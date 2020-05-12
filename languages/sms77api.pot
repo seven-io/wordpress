@@ -1,0 +1,44 @@
+# Copyright (C) 2020 sms77 e.K.
+# This file is distributed under the same license as the sms77 API plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: sms77 API 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/sms77api\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2020-05-14T00:29:05+02:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.4.0\n"
+"X-Domain: sms77api\n"
+
+#. Plugin Name of the plugin
+msgid "sms77 API"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "http://github.com/sms77io/wp-api"
+msgstr ""
+
+#. Description of the plugin
+msgid "Send SMS through the sms77.io gateway."
+msgstr ""
+
+#. Author of the plugin
+msgid "sms77 e.K."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://sms77.io/"
+msgstr ""
+
+#: includes/class-sms77api-loader.php:40
+#: includes/class-sms77api-loader.php:41
+msgid "sms77 SMS"
+msgstr ""
+
+#: pages/compose.php:7
+msgid "Send SMS"
+msgstr ""
