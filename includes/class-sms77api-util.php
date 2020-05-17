@@ -9,6 +9,7 @@
 class sms77api_Util {
     static function getOptions() {
         return [
+            'sms77api_debug' => [0, [], 'boolean'],
             'sms77api_key' => [null, [
                 'sanitize_callback' => function($key) {
                     $error = function($msg) {
@@ -20,7 +21,6 @@ class sms77api_Util {
                     if (!$response) {
                         return $error('Internal error. Please try again later.');
                     }
-
 
                     if ('900' === $response) {
                         return $error('Invalid API key or API down.');

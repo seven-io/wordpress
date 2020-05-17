@@ -23,7 +23,9 @@ class sms77api_Loader {
 
                 register_setting(
                     'sms77api_general_settings',
-                    $name, array_merge(['type' => 'string'], isset($values[1]) ? $values[1] : []));
+                    $name, array_merge(
+                    ['type' => isset($values[2]) ? $values[2] : 'string'],
+                    isset($values[1]) ? $values[1] : []));
             }
         });
     }
@@ -57,19 +59,26 @@ class sms77api_Loader {
 
             $errors = [];
 
-            $receivers = $_POST['sms77api_receivers'];
+            $receivers = $_POST['receivers'];
             if (!isset($receivers)) {
                 $errors[] = 'Receivers cannot be missing.';
             }
 
-            $msg = $_POST['sms77api_msg'];
+            $msg = $_POST['msg'];
             if (!isset($msg)) {
                 $errors[] = 'Message cannot be empty.';
             }
 
             if (!count($errors)) {
                 $res = sms77api_Util::get(
-                    'sms', get_option('sms77api_key'), ['text' => $msg, 'to' => $receivers,]);
+                    'sms',
+                    get_option('sms77api_key'),
+                    [
+                        'debug' =>(int)(bool)$_POST['debug'],
+                        'text' => $msg,
+                        'to' => $receivers,
+                    ]
+                );
             }
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
