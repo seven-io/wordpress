@@ -2,6 +2,8 @@
 if (!defined('WPINC')) {
     die;
 }
+
+require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 ?>
     <h1>
         <?php esc_html_e('Send SMS', 'sms77api'); ?>
@@ -21,23 +23,16 @@ if (!defined('WPINC')) {
     <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='compose_hook'>
 
-        <label>
-            <span>
-                <strong>Debug</strong>
-                <small>validate parameters but do not send actual messages</small>
-            </span>
-            <input name="debug" style='margin: 0;'
-                   type='checkbox' <?php echo (bool)get_option('sms77api_debug') ? 'checked' : ''; ?>/>
+        <label style='display: flex;'>
+            <?php sms77api_Partials::debug(false); ?>
+        </label>
+
+        <label style='display: flex;'>
+            <?php sms77api_Partials::unicode(false); ?>
         </label>
 
         <label style='display: flex; flex-direction: column;'>
-            <span>
-                <strong>Receiver(s)</strong>
-                <small>separated by comma eg: +4912345, +12345</small>
-            </span>
-
-            <input name="receivers"
-                   value="<?php echo get_option('sms77api_receivers'); ?>" required/>
+            <?php sms77api_Partials::receivers(true, false); ?>
         </label>
 
         <label style='display: flex; flex-direction: column;'>

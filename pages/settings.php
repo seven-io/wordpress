@@ -2,8 +2,9 @@
 if (!defined('WPINC')) {
     die;
 }
-?>
 
+require_once __DIR__ . '/../includes/class-sms77api-partials.php';
+?>
 <h1>sms77 API Settings</h1>
 
 <h2>General</h2>
@@ -17,12 +18,11 @@ if (!defined('WPINC')) {
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <span>
-            <strong>Debug</strong>
-            <small>validate parameters but do not send actual messages</small>
-        </span>
-        <input name="sms77api_debug" style='margin: 0;'
-               type='checkbox' <?php echo (bool)get_option('sms77api_debug') ? 'checked' : ''; ?>/>
+        <?php sms77api_Partials::debug(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::unicode(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
@@ -31,11 +31,7 @@ if (!defined('WPINC')) {
     </label>
 
     <label style='display: flex; justify-content: space-between;'>
-        <span>
-            <strong>Default Receiver(s)</strong>
-            <small>separated by comma eg: +4912345, +12345</small>
-        </span>
-        <input name="sms77api_receivers" value="<?php echo get_option('sms77api_receivers'); ?>"/>
+        <?php sms77api_Partials::receivers(false, true); ?>
     </label>
 
     <?php submit_button(); ?>

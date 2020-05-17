@@ -30,6 +30,7 @@ class sms77api_Util {
                 },]],
             'sms77api_msg' => [null],
             'sms77api_receivers' => [null],
+            'sms77api_unicode' => [0, [], 'boolean'],
         ];
     }
 

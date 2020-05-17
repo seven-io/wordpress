@@ -77,6 +77,7 @@ class sms77api_Loader {
                         'debug' =>(int)(bool)$_POST['debug'],
                         'text' => $msg,
                         'to' => $receivers,
+                        'unicode' =>(int)(bool)$_POST['unicode'],
                     ]
                 );
             }
