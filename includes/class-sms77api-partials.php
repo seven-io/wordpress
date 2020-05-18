@@ -42,6 +42,14 @@ class sms77api_Partials {
             'validate parameters but do not send actual messages');
     }
 
+    static function flash($isGlobal) {
+        self::checkboxSetting(
+            'flash',
+            'Flash',
+            $isGlobal,
+            'makes the message appear directly in the display');
+    }
+
     static function unicode($isGlobal) {
         self::checkboxSetting(
             'unicode',

@@ -74,10 +74,11 @@ class sms77api_Loader {
                     'sms',
                     get_option('sms77api_key'),
                     [
-                        'debug' =>(int)(bool)$_POST['debug'],
+                        'debug' => isset($_POST['debug']) ? (int)(bool)$_POST['debug'] : 0,
+                        'flash' => isset($_POST['flash']) ? (int)(bool)$_POST['flash'] : 0,
                         'text' => $msg,
                         'to' => $receivers,
-                        'unicode' =>(int)(bool)$_POST['unicode'],
+                        'unicode' => isset($_POST['unicode']) ? (int)(bool)$_POST['unicode'] : 0,
                     ]
                 );
             }

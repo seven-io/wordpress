@@ -10,6 +10,7 @@ class sms77api_Util {
     static function getOptions() {
         return [
             'sms77api_debug' => [0, [], 'boolean'],
+            'sms77api_flash' => [0, [], 'boolean'],
             'sms77api_key' => [null, [
                 'sanitize_callback' => function($key) {
                     $error = function($msg) {
