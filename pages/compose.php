@@ -21,7 +21,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 
 <?php if (get_option('sms77api_key')): ?>
     <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
-        <input type='hidden' name='action' value='compose_hook'>
+        <input type='hidden' name='action' value='sms77api_compose_hook'>
 
         <label style='display: flex;'>
             <?php sms77api_Partials::debug(false); ?>
@@ -36,7 +36,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
         </label>
 
         <label style='display: flex;'>
-            <?php sms77api_Partials::udh(false); ?>
+            <?php sms77api_Partials::performanceTracking(false) ?>
         </label>
 
         <label style='display: flex;'>
@@ -44,7 +44,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
         </label>
 
         <label style='display: flex;'>
-            <?php sms77api_Partials::ttl(false); ?>
+            <?php sms77api_Partials::udh(false); ?>
         </label>
 
         <label style='display: flex;'>
@@ -52,22 +52,33 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
         </label>
 
         <label style='display: flex;'>
-            <?php sms77api_Partials::performanceTracking(false); ?>
+            <?php sms77api_Partials::ttl(false); ?>
         </label>
 
         <label style='display: flex; flex-direction: column;'>
-            <?php sms77api_Partials::receivers(true, false); ?>
+            <?php sms77api_Partials::receivers(false) ?>
         </label>
 
         <label style='display: flex; flex-direction: column;'>
-            <strong>Message</strong>
-
-            <textarea name="msg"
-                      required><?php echo get_option('sms77api_msg'); ?></textarea>
+            <?php sms77api_Partials::msg(false) ?>
         </label>
 
-        <?php submit_button('Send SMS'); ?>
+        <?php submit_button('Send SMS') ?>
     </form>
+    <?php if (class_exists('WooCommerce')
+        || in_array('woocommerce/woocommerce.php',
+            apply_filters('active_plugins', get_option('active_plugins')))): ?>
+        <h2>WooCommerce</h2>
+
+        <h3>Bulk SMS</h3>
+        <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
+            <input type='hidden' name='action' value='sms77api_wooc_bulk'>
+
+            <?php sms77api_Partials::msg(false) ?>
+
+            <?php submit_button('Send Bulk') ?>
+        </form>
+    <?php endif; ?>
 <?php else: ?>
     <p>An API Key is required for sending SMS. Please head to the
         <a href='<?php echo admin_url('options-general.php?page=sms77api') ?>'>Plugin Settings</a> to set it.

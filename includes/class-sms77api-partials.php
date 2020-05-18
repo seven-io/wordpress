@@ -20,25 +20,25 @@ class sms77api_Partials {
         <?php
     }
 
-    static function textSetting($name, $label, $required, $isGlobal, $helper = null) {
-        $option = "sms77api_$name";
-        ?>
-        <span>
-                <strong><?php echo $label ?></strong>
-                <?php echo $helper ? "<small>$helper</small>" : '' ?>
-            </span>
-
-        <input name="<?php echo $isGlobal ? $option : $name ?>" value="<?php echo get_option($option); ?>"
-            <?php echo $required ? 'required' : '' ?>/>
-        <?php
-    }
-
     static function debug($isGlobal) {
         self::checkboxSetting(
             'debug',
             'Debug',
             $isGlobal,
             'validate parameters but do not send actual messages');
+    }
+
+    static function delay($isGlobal) {
+        $name = 'delay';
+        $option = "sms77api_$name";
+        ?>
+        <span>
+            <strong>Delay</strong>
+            <small>sets a delay for sending</small>
+        </span>
+
+        <input name='<?php echo $isGlobal ? $option : $name ?>' value='<?php echo get_option($option) ?>'/>
+        <?php
     }
 
     static function flash($isGlobal) {
@@ -62,6 +62,17 @@ class sms77api_Partials {
         <?php
     }
 
+    static function msg($isGlobal) {
+        $name = 'msg';
+        $option = "sms77api_$name";
+        ?>
+        <strong><?php echo $isGlobal ? 'Default ' : '' ?>Message</strong>
+
+        <textarea name='<?php echo $isGlobal ? $option : $name ?>'
+            <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
+        <?php
+    }
+
     static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
@@ -69,13 +80,18 @@ class sms77api_Partials {
             $isGlobal);
     }
 
-    static function receivers($required, $isGlobal) {
-        self::textSetting(
-            'receivers',
-            'Default Receiver(s)',
-            $required,
-            $isGlobal,
-            'separated by comma eg: +4912345, +12345');
+    static function receivers($isGlobal) {
+        $name = 'receivers';
+        $option = "sms77api_$name";
+        ?>
+        <span>
+            <strong><?php echo $isGlobal ? 'Default ' : '' ?>Receiver(s)</strong>
+            <small>separated by comma eg: +4912345, +12345</small>
+        </span>
+
+        <input name="<?php echo $isGlobal ? $option : $name ?>" value="<?php echo get_option($option); ?>"
+            <?php echo $isGlobal ? '' : 'required' ?>/>
+        <?php
     }
 
     static function ttl($isGlobal) {

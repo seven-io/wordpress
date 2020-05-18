@@ -30,11 +30,15 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::udh(true) ?>
+        <?php sms77api_Partials::performanceTracking(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
         <?php sms77api_Partials::utf8(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::udh(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
@@ -46,16 +50,11 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::performanceTracking(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <strong>Default Message</strong>
-        <input name="sms77api_msg" value="<?php echo get_option('sms77api_msg'); ?>"/>
+        <?php sms77api_Partials::msg(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between;'>
-        <?php sms77api_Partials::receivers(false, true); ?>
+        <?php sms77api_Partials::receivers(true); ?>
     </label>
 
     <?php submit_button(); ?>

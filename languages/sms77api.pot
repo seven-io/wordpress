@@ -34,11 +34,6 @@ msgstr ""
 msgid "http://sms77.io/"
 msgstr ""
 
-#: includes/class-sms77api-loader.php:40
-#: includes/class-sms77api-loader.php:41
-msgid "sms77 SMS"
-msgstr ""
-
 #: pages/compose.php:7
 msgid "Send SMS"
 msgstr ""

@@ -12,6 +12,7 @@ class sms77api_Util {
     static function getOptions() {
         return [
             self::PREFIX . '_debug' => [0, [], 'boolean'],
+            self::PREFIX . '_delay' => [null],
             self::PREFIX . '_flash' => [0, [], 'boolean'],
             self::PREFIX . '_label' => [null],
             self::PREFIX . '_key' => [null, [
