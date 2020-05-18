@@ -36,6 +36,7 @@ class sms77api_Util {
             self::PREFIX . '_msg' => [null],
             self::PREFIX . '_performance_tracking' => [0, [], 'boolean'],
             self::PREFIX . '_receivers' => [null],
+            self::PREFIX . '_udh' => [null],
             self::PREFIX . '_unicode' => [0, [], 'boolean'],
             self::PREFIX . '_utf8' => [0, [], 'boolean'],
             self::PREFIX . '_ttl' => [null, [], 'integer'],

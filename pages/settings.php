@@ -26,15 +26,15 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::utf8(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
         <?php sms77api_Partials::flash(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::performanceTracking(true) ?>
+        <?php sms77api_Partials::udh(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::utf8(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
@@ -43,6 +43,10 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
         <?php sms77api_Partials::label(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::performanceTracking(true) ?>
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>

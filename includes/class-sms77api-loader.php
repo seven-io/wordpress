@@ -85,6 +85,7 @@ class sms77api_Loader {
                         'text' => $msg,
                         'to' => $receivers,
                         'ttl' => isset($_POST['ttl']) ? (int)$_POST['ttl'] : null,
+                        'udh' => isset($_POST['udh']) ? $_POST['udh'] : null,
                         'unicode' => $toBool('unicode'),
                         'utf8' => $toBool('utf8'),
                     ]

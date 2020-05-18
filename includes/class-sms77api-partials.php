@@ -62,14 +62,6 @@ class sms77api_Partials {
         <?php
     }
 
-    static function unicode($isGlobal) {
-        self::checkboxSetting(
-            'unicode',
-            'Unicode',
-            $isGlobal,
-            'forces unicode regardless of server determination');
-    }
-
     static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
@@ -98,6 +90,28 @@ class sms77api_Partials {
         <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
                value='<?php echo get_option($option) ?>'/>
         <?php
+    }
+
+    static function udh($isGlobal) {
+        $name = 'udh';
+        $option = "sms77api_$name";
+        ?>
+        <span>
+            <strong>UDH</strong>
+            <small>sets a custom <a
+                        href='https://en.wikipedia.org/wiki/User_Data_Header'>User Data Header</a></a></small>
+        </span>
+
+        <input name='<?php echo $isGlobal ? $option : $name ?>' value='<?php echo get_option($option) ?>'/>
+        <?php
+    }
+
+    static function unicode($isGlobal) {
+        self::checkboxSetting(
+            'unicode',
+            'Unicode',
+            $isGlobal,
+            'forces unicode regardless of server determination');
     }
 
     static function utf8($isGlobal) {
