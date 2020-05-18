@@ -66,4 +66,12 @@ class sms77api_Partials {
             $isGlobal,
             'separated by comma eg: +4912345, +12345');
     }
+
+    static function utf8($isGlobal) {
+        self::checkboxSetting(
+            'utf8',
+            'UTF-8',
+            $isGlobal,
+            'forces utf8 regardless of server determination');
+    }
 }

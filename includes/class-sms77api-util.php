@@ -7,14 +7,17 @@
  * @author     sms77 e.K. <support@sms77.io>
  */
 class sms77api_Util {
+    const PREFIX = 'sms77api';
+
     static function getOptions() {
         return [
-            'sms77api_debug' => [0, [], 'boolean'],
-            'sms77api_flash' => [0, [], 'boolean'],
-            'sms77api_key' => [null, [
+            self::PREFIX . '_debug' => [0, [], 'boolean'],
+            self::PREFIX . '_flash' => [0, [], 'boolean'],
+            self::PREFIX . '_key' => [null, [
                 'sanitize_callback' => function($key) {
                     $error = function($msg) {
-                        add_settings_error('sms77api_key', 'sms77api_invalid_key', $msg);
+                        add_settings_error(self::PREFIX . '_key',
+                            self::PREFIX . '_invalid_key', $msg);
                     };
 
                     $response = sms77api_Util::get('balance', $key);
@@ -29,9 +32,10 @@ class sms77api_Util {
 
                     return $key;
                 },]],
-            'sms77api_msg' => [null],
-            'sms77api_receivers' => [null],
-            'sms77api_unicode' => [0, [], 'boolean'],
+            self::PREFIX . '_msg' => [null],
+            self::PREFIX . '_receivers' => [null],
+            self::PREFIX . '_unicode' => [0, [], 'boolean'],
+            self::PREFIX . '_utf8' => [0, [], 'boolean'],
         ];
     }
 
@@ -44,7 +48,7 @@ class sms77api_Util {
             ['blocking' => true,]);
 
         if (is_wp_error($response)) {
-            //log_error($response->get_error_message()); //TODO implement logging?
+            //error_log($response->get_error_message());
             return null;
         } else {
             $body = $response['body'];

@@ -26,6 +26,10 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::utf8(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
         <?php sms77api_Partials::flash(true) ?>
     </label>
 

@@ -35,6 +35,10 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
             <?php sms77api_Partials::unicode(false); ?>
         </label>
 
+        <label style='display: flex;'>
+            <?php sms77api_Partials::utf8(false); ?>
+        </label>
+
         <label style='display: flex; flex-direction: column;'>
             <?php sms77api_Partials::receivers(true, false); ?>
         </label>
