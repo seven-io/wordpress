@@ -1,5 +1,4 @@
 <?php
-require_once __DIR__ . '/../includes/class-sms77api-util.php';
 
 /**
  * @link       http://sms77.io
@@ -72,6 +71,20 @@ class sms77api_Partials {
             $required,
             $isGlobal,
             'separated by comma eg: +4912345, +12345');
+    }
+
+    static function ttl($isGlobal) {
+        $name = 'ttl';
+        $option = "sms77api_$name";
+        ?>
+        <span>
+                <strong>TTL</strong>
+                <small>Time-To-Live (default: 86400000 ms - 24h)</small>
+            </span>
+
+        <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
+               value='<?php echo get_option($option) ?>'/>
+        <?php
     }
 
     static function utf8($isGlobal) {

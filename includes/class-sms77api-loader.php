@@ -83,6 +83,7 @@ class sms77api_Loader {
                         'performance_tracking' => $toBool('performance_tracking'),
                         'text' => $msg,
                         'to' => $receivers,
+                        'ttl' => isset($_POST['ttl']) ? (int)$_POST['ttl'] : null,
                         'unicode' => $toBool('unicode'),
                         'utf8' => $toBool('utf8'),
                     ]
