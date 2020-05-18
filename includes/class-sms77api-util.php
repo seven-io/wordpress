@@ -48,7 +48,7 @@ class sms77api_Util {
             ['blocking' => true,]);
 
         if (is_wp_error($response)) {
-            //error_log($response->get_error_message());
+            error_log($response->get_error_message());
             return null;
         } else {
             $body = $response['body'];
