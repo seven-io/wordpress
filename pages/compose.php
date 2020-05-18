@@ -28,15 +28,19 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
         </label>
 
         <label style='display: flex;'>
-            <?php sms77api_Partials::flash(false); ?>
-        </label>
-
-        <label style='display: flex;'>
             <?php sms77api_Partials::unicode(false); ?>
         </label>
 
         <label style='display: flex;'>
             <?php sms77api_Partials::utf8(false); ?>
+        </label>
+
+        <label style='display: flex;'>
+            <?php sms77api_Partials::flash(false); ?>
+        </label>
+
+        <label style='display: flex;'>
+            <?php sms77api_Partials::performanceTracking(false); ?>
         </label>
 
         <label style='display: flex; flex-direction: column;'>

@@ -33,6 +33,7 @@ class sms77api_Util {
                     return $key;
                 },]],
             self::PREFIX . '_msg' => [null],
+            self::PREFIX . '_performance_tracking' => [0, [], 'boolean'],
             self::PREFIX . '_receivers' => [null],
             self::PREFIX . '_unicode' => [0, [], 'boolean'],
             self::PREFIX . '_utf8' => [0, [], 'boolean'],
@@ -44,7 +45,7 @@ class sms77api_Util {
 
         $response = wp_remote_get(
             "https://gateway.sms77.io/api/$endpoint?"
-            . http_build_query(array_merge($data, ['json' => $isJsonEndpoint ? 1 : 0, 'p' => $apiKey,])),
+            . http_build_query(array_merge($data, ['json' => $isJsonEndpoint ? 1 : 0, 'p' => $apiKey])),
             ['blocking' => true,]);
 
         if (is_wp_error($response)) {

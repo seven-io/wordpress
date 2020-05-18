@@ -53,6 +53,10 @@ class sms77api_Loader {
 
     private function admin_post_compose_hook() {
         add_action('admin_post_compose_hook', function() {
+            $toBool = function($key) {
+                return isset($_POST[$key]) ? (int)(bool)$_POST[$key] : 0;
+            };
+
             if (!isset($_POST['submit'])) {
                 return;
             }
@@ -74,12 +78,13 @@ class sms77api_Loader {
                     'sms',
                     get_option('sms77api_key'),
                     [
-                        'debug' => isset($_POST['debug']) ? (int)(bool)$_POST['debug'] : 0,
-                        'flash' => isset($_POST['flash']) ? (int)(bool)$_POST['flash'] : 0,
+                        'debug' => $toBool('debug'),
+                        'flash' => $toBool('flash'),
+                        'performance_tracking' => $toBool('performance_tracking'),
                         'text' => $msg,
                         'to' => $receivers,
-                        'unicode' => isset($_POST['unicode']) ? (int)(bool)$_POST['unicode'] : 0,
-                        'utf8' => isset($_POST['utf8']) ? (int)(bool)$_POST['utf8'] : 0,
+                        'unicode' => $toBool('unicode'),
+                        'utf8' => $toBool('utf8'),
                     ]
                 );
             }

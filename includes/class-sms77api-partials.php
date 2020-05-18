@@ -58,6 +58,13 @@ class sms77api_Partials {
             'forces unicode regardless of server determination');
     }
 
+    static function performanceTracking($isGlobal) {
+        self::checkboxSetting(
+            'performance_tracking',
+            'Performance Tracking',
+            $isGlobal);
+    }
+
     static function receivers($required, $isGlobal) {
         self::textSetting(
             'receivers',

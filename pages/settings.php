@@ -34,6 +34,10 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     </label>
 
     <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
+        <?php sms77api_Partials::performanceTracking(true) ?>
+    </label>
+
+    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
         <strong>Default Message</strong>
         <input name="sms77api_msg" value="<?php echo get_option('sms77api_msg'); ?>"/>
     </label>
