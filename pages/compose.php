@@ -47,6 +47,10 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
             <?php sms77api_Partials::ttl(false); ?>
         </label>
 
+        <label style='display: flex;'>
+            <?php sms77api_Partials::label(false); ?>
+        </label>
+
         <label style='display: flex; flex-direction: column;'>
             <?php sms77api_Partials::receivers(true, false); ?>
         </label>

@@ -49,6 +49,19 @@ class sms77api_Partials {
             'makes the message appear directly in the display');
     }
 
+    static function label($isGlobal) {
+        $name = 'label';
+        $option = "sms77api_$name";
+        ?>
+        <span>
+            <strong>Label</strong>
+            <small>allowed characters: a-z, A-Z, 0-9, .-_@</small>
+        </span>
+
+        <input name='<?php echo $isGlobal ? $option : $name ?>' value='<?php echo get_option($option) ?>'/>
+        <?php
+    }
+
     static function unicode($isGlobal) {
         self::checkboxSetting(
             'unicode',

@@ -80,6 +80,7 @@ class sms77api_Loader {
                     [
                         'debug' => $toBool('debug'),
                         'flash' => $toBool('flash'),
+                        'label' => isset($_POST['label']) ? $_POST['label'] : null,
                         'performance_tracking' => $toBool('performance_tracking'),
                         'text' => $msg,
                         'to' => $receivers,

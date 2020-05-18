@@ -13,6 +13,7 @@ class sms77api_Util {
         return [
             self::PREFIX . '_debug' => [0, [], 'boolean'],
             self::PREFIX . '_flash' => [0, [], 'boolean'],
+            self::PREFIX . '_label' => [null],
             self::PREFIX . '_key' => [null, [
                 'sanitize_callback' => function($key) {
                     $error = function($msg) {
