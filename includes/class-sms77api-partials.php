@@ -58,7 +58,8 @@ class sms77api_Partials {
             <small>allowed characters: a-z, A-Z, 0-9, .-_@</small>
         </span>
 
-        <input name='<?php echo $isGlobal ? $option : $name ?>' value='<?php echo get_option($option) ?>'/>
+        <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
+               value='<?php echo get_option($option) ?>'/>
         <?php
     }
 
@@ -97,6 +98,7 @@ class sms77api_Partials {
     static function ttl($isGlobal) {
         $name = 'ttl';
         $option = "sms77api_$name";
+        $value = get_option($option);
         ?>
         <span>
                 <strong>TTL</strong>
@@ -104,7 +106,7 @@ class sms77api_Partials {
             </span>
 
         <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
-               value='<?php echo get_option($option) ?>'/>
+            <?php echo $value ? "value='$value'" : '' ?>/>
         <?php
     }
 
@@ -118,7 +120,8 @@ class sms77api_Partials {
                         href='https://en.wikipedia.org/wiki/User_Data_Header'>User Data Header</a></a></small>
         </span>
 
-        <input name='<?php echo $isGlobal ? $option : $name ?>' value='<?php echo get_option($option) ?>'/>
+        <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
+               value='<?php echo get_option($option) ?>'/>
         <?php
     }
 

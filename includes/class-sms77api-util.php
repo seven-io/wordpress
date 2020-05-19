@@ -11,6 +11,11 @@ class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
+    static function hasWooCommerce() {
+        return in_array('woocommerce/woocommerce.php',
+            apply_filters('active_plugins', get_option('active_plugins')));
+    }
+
     static function getOptions() {
         return [
             self::PREFIX . '_debug' => [0, [], 'boolean'],

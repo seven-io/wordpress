@@ -38,21 +38,28 @@ add_action('admin_init', function() {
 
 add_action('admin_menu', function() {
     add_options_page(
-        'sms77 API Settings', 'sms77 API', 'manage_options', 'sms77api',
+        'sms77 API Settings', 'sms77 API Settings', 'manage_options', 'sms77api',
         function() {
             require_once __DIR__ . '/pages/settings.php';
         });
 
     add_menu_page(
-        __('sms77 SMS', 'sms77api'),
-        __('sms77 SMS', 'sms77api'),
+        'sms77 Compose',
+        'sms77 Compose',
         'manage_options',
-        'sms77api-compose',
+        'sms77api-menu',
         function() {
             require_once __DIR__ . '/pages/compose.php';
         },
         'dashicons-email-alt2'
     );
+
+    if (sms77api_Util::hasWooCommerce()) {
+        add_submenu_page( 'sms77api-menu', 'WooCommerce', 'WooCommerce',
+            'manage_options', 'sms77api-wooc', function() {
+                require_once __DIR__ . '/pages/woocommerce.php';
+            });
+    }
 });
 
 function toString($key) {
