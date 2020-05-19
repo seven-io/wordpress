@@ -24,10 +24,9 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
     <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='sms77api_wooc_bulk'>
 
-        <?php require_once __DIR__ . '/../partials/compose_options.php' ?>
+        <?php sms77api_Partials::all(false) ?>
 
         <h3>Filters</h3>
-
         <div style='display: flex; align-items: flex-end;'>
             <label style='display: flex; flex-direction: column;'>
                 <strong>Action</strong>
@@ -64,7 +63,7 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
             </label>
         </div>
 
-        <label style='display: flex; flex-direction: column;'>
+        <label style='flex-direction: column;'>
             <?php sms77api_Partials::msg(false) ?>
         </label>
 
@@ -88,6 +87,18 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
     <style>
         .datepicker {
             min-height: 30px;
+        }
+
+        input {
+            max-width: 200px;
+        }
+
+        form label {
+            justify-content: space-between;
+        }
+
+        textarea {
+            width: 100%;
         }
     </style>
 <?php endif; ?>

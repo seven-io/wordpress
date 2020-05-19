@@ -12,57 +12,38 @@ if (!defined('WPINC')) {
 
 require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 ?>
-<h1>sms77 API Settings</h1>
+<h1>sms77 - Settings</h1>
 
 <h2>General</h2>
 
 <form method="POST" action="options.php" style='display: flex; flex-direction: column;'>
     <?php settings_fields('sms77api_general_settings'); ?>
 
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <strong>API Key</strong>
+    <label style='display: flex'>
+        <span>
+            <strong>API Key</strong>
+            <small>required for sending SMS - get yours @ <a href='http://sms77.io'>sms77.io</a></small>
+        </span>
+
         <input required name="sms77api_key" value="<?php echo get_option('sms77api_key'); ?>"/>
     </label>
 
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::debug(true) ?>
-    </label>
+    <?php
+    sms77api_Partials::all(true);
 
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::unicode(true) ?>
-    </label>
+    sms77api_Partials::msg(true);
+    sms77api_Partials::receivers(true);
 
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::flash(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::performanceTracking(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::utf8(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::udh(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::ttl(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::label(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between; margin-bottom: 10px;'>
-        <?php sms77api_Partials::msg(true) ?>
-    </label>
-
-    <label style='display: flex; justify-content: space-between;'>
-        <?php sms77api_Partials::receivers(true); ?>
-    </label>
-
-    <?php submit_button(); ?>
+    submit_button();
+    ?>
 </form>
+
+<style>
+    form label {
+        justify-content: space-between;
+    }
+
+    form label:not(:last-of-type) {
+        margin-bottom: 10px;
+    }
+</style>

@@ -22,16 +22,30 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='sms77api_compose_hook'>
 
-        <?php require_once __DIR__ . '/../partials/compose_options.php' ?>
+        <?php sms77api_Partials::all(false) ?>
 
-        <label style='display: flex; flex-direction: column;'>
+        <label class='nostyle' style='display: flex; flex-direction: column;'>
             <?php sms77api_Partials::receivers(false) ?>
         </label>
 
-        <label style='display: flex; flex-direction: column;'>
+        <label class='nostyle' style='display: flex; flex-direction: column;'>
             <?php sms77api_Partials::msg(false) ?>
         </label>
 
         <?php submit_button('Send SMS') ?>
     </form>
+
+    <style>
+        input {
+            max-width: 200px;
+        }
+
+        form label:not(.nostyle) {
+            justify-content: space-between;
+        }
+
+        textarea, input[name='receivers'] {
+            width: 75%;
+        }
+    </style>
 <?php endif; ?>
