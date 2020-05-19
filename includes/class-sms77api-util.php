@@ -8,6 +8,8 @@
  */
 class sms77api_Util {
     const PREFIX = 'sms77api';
+    const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
+    const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
     static function getOptions() {
         return [

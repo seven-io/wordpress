@@ -109,13 +109,45 @@ add_action('admin_post_sms77api_compose_hook', function() {
         ])));
 });
 
+add_action('admin_enqueue_scripts', function() {
+    wp_enqueue_script('jquery-ui-datepicker');
+    wp_enqueue_style('sms77api-admin-ui-css',
+        'http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css',
+        false, "1.12.1", false);
+});
+
 add_action('admin_post_sms77api_wooc_bulk', function() {
     if (!isset($_POST['submit'])) {
         return;
     }
 
+    $date = isset($_POST['date']) ? $_POST['date'] : null;
+    $dateModificator = isset($_POST['date_modificator']) ? $_POST['date_modificator'] : null;
+    $dateAction = isset($_POST['date_action']) ? $_POST['date_action'] : null;
+    $args = [];
+    if ($date && $dateAction && $dateModificator) {
+        if ('...' === $dateModificator) {
+            $dateTo = isset($_POST['date_to']) ? $_POST['date_to'] : null;
+            if (!$dateTo) {
+                return wp_redirect(admin_url('admin.php?' . http_build_query([
+                        'errors' => ['To-Date must be set if using the "..." modificator.'],
+                        'page' => 'sms77api-compose',
+                        'response' => null,
+                    ])));
+            }
+
+            $search = "$date...$dateTo";
+        } else {
+            $search = "$dateModificator$date";
+        }
+
+        $args["date_$dateAction"] = $search;
+    }
+
     $phones = [];
-    foreach ((new WC_Order_Query())->get_orders() as $order) {
+    foreach (
+        (new WC_Order_Query($args))
+            ->get_orders() as $order) {
         /* @var WC_Order $order */
         $phones[] = $order->get_billing_phone();
     }

@@ -1,4 +1,11 @@
 <?php
+/**
+ * @link       http://sms77.io
+ * @package    sms77api
+ * @subpackage sms77api/pages
+ * @author     sms77 e.K. <support@sms77.io>
+ */
+
 if (!defined('WPINC')) {
     die;
 }
