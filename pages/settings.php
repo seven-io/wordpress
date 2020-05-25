@@ -12,17 +12,20 @@ if (!defined('WPINC')) {
 
 require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 ?>
-<h1>sms77 - Settings</h1>
+<h1>sms77 - <?php _e('Settings', 'sms77api') ?></h1>
 
-<h2>General</h2>
+<h2><?php _e('General', 'sms77api') ?></h2>
 
-<form name='sms77api_settings' method="POST" action="options.php" style='display: flex; flex-direction: column;'>
+<form name='sms77api_settings' method="POST" action="options.php"
+      style='display: flex; flex-direction: column;'>
     <?php settings_fields('sms77api_general_settings'); ?>
 
     <label style='display: flex'>
         <span>
-            <strong>API Key</strong>
-            <small>required for sending SMS - get yours @ <a href='http://sms77.io'>sms77.io</a></small>
+            <strong><?php _e('API Key', 'sms77api') ?></strong>
+            <small>
+                <?php _e('required for sending SMS - get yours @ ', 'sms77api') ?>
+                <a href='http://sms77.io'>sms77.io</a></small>
         </span>
 
         <input required name="sms77api_key" value="<?php echo get_option('sms77api_key'); ?>"/>

@@ -22,7 +22,7 @@ class sms77api_Partials {
     private static function debug($isGlobal) {
         self::checkboxSetting(
             'debug',
-            'Debug',
+            __('Debug', 'sms77api'),
             $isGlobal,
             'validate parameters but do not send actual messages');
     }
@@ -48,8 +48,8 @@ class sms77api_Partials {
         ?>
         <label style='display: flex;'>
             <span>
-            <strong>Delay</strong>
-            <small>sets a delay for sending</small>
+            <strong><?php _e('Delay', 'sms77api') ?></strong>
+            <small><?php _e('sets a delay for sending', 'sms77api') ?></small>
         </span>
 
             <input name='<?php echo $isGlobal ? $option : $name ?>'
@@ -61,32 +61,32 @@ class sms77api_Partials {
     private static function unicode($isGlobal) {
         self::checkboxSetting(
             'unicode',
-            'Unicode',
+            __('Unicode', 'sms77api'),
             $isGlobal,
-            'forces unicode regardless of server determination');
+            __('forces unicode regardless of server determination', 'sms77api'));
     }
 
     private static function flash($isGlobal) {
         self::checkboxSetting(
             'flash',
-            'Flash',
+            __('Flash', 'sms77api'),
             $isGlobal,
-            'makes the message appear directly in the display');
+            __('makes the message appear directly in the display', 'sms77api'));
     }
 
     private static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
-            'Performance Tracking',
+            __('Performance Tracking', 'sms77api'),
             $isGlobal);
     }
 
     private static function utf8($isGlobal) {
         self::checkboxSetting(
             'utf8',
-            'UTF-8',
+            __('UTF-8', 'sms77api'),
             $isGlobal,
-            'forces utf8 regardless of server determination');
+            __('forces utf8 regardless of server determination', 'sms77api'));
     }
 
     private static function udh($isGlobal) {
@@ -95,9 +95,10 @@ class sms77api_Partials {
         ?>
         <label style='display: flex;'>
             <span>
-            <strong>UDH</strong>
+            <strong><?php _e('UDH', 'sms77api') ?></strong>
             <small>sets a custom <a
-                        href='https://en.wikipedia.org/wiki/User_Data_Header'>User Data Header</a></a></small>
+                        href='https://en.wikipedia.org/wiki/User_Data_Header'>
+                    <?php _e('User Data Header', 'sms77api') ?></a></a></small>
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
@@ -112,7 +113,7 @@ class sms77api_Partials {
         ?>
         <label style='display: flex;'>
             <span>
-            <strong>Label</strong>
+            <strong><?php _e('Label', 'sms77api') ?></strong>
             <small>allowed characters: a-z, A-Z, 0-9, .-_@</small>
         </span>
 
@@ -129,8 +130,8 @@ class sms77api_Partials {
         ?>
         <label style='display: flex;'>
             <span>
-                <strong>TTL</strong>
-                <small>Time-To-Live (default: 86400000 ms - 24h)</small>
+                <strong><?php _e('TTL', 'sms77api') ?></strong>
+                <small><?php _e('Time-To-Live (default: 86400000 ms - 24h)', 'sms77api') ?></small>
             </span>
 
             <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
@@ -144,7 +145,9 @@ class sms77api_Partials {
         $option = "sms77api_$name";
         ?>
         <label style='display: flex;'>
-            <strong><?php echo $isGlobal ? 'Default ' : '' ?>Message</strong>
+            <strong><?php $isGlobal
+                    ? _e('Default Message', 'sms77api')
+                    : _e('Message', 'sms77api') ?></strong>
 
             <textarea name='<?php echo $isGlobal ? $option : $name ?>'
             <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
@@ -158,9 +161,11 @@ class sms77api_Partials {
         ?>
         <label style='display: flex;'>
             <span>
-            <strong><?php echo $isGlobal ? 'Default ' : '' ?>Receiver(s)</strong>
-            <small>separated by comma eg: +4912345, +12345</small>
-        </span>
+                 <strong><?php $isGlobal
+                         ? _e('Default Receiver(s)', 'sms77api')
+                         : _e('Receiver(s)', 'sms77api') ?></strong>
+                <small>separated by comma eg: +4912345, +12345</small>
+            </span>
 
             <input name="<?php echo $isGlobal ? $option : $name ?>" value="<?php echo get_option($option); ?>"
                 <?php echo $isGlobal ? '' : 'required' ?>/>

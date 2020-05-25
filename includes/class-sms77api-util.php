@@ -6,6 +6,8 @@
  * @subpackage sms77api/includes
  * @author     sms77 e.K. <support@sms77.io>
  */
+require_once 'class-sms77api-options.php';
+
 class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
@@ -13,41 +15,6 @@ class sms77api_Util {
     static function hasWooCommerce() {
         return in_array('woocommerce/woocommerce.php',
             apply_filters('active_plugins', get_option('active_plugins')));
-    }
-
-    static function getOptions() {
-        return [
-            'sms77api_debug' => [0, [], 'boolean'],
-            'sms77api_delay' => [null],
-            'sms77api_flash' => [0, [], 'boolean'],
-            'sms77api_label' => [null],
-            'sms77api_key' => [null, [
-                'sanitize_callback' => function($key) {
-                    $error = function($msg) {
-                        add_settings_error('sms77api_key',
-                            'sms77api_invalid_key', $msg);
-                    };
-
-                    $response = sms77api_Util::get('balance', $key);
-
-                    if (!$response) {
-                        return $error('Internal error. Please try again later.');
-                    }
-
-                    if ('900' === $response) {
-                        return $error('Invalid API key or API down.');
-                    }
-
-                    return $key;
-                },]],
-            'sms77api_msg' => [null],
-            'sms77api_performance_tracking' => [0, [], 'boolean'],
-            'sms77api_receivers' => [null],
-            'sms77api_udh' => [null],
-            'sms77api_unicode' => [0, [], 'boolean'],
-            'sms77api_utf8' => [0, [], 'boolean'],
-            'sms77api_ttl' => [null, [], 'integer'],
-        ];
     }
 
     static function get($endpoint, $apiKey, $data = []) {
@@ -91,9 +58,11 @@ class sms77api_Util {
 
         if (!get_option('sms77api_key')) {
             $href = admin_url('options-general.php?page=sms77api');
-            echo "<p>An API Key is required for sending SMS. Please head to the
-                <a href='$href'>Plugin Settings</a> to set it.
-            </p>";
+            $p = sprintf(wp_kses(
+                __('An API Key is required for sending SMS. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
+                ['a' => ['href' => []]]), esc_url($href));
+
+            echo "<p>$p</p>";
         }
     }
 }

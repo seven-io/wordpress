@@ -22,10 +22,12 @@ if (!defined('WPINC')) {
 
 define('SMS77API_VERSION', '1.0.0');
 
-require plugin_dir_path(__FILE__) . 'includes/' . 'class-sms77api-util.php';
+$rootPath = plugin_dir_path(__FILE__);
+require_once $rootPath . 'includes/' . 'class-sms77api-util.php';
+require_once $rootPath . 'includes/' . 'class-sms77api-options.php';
 
 add_action('admin_init', function() {
-    foreach (sms77api_Util::getOptions() as $name => $values) {
+    foreach ((array)new sms77api_Options as $name => $values) {
         add_option($name, $values[0]);
 
         register_setting(
@@ -55,7 +57,7 @@ add_action('admin_menu', function() {
     );
 
     if (sms77api_Util::hasWooCommerce()) {
-        add_submenu_page( 'sms77api-menu', 'WooCommerce', 'WooCommerce',
+        add_submenu_page('sms77api-menu', 'WooCommerce', 'WooCommerce',
             'manage_options', 'sms77api-wooc', function() {
                 require_once __DIR__ . '/pages/woocommerce.php';
             });

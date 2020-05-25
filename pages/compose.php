@@ -33,7 +33,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
             <?php sms77api_Partials::msg(false) ?>
         </label>
 
-        <?php submit_button('Send SMS') ?>
+        <?php submit_button(__('Send SMS', 'sms77api')) ?>
     </form>
 
     <style>
