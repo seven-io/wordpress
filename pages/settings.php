@@ -16,7 +16,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 
 <h2>General</h2>
 
-<form method="POST" action="options.php" style='display: flex; flex-direction: column;'>
+<form name='sms77api_settings' method="POST" action="options.php" style='display: flex; flex-direction: column;'>
     <?php settings_fields('sms77api_general_settings'); ?>
 
     <label style='display: flex'>
@@ -39,11 +39,11 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 </form>
 
 <style>
-    form label {
+    form[name='sms77api_settings'] label {
         justify-content: space-between;
     }
 
-    form label:not(:last-of-type) {
+    form[name='sms77api_settings'] label:not(:last-of-type) {
         margin-bottom: 10px;
     }
 </style>

@@ -15,13 +15,13 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
 ?>
     <h1>sms77 - WooCommerce</h1>
 
-<?php require_once __DIR__ . '/../partials/responsable.php' ?>
+<?php sms77api_Util::defaultMessageElements() ?>
 
 <?php if (get_option('sms77api_key') && sms77api_Util::hasWooCommerce()): ?>
     <h2>
         <?php esc_html_e('Send Bulk', 'sms77api'); ?>
     </h2>
-    <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
+    <form name='sms77api_wooc' method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='sms77api_wooc_bulk'>
 
         <?php sms77api_Partials::all(false) ?>
@@ -85,19 +85,19 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
         });
     </script>
     <style>
-        .datepicker {
+        form[name='sms77api_wooc'] .datepicker {
             min-height: 30px;
         }
 
-        input {
+        form[name='sms77api_wooc'] input {
             max-width: 200px;
         }
 
-        form label {
+        form[name='sms77api_wooc'] label {
             justify-content: space-between;
         }
 
-        textarea {
+        form[name='sms77api_wooc'] textarea {
             width: 100%;
         }
     </style>

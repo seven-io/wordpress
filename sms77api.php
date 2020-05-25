@@ -63,14 +63,16 @@ add_action('admin_menu', function() {
 });
 
 function toString($key) {
-    return isset($_POST[$key]) ? $_POST[$key] : '';
+    return array_key_exists($key, $_POST) ? $_POST[$key] : '';
 }
 
-function toBool($key) {
-    return isset($_POST[$key]) ? (int)(bool)$_POST[$key] : 0;
+function toShortBool($key) {
+    return array_key_exists($key, $_POST) ? (int)((bool)$_POST[$key]) : 0;
 }
 
-function sms($receivers, $msg) {
+function sms($receivers) {
+    $msg = toString('msg');
+
     if (!isset($_POST['submit'])) {
         return;
     }
@@ -91,23 +93,23 @@ function sms($receivers, $msg) {
             'sms',
             get_option('sms77api_key'),
             [
-                'debug' => toBool('debug'),
-                'flash' => toBool('flash'),
-                'label' => isset($_POST['label']) ? $_POST['label'] : null,
-                'performance_tracking' => toBool('performance_tracking'),
+                'debug' => toShortBool('debug'),
+                'flash' => toShortBool('flash'),
+                'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
+                'performance_tracking' => toShortBool('performance_tracking'),
                 'text' => $msg,
                 'to' => $receivers,
-                'ttl' => isset($_POST['ttl']) ? (int)$_POST['ttl'] : null,
-                'udh' => isset($_POST['udh']) ? $_POST['udh'] : null,
-                'unicode' => toBool('unicode'),
-                'utf8' => toBool('utf8'),
+                'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
+                'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
+                'unicode' => toShortBool('unicode'),
+                'utf8' => toShortBool('utf8'),
             ]
         ),
     ];
 }
 
 add_action('admin_post_sms77api_compose_hook', function() {
-    $res = sms(toString('receivers'), toString('msg'));
+    $res = sms(toString('receivers'));
 
     wp_redirect(admin_url('admin.php?' . http_build_query([
             'errors' => $res['errors'],
@@ -159,7 +161,7 @@ add_action('admin_post_sms77api_wooc_bulk', function() {
         $phones[] = $order->get_billing_phone();
     }
 
-    $apiRes = sms(implode(',', array_unique($phones)), toString('msg'));
+    $apiRes = sms(implode(',', array_unique($phones)));
 
     wp_redirect(admin_url('admin.php?' . http_build_query([
             'errors' => $apiRes['errors'],

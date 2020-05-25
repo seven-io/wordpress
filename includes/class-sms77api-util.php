@@ -7,7 +7,6 @@
  * @author     sms77 e.K. <support@sms77.io>
  */
 class sms77api_Util {
-    const PREFIX = 'sms77api';
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
@@ -18,15 +17,15 @@ class sms77api_Util {
 
     static function getOptions() {
         return [
-            self::PREFIX . '_debug' => [0, [], 'boolean'],
-            self::PREFIX . '_delay' => [null],
-            self::PREFIX . '_flash' => [0, [], 'boolean'],
-            self::PREFIX . '_label' => [null],
-            self::PREFIX . '_key' => [null, [
+            'sms77api_debug' => [0, [], 'boolean'],
+            'sms77api_delay' => [null],
+            'sms77api_flash' => [0, [], 'boolean'],
+            'sms77api_label' => [null],
+            'sms77api_key' => [null, [
                 'sanitize_callback' => function($key) {
                     $error = function($msg) {
-                        add_settings_error(self::PREFIX . '_key',
-                            self::PREFIX . '_invalid_key', $msg);
+                        add_settings_error('sms77api_key',
+                            'sms77api_invalid_key', $msg);
                     };
 
                     $response = sms77api_Util::get('balance', $key);
@@ -41,13 +40,13 @@ class sms77api_Util {
 
                     return $key;
                 },]],
-            self::PREFIX . '_msg' => [null],
-            self::PREFIX . '_performance_tracking' => [0, [], 'boolean'],
-            self::PREFIX . '_receivers' => [null],
-            self::PREFIX . '_udh' => [null],
-            self::PREFIX . '_unicode' => [0, [], 'boolean'],
-            self::PREFIX . '_utf8' => [0, [], 'boolean'],
-            self::PREFIX . '_ttl' => [null, [], 'integer'],
+            'sms77api_msg' => [null],
+            'sms77api_performance_tracking' => [0, [], 'boolean'],
+            'sms77api_receivers' => [null],
+            'sms77api_udh' => [null],
+            'sms77api_unicode' => [0, [], 'boolean'],
+            'sms77api_utf8' => [0, [], 'boolean'],
+            'sms77api_ttl' => [null, [], 'integer'],
         ];
     }
 
@@ -76,6 +75,25 @@ class sms77api_Util {
             }
 
             return $body;
+        }
+    }
+
+    static function defaultMessageElements() {
+        if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
+            $errors = implode(PHP_EOL, $_GET['errors']);
+            echo "<b>Errors:</b><pre>$errors</pre>";
+        }
+
+        if (isset($_GET['response'])) {
+            $errors = json_encode($_GET['response'], JSON_PRETTY_PRINT);
+            echo "<b>Response:</b><pre>$errors</pre>";
+        }
+
+        if (!get_option('sms77api_key')) {
+            $href = admin_url('options-general.php?page=sms77api');
+            echo "<p>An API Key is required for sending SMS. Please head to the
+                <a href='$href'>Plugin Settings</a> to set it.
+            </p>";
         }
     }
 }
