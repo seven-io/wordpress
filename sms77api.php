@@ -19,7 +19,8 @@
 if (!defined('WPINC')) {
     die;
 }
-
+global $sms77_db_version;
+$sms77_db_version = '1.0.0';
 define('SMS77API_VERSION', '1.0.0');
 
 $rootPath = plugin_dir_path(__FILE__);
@@ -46,18 +47,24 @@ add_action('admin_menu', function() {
         });
 
     add_menu_page(
-        'sms77 Compose',
-        'sms77 Compose',
+        'Sms77.io',
+        'Sms77.io',
         'manage_options',
         'sms77api-menu',
         function() {
-            require_once __DIR__ . '/pages/compose.php';
+            header("Location: http://sms77.io");
+            die();
         },
         'dashicons-email-alt2'
     );
 
+    add_submenu_page('sms77api-menu', 'Write SMS', 'Write SMS',
+        'manage_options', 'sms77api-compose', function() {
+            require_once __DIR__ . '/pages/compose.php';
+        });
+
     if (sms77api_Util::hasWooCommerce()) {
-        add_submenu_page('sms77api-menu', 'WooCommerce', 'WooCommerce',
+        add_submenu_page('sms77api-menu', 'WooCommerce Bulk', 'WooCommerce Bulk',
             'manage_options', 'sms77api-wooc', function() {
                 require_once __DIR__ . '/pages/woocommerce.php';
             });
@@ -73,6 +80,8 @@ function toShortBool($key) {
 }
 
 function sms($receivers) {
+    global $wpdb;
+
     $msg = toString('msg');
 
     if (!isset($_POST['submit'])) {
@@ -89,24 +98,36 @@ function sms($receivers) {
         $errors[] = 'Message cannot be empty.';
     }
 
+    if (count($errors)) {
+        return [
+            'errors' => $errors,
+            'response' => null,
+        ];
+    }
+
+    $config = [
+        'debug' => toShortBool('debug'),
+        'flash' => toShortBool('flash'),
+        'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
+        'performance_tracking' => toShortBool('performance_tracking'),
+        'text' => $msg,
+        'to' => $receivers,
+        'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
+        'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
+        'unicode' => toShortBool('unicode'),
+        'utf8' => toShortBool('utf8'),
+    ];
+
+    $response = sms77api_Util::get('sms', get_option('sms77api_key'), $config);
+
+    $wpdb->insert($wpdb->prefix . "sms77api_messages", [
+        'response' => json_encode($response),
+        'config' => json_encode($config),
+    ]);
+
     return [
         'errors' => $errors,
-        'response' => count($errors) ? null : sms77api_Util::get(
-            'sms',
-            get_option('sms77api_key'),
-            [
-                'debug' => toShortBool('debug'),
-                'flash' => toShortBool('flash'),
-                'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
-                'performance_tracking' => toShortBool('performance_tracking'),
-                'text' => $msg,
-                'to' => $receivers,
-                'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
-                'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
-                'unicode' => toShortBool('unicode'),
-                'utf8' => toShortBool('utf8'),
-            ]
-        ),
+        'response' => $response,
     ];
 }
 
@@ -142,7 +163,7 @@ add_action('admin_post_sms77api_wooc_bulk', function() {
             if (!$dateTo) {
                 return wp_redirect(admin_url('admin.php?' . http_build_query([
                         'errors' => ['To-Date must be set if using the "..." modificator.'],
-                        'page' => 'sms77api-compose',
+                        'page' => 'sms77api-wooc',
                         'response' => null,
                     ])));
             }
@@ -166,7 +187,7 @@ add_action('admin_post_sms77api_wooc_bulk', function() {
     $apiRes = sms(implode(',', array_unique($phones)));
 
     wp_redirect(admin_url('admin.php?' . http_build_query([
-            'errors' => $apiRes['errors'],
+            'errors' => $apiRes['wooc'],
             'page' => 'sms77api-compose',
             'response' => $apiRes['response'],
         ])));
@@ -178,4 +199,23 @@ add_action('plugins_loaded', function() {
         false,
         dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
     );
+});
+
+register_activation_hook(__FILE__, function() {
+    global $wpdb;
+    global $sms77_db_version;
+    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+    $table_name = $wpdb->prefix . "sms77api_messages";
+    $charset_collate = $wpdb->get_charset_collate();
+    dbDelta("CREATE TABLE IF NOT EXISTS `$table_name` (
+      `id` MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
+      `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `response` TEXT NOT NULL,
+      `config` TEXT NOT NULL,
+      PRIMARY KEY (`id`)
+    ) $charset_collate;");
+
+    add_option('sms77api_db_version', $sms77_db_version);
 });

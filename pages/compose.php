@@ -14,7 +14,7 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
 require_once __DIR__ . '/../includes/class-sms77api-partials.php';
 ?>
     <h1>
-        sms77 - <?php esc_html_e('Compose SMS', 'sms77api'); ?>
+        sms77 - <?php _e('Compose SMS', 'sms77api'); ?>
     </h1>
 
 <?php sms77api_Util::defaultMessageElements() ?>
