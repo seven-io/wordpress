@@ -12,6 +12,66 @@ class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
+    static function sms($receivers) {
+        global $wpdb;
+
+        $msg = self::toString('msg');
+
+        if (!isset($_POST['submit'])) {
+            return;
+        }
+
+        $errors = [];
+
+        if (!mb_strlen($receivers)) {
+            $errors[] = 'Receivers cannot be missing.';
+        }
+
+        if (!mb_strlen($msg)) {
+            $errors[] = 'Message cannot be empty.';
+        }
+
+        if (count($errors)) {
+            return [
+                'errors' => $errors,
+                'response' => null,
+            ];
+        }
+
+        $config = [
+            'debug' => self::toShortBool('debug'),
+            'flash' => self::toShortBool('flash'),
+            'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
+            'performance_tracking' => self::toShortBool('performance_tracking'),
+            'text' => $msg,
+            'to' => $receivers,
+            'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
+            'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
+            'unicode' => self::toShortBool('unicode'),
+            'utf8' => self::toShortBool('utf8'),
+        ];
+
+        $response = self::get('sms', get_option('sms77api_key'), $config);
+
+        $wpdb->insert($wpdb->prefix . "sms77api_messages", [
+            'response' => json_encode($response),
+            'config' => json_encode($config),
+        ]);
+
+        return [
+            'errors' => $errors,
+            'response' => $response,
+        ];
+    }
+
+    static function toString($key) {
+        return array_key_exists($key, $_POST) ? $_POST[$key] : '';
+    }
+
+    static function toShortBool($key) {
+        return array_key_exists($key, $_POST) ? (int)((bool)$_POST[$key]) : 0;
+    }
+
     static function hasWooCommerce() {
         return in_array('woocommerce/woocommerce.php',
             apply_filters('active_plugins', get_option('active_plugins')));
