@@ -19,25 +19,44 @@
 if (!defined('WPINC')) {
     die;
 }
-global $sms77_db_version;
-$sms77_db_version = '1.0.0';
+global $sms77api_db_version;
+$sms77api_db_version = '1.0.0';
 define('SMS77API_VERSION', '1.0.0');
 $rootPath = plugin_dir_path(__FILE__);
 require_once $rootPath . 'includes/' . 'class-sms77api-util.php';
 require_once $rootPath . 'includes/' . 'class-sms77api-options.php';
 require_once $rootPath . 'tables/' . 'Messages_Table.php';
+require_once $rootPath . 'tables/' . 'Number_Lookups_Table.php';
 
+/**
+ * @property Messages_Table messages_table
+ * @property Number_Lookups_Table number_lookups_table
+ * @property string _charset
+ */
 class Sms77Api_Plugin {
     static $instance;
 
-    public $messages_table;
-
     public function __construct() {
+        global $wpdb;
+        $this->_charset = $wpdb->get_charset_collate();
+
         load_plugin_textdomain(
             'sms77api',
             false,
             dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
         );
+
+        $this->addActions();
+
+        $this->registerActivationHook();
+
+        add_filter('set-screen-option', function($status, $option, $value) {
+            return $value;
+        }, 10, 3);
+    }
+
+    private function addActions() {
+        add_action('init', [$this, 'updateTables']);
 
         add_action('admin_init', function() {
             foreach ((array)new sms77api_Options as $name => $values) {
@@ -70,7 +89,7 @@ class Sms77Api_Plugin {
                 'dashicons-email-alt2'
             );
 
-            $hook = add_submenu_page(
+            $messagesHook = add_submenu_page(
                 'sms77api-menu',
                 __('Messages', 'sms77io'),
                 __('Messages', 'sms77io'),
@@ -80,8 +99,7 @@ class Sms77Api_Plugin {
                     require_once __DIR__ . '/pages/messages.php';
                 }
             );
-
-            add_action("load-$hook", function() {
+            add_action("load-$messagesHook", function() {
                 add_screen_option('per_page', [
                     'label' => 'Messages',
                     'default' => 5,
@@ -89,6 +107,42 @@ class Sms77Api_Plugin {
                 ]);
 
                 $this->messages_table = new Messages_Table();
+            });
+
+            $numberLookupsHook = add_submenu_page(
+                'sms77api-menu',
+                __('Number Lookups', 'sms77io'),
+                __('Number Lookups', 'sms77io'),
+                'manage_options',
+                'sms77api-number_lookups',
+                function() {
+                    if (!get_option('sms77api_key')) {
+                        return;
+                    }
+                    ?>
+                    <h2>Create new Number Lookup</h2>
+
+                    <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'
+                          style='display: flex; align-items: baseline'>
+                        <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
+
+                        <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
+                               placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
+
+                        <?php submit_button(__('Lookup', 'sms77api')) ?>
+                    </form>
+                    <?php
+                    sms77api_Util::grid($this->number_lookups_table);
+                }
+            );
+            add_action("load-$numberLookupsHook", function() {
+                add_screen_option('per_page', [
+                    'label' => 'Number Lookups',
+                    'default' => 5,
+                    'option' => 'number_lookups_per_page',
+                ]);
+
+                $this->number_lookups_table = new Number_Lookups_Table();
             });
 
             add_submenu_page('sms77api-menu', 'Write SMS', 'Write SMS',
@@ -166,30 +220,78 @@ class Sms77Api_Plugin {
                 ])));
         });
 
-        register_activation_hook(__FILE__, function() {
-            global $wpdb;
-            global $sms77_db_version;
-            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        add_action('admin_post_sms77api_number_lookup_hook', function() {
+            $errors = [];
 
-            $table_name = $wpdb->prefix . "sms77api_messages";
-            $charset_collate = $wpdb->get_charset_collate();
-            dbDelta("CREATE TABLE IF NOT EXISTS `$table_name` (
-      `id` MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
-      `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `response` TEXT NOT NULL,
-      `config` TEXT NOT NULL,
-      PRIMARY KEY (`id`)
-    ) $charset_collate;");
+            if (!isset($_POST['submit'])) {
+                return;
+            }
 
-            add_option('sms77api_db_version', $sms77_db_version);
+            $response = sms77api_Util::formatLookup($_POST['number']);
+            if (!$response) {
+                $errors[] = __('Failed to lookup number format.', 'sms77api');
+            }
+
+            wp_redirect(admin_url('admin.php?' . http_build_query([
+                    'errors' => $errors,
+                    'page' => 'sms77api-number_lookups',
+                    'response' => $response,
+                ])));
         });
-
-        add_filter('set-screen-option', function($status, $option, $value) {
-            return $value;
-        }, 10, 3);
     }
 
-    public static function get_instance() {
+    private function registerActivationHook() {
+        register_activation_hook(ABSPATH . 'wp-content/plugins/sms77api/sms77api.php', function() {
+            global $wpdb;
+            global $sms77api_db_version;
+
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+            dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_messages` (
+                `id` MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
+                `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `response` TEXT NOT NULL,
+                `config` TEXT NOT NULL,
+                PRIMARY KEY (`id`)
+                ) $this->_charset;");
+
+
+            add_option('sms77api_db_version', $sms77api_db_version);
+
+            $this->updateTables();
+        });
+    }
+
+    function updateTables() {
+        global $wpdb;
+        global $sms77api_db_version;
+        $newVersion = '1.5.0';
+
+        if (!(version_compare(get_option('sms77api_db_version', $sms77api_db_version), $newVersion) < 0)) {
+            return;
+        }
+
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+        dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_number_lookups` (
+                `id` TINYINT(9) AUTO_INCREMENT,
+                `international` VARCHAR(255) UNIQUE NOT NULL,
+                `success` TINYINT(1) NOT NULL,
+                `national` VARCHAR(255) NOT NULL,
+                `international_formatted` VARCHAR(255) NOT NULL,
+                `country_name` VARCHAR(255) NOT NULL,
+                `country_code` VARCHAR(4) NOT NULL,
+                `country_iso` VARCHAR(4) NOT NULL,
+                `carrier` VARCHAR(255) NOT NULL,
+                `network_type` VARCHAR(24) NOT NULL,
+                `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+                ) $this->_charset;");
+
+        update_option('sms77api_db_version', $newVersion);
+    }
+
+    static function get_instance() {
         if (!isset(self::$instance)) {
             self::$instance = new self();
         }

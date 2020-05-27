@@ -12,6 +12,57 @@ class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
+    /**
+     * @param Base_Table $table
+     */
+    static function grid($table) {
+        ?>
+        <div class="wrap">
+            <h1>sms77 - <?php echo $table->_args['_tpl']['title'] ?></h1>
+
+            <?php self::defaultMessageElements() ?>
+
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <div class="meta-box-sortables ui-sortable">
+                            <form method="POST">
+                                <?php
+                                $table->prepare_items();
+                                $table->display();
+                                ?>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <br class="clear">
+            </div>
+        </div>
+        <?php
+    }
+
+    static function formatLookup($number) {
+        global $wpdb;
+        $response = self::get(
+            'lookup', get_option('sms77api_key'), ['number' => $number, 'type' => 'format']);
+
+        if (true !== $response['success']) {
+            error_log(is_array($response) || is_object($response)
+                ? print_r($response, true) : $response);
+
+            return false;
+        }
+
+        if (empty($wpdb->get_col("SELECT international from {$wpdb->prefix}sms77api_number_lookups"
+            . " WHERE international = {$response['international']}"))) {
+            return 1 === $wpdb->insert($wpdb->prefix . "sms77api_number_lookups", $response)
+                ? $response : false;
+        }
+
+        return is_int($wpdb->update($wpdb->prefix . "sms77api_number_lookups",
+            $response, ['international' => $response['international']])) ? $response : false;
+    }
+
     static function sms($config) {
         global $wpdb;
 

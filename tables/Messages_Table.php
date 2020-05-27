@@ -25,12 +25,7 @@ class Messages_Table extends WP_List_Table {
      * @return mixed
      */
     public function column_default($item, $columnName) {
-        switch ($columnName) {
-            case 'actions':
-                return "<a href='?page={$_REQUEST['page']}&action=resend&message={$item['id']}'>Resend</a>";
-            default:
-                return $item[$columnName];
-        }
+        return $item[$columnName];
     }
 
     /**
