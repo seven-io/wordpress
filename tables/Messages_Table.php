@@ -49,7 +49,6 @@ class Messages_Table extends WP_List_Table {
             'response' => __('Response', 'sms77api'),
             'config' => __('Config', 'sms77api'),
             'created' => __('Created', 'sms77api'),
-            'updated' => __('Updated', 'sms77api'),
         ];
     }
 
@@ -57,7 +56,6 @@ class Messages_Table extends WP_List_Table {
     public function get_sortable_columns() {
         return [
             'created' => ['created', true],
-            'updated' => ['updated', false],
         ];
     }
 

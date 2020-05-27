@@ -176,7 +176,6 @@ class Sms77Api_Plugin {
             dbDelta("CREATE TABLE IF NOT EXISTS `$table_name` (
       `id` MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
       `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-      `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       `response` TEXT NOT NULL,
       `config` TEXT NOT NULL,
       PRIMARY KEY (`id`)
