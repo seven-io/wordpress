@@ -12,9 +12,20 @@ class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
-    static function sms($receivers) {
+    static function sms($config) {
         global $wpdb;
 
+        $response = self::get('sms', get_option('sms77api_key'), $config);
+
+        $wpdb->insert($wpdb->prefix . "sms77api_messages", [
+            'response' => json_encode($response),
+            'config' => json_encode($config),
+        ]);
+
+        return $response;
+    }
+
+    static function send($receivers) {
         $msg = self::toString('msg');
 
         if (!isset($_POST['submit'])) {
@@ -38,29 +49,20 @@ class sms77api_Util {
             ];
         }
 
-        $config = [
-            'debug' => self::toShortBool('debug'),
-            'flash' => self::toShortBool('flash'),
-            'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
-            'performance_tracking' => self::toShortBool('performance_tracking'),
-            'text' => $msg,
-            'to' => $receivers,
-            'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
-            'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
-            'unicode' => self::toShortBool('unicode'),
-            'utf8' => self::toShortBool('utf8'),
-        ];
-
-        $response = self::get('sms', get_option('sms77api_key'), $config);
-
-        $wpdb->insert($wpdb->prefix . "sms77api_messages", [
-            'response' => json_encode($response),
-            'config' => json_encode($config),
-        ]);
-
         return [
             'errors' => $errors,
-            'response' => $response,
+            'response' => self::sms([
+                'debug' => self::toShortBool('debug'),
+                'flash' => self::toShortBool('flash'),
+                'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
+                'performance_tracking' => self::toShortBool('performance_tracking'),
+                'text' => $msg,
+                'to' => $receivers,
+                'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
+                'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
+                'unicode' => self::toShortBool('unicode'),
+                'utf8' => self::toShortBool('utf8'),
+            ]),
         ];
     }
 
@@ -112,8 +114,8 @@ class sms77api_Util {
         }
 
         if (isset($_GET['response'])) {
-            $errors = json_encode($_GET['response'], JSON_PRETTY_PRINT);
-            echo "<b>Response:</b><pre>$errors</pre>";
+            $response = json_encode($_GET['response'], JSON_PRETTY_PRINT);
+            echo "<b>Response:</b><pre>$response</pre>";
         }
 
         if (!get_option('sms77api_key')) {

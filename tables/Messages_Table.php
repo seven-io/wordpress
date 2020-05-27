@@ -16,41 +16,20 @@ class Messages_Table extends WP_List_Table {
         parent::__construct([
             'singular' => __('Message', 'sms77api'),
             'plural' => __('Messages', 'sms77api'),
-            'ajax' => false,
         ]);
-    }
-
-    public function no_items() {
-        _e('There are no messages yet.', 'sms77api');
-    }
-
-    /**
-     * @param array $item an array of DB data
-     * @return string
-     */
-    function column_name($item) {
-        return '<strong>' . $item['name'] . '</strong>' . $this->row_actions([
-                'delete' => sprintf('<a href="?page=%s&action=%s&message=%s&_wpnonce=%s">Delete</a>',
-                    esc_attr($_REQUEST['page']),
-                    'delete',
-                    absint($item['id']),
-                    wp_create_nonce('sms77api_delete_message')),]);
     }
 
     /**
      * @param array $item
-     * @param string $column_name
+     * @param string $columnName
      * @return mixed
      */
-    public function column_default($item, $column_name) {
-        switch ($column_name) {
-            case 'response':
-            case 'config':
-            case 'created':
-            case 'updated':
-                return $item[$column_name];
+    public function column_default($item, $columnName) {
+        switch ($columnName) {
+            case 'actions':
+                return "<a href='?page={$_REQUEST['page']}&action=resend&message={$item['id']}'>Resend</a>";
             default:
-                return '';
+                return $item[$columnName];
         }
     }
 
@@ -60,7 +39,7 @@ class Messages_Table extends WP_List_Table {
      * @return string
      */
     function column_cb($item) {
-        return sprintf('<input type="checkbox" name="bulk-delete[]" value="%s" />', $item['id']);
+        return "<input type='checkbox' name='row_action[]' value='{$item['id']}' />";
     }
 
     /** @return array */
@@ -85,7 +64,8 @@ class Messages_Table extends WP_List_Table {
     /** @return array */
     public function get_bulk_actions() {
         return [
-            'bulk-delete' => __('Delete', 'sms77api'),
+            'delete' => __('Delete', 'sms77api'),
+            'resend' => __('Resend', 'sms77api'),
         ];
     }
 
@@ -94,55 +74,64 @@ class Messages_Table extends WP_List_Table {
 
         $this->_column_headers = $this->get_column_info();
 
-        $this->process_bulk_action();
+        if (isset($_POST['_wpnonce']) && !empty($_POST['_wpnonce'])) {
+            if (!wp_verify_nonce(
+                filter_input(INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING),
+                'bulk-' . $this->_args['plural'])) {
+                wp_die('SECURITY_CHECK_FAILED');
+            }
 
-        $per_page = $this->get_items_per_page('messages_per_page', 4);
+            switch ($this->current_action()) {
+                case 'resend':
+                    if (isset($_POST['row_action'])) {
+                        $errors = [];
+                        $responses = [];
+
+                        foreach ($_POST['row_action'] as $msgId) {
+                            try {
+                                $responses[] = sms77api_Util::sms((array)json_decode($wpdb->get_row(
+                                    "SELECT config from {$wpdb->prefix}sms77api_messages WHERE id = $msgId")
+                                    ->config));
+                            } catch (\Exception $ex) {
+                                $errors[] = $ex->getMessage();
+                            }
+                        }
+
+                        wp_redirect(esc_url_raw(add_query_arg([
+                            'errors' => $errors,
+                            'response' => $responses,
+                        ])));
+                        die;
+                    }
+
+                    wp_redirect(esc_url(add_query_arg()));
+                    die;
+
+                    break;
+                case 'delete':
+                    if (isset($_POST['row_action'])) {
+                        foreach (esc_sql($_POST['row_action']) as $id) {
+                            $wpdb->delete("{$wpdb->prefix}sms77api_messages", ['id' => $id], ['%d']);
+                        }
+                    }
+
+                    wp_redirect(esc_url(add_query_arg()));
+                    die;
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        $perPage = $this->get_items_per_page('messages_per_page', 5);
 
         $this->set_pagination_args([
             'total_items' => $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->prefix}sms77api_messages"),
-            'per_page' => $per_page,
+            'per_page' => $perPage,
         ]);
 
-        $this->items = self::getMessages($per_page, $this->get_pagenum());
-    }
-
-    private function process_bulk_action() {
-        $redirect = function() {
-            wp_redirect(esc_url(add_query_arg()));
-
-            die;
-        };
-
-        if ('delete' === $this->current_action()) {
-            if (!wp_verify_nonce(esc_attr($_REQUEST['_wpnonce']), 'sms77api_delete_message')) {
-                die;
-            }
-
-            self::deleteMessage(absint($_GET['message']));
-
-            $redirect();
-        }
-
-        // If the delete bulk action is triggered
-        if ((isset($_POST['action']) && $_POST['action'] == 'bulk-delete')
-            || (isset($_POST['action2']) && $_POST['action2'] == 'bulk-delete')
-        ) {
-            foreach (esc_sql($_POST['bulk-delete']) as $id) {
-                self::deleteMessage($id);
-            }
-
-            $redirect();
-        }
-    }
-
-    /**
-     * @param int $id message ID
-     * @return bool|false|int
-     */
-    public static function deleteMessage($id) {
-        global $wpdb;
-
-        return $wpdb->delete("{$wpdb->prefix}sms77api_messages", ['id' => $id], ['%d']);
+        $this->items = self::getMessages($perPage, $this->get_pagenum());
     }
 
     /**
@@ -150,12 +139,14 @@ class Messages_Table extends WP_List_Table {
      * @param int $pageNumber
      * @return mixed
      */
-    public static function getMessages($perPage = 5, $pageNumber = 1) {
+    public static function getMessages($perPage, $pageNumber) {
         global $wpdb;
 
         $sql = "SELECT * FROM {$wpdb->prefix}sms77api_messages";
 
-        if (!empty($_REQUEST['orderby'])) {
+        if (empty($_REQUEST['orderby'])) {
+            $sql .= ' ORDER BY created DESC';
+        } else {
             $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
             $sql .= empty($_REQUEST['order']) ? ' ASC' : ' ' . esc_sql($_REQUEST['order']);
         }

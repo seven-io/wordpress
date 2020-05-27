@@ -83,7 +83,7 @@ class Sms77Api_Plugin {
 
             add_action("load-$hook", function() {
                 add_screen_option('per_page', [
-                    'label' => 'Customers',
+                    'label' => 'Messages',
                     'default' => 5,
                     'option' => 'messages_per_page',
                 ]);
@@ -105,7 +105,7 @@ class Sms77Api_Plugin {
         });
 
         add_action('admin_post_sms77api_compose_hook', function() {
-            $res = sms77api_Util::sms(sms77api_Util::toString('receivers'));
+            $res = sms77api_Util::send(sms77api_Util::toString('receivers'));
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
                     'errors' => $res['errors'],
@@ -157,7 +157,7 @@ class Sms77Api_Plugin {
                 $phones[] = $order->get_billing_phone();
             }
 
-            $apiRes = sms77api_Util::sms(implode(',', array_unique($phones)));
+            $apiRes = sms77api_Util::send(implode(',', array_unique($phones)));
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
                     'errors' => $apiRes['wooc'],
