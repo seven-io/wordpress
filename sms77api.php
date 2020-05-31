@@ -25,12 +25,15 @@ define('SMS77API_VERSION', '1.0.0');
 $rootPath = plugin_dir_path(__FILE__);
 require_once $rootPath . 'includes/' . 'class-sms77api-util.php';
 require_once $rootPath . 'includes/' . 'class-sms77api-options.php';
+require_once $rootPath . 'includes/' . 'class-sms77api-partials.php';
+require_once $rootPath . 'includes/' . 'class-sms77api-lookup.php';
 require_once $rootPath . 'tables/' . 'Messages_Table.php';
-require_once $rootPath . 'tables/' . 'Number_Lookups_Table.php';
+require_once $rootPath . 'tables/' . 'Format_Lookups_Table.php';
+require_once $rootPath . 'tables/' . 'MNP_Lookups_Table.php';
 
 /**
  * @property Messages_Table messages_table
- * @property Number_Lookups_Table number_lookups_table
+ * @property Format_Lookups_Table $format_lookups_table
  * @property string _charset
  */
 class Sms77Api_Plugin {
@@ -89,17 +92,16 @@ class Sms77Api_Plugin {
                 'dashicons-email-alt2'
             );
 
-            $messagesHook = add_submenu_page(
-                'sms77api-menu',
-                __('Messages', 'sms77io'),
-                __('Messages', 'sms77io'),
-                'manage_options',
-                'sms77api-messages',
-                function() {
-                    require_once __DIR__ . '/pages/messages.php';
-                }
-            );
-            add_action("load-$messagesHook", function() {
+            add_action("load-" . add_submenu_page(
+                    'sms77api-menu',
+                    __('Messages', 'sms77io'),
+                    __('Messages', 'sms77io'),
+                    'manage_options',
+                    'sms77api-messages',
+                    function() {
+                        require_once __DIR__ . '/pages/messages.php';
+                    }
+                ), function() {
                 add_screen_option('per_page', [
                     'label' => 'Messages',
                     'default' => 5,
@@ -109,41 +111,33 @@ class Sms77Api_Plugin {
                 $this->messages_table = new Messages_Table();
             });
 
-            $numberLookupsHook = add_submenu_page(
-                'sms77api-menu',
-                __('Number Lookups', 'sms77io'),
-                __('Number Lookups', 'sms77io'),
-                'manage_options',
-                'sms77api-number_lookups',
-                function() {
-                    if (!get_option('sms77api_key')) {
-                        return;
+            $addSubMenuTable = function($Table, $tableProp, $title, $menuSlug, $perPageOption, $type) {
+                $hook = add_submenu_page(
+                    'sms77api-menu',
+                    __($title, 'sms77io'),
+                    __($title, 'sms77io'),
+                    'manage_options',
+                    $menuSlug,
+                    function() use ($tableProp, $type) {
+                        sms77api_Partials::lookupPage($this->$tableProp, $type);
                     }
-                    ?>
-                    <h2>Create new Number Lookup</h2>
+                );
+                add_action("load-$hook", function() use ($title, $tableProp, $Table, $perPageOption) {
+                    add_screen_option('per_page', [
+                        'default' => 5,
+                        'label' => $title,
+                        'option' => $perPageOption,
+                    ]);
 
-                    <form method='POST' action='<?php echo admin_url('admin-post.php'); ?>'
-                          style='display: flex; align-items: baseline'>
-                        <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
-
-                        <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
-                               placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
-
-                        <?php submit_button(__('Lookup', 'sms77api')) ?>
-                    </form>
-                    <?php
-                    sms77api_Util::grid($this->number_lookups_table);
-                }
-            );
-            add_action("load-$numberLookupsHook", function() {
-                add_screen_option('per_page', [
-                    'label' => 'Number Lookups',
-                    'default' => 5,
-                    'option' => 'number_lookups_per_page',
-                ]);
-
-                $this->number_lookups_table = new Number_Lookups_Table();
-            });
+                    $this->$tableProp = new $Table();
+                });
+            };
+            $addSubMenuTable(
+                Format_Lookups_Table::class, 'format_lookups_table', 'Format Lookups',
+                'sms77api_format_lookups', 'format_lookups_per_page', 'format');
+            $addSubMenuTable(
+                MNP_Lookups_Table::class, 'mnp_lookups_table', 'MNP Lookups',
+                'sms77api_mnp_lookups', 'mnp_lookups_per_page', 'mnp');
 
             add_submenu_page('sms77api-menu', 'Write SMS', 'Write SMS',
                 'manage_options', 'sms77api-compose', function() {
@@ -223,18 +217,18 @@ class Sms77Api_Plugin {
         add_action('admin_post_sms77api_number_lookup_hook', function() {
             $errors = [];
 
-            if (!isset($_POST['submit'])) {
+            if (!isset($_POST['submit']) || !in_array($_POST['type'], ['format', 'cnam', 'hlr', 'mnp'])) {
                 return;
             }
 
-            $response = sms77api_Util::formatLookup($_POST['number']);
+            $response = sms77api_Lookup::numbered($_POST['number'], $_POST['type']);
             if (!$response) {
-                $errors[] = __('Failed to lookup number format.', 'sms77api');
+                $errors[] = __("Failed to lookup '{$_POST['type']}'.", 'sms77api');
             }
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
                     'errors' => $errors,
-                    'page' => 'sms77api-number_lookups',
+                    'page' => "sms77api_{$_POST['type']}_lookups",
                     'response' => $response,
                 ])));
         });
@@ -265,7 +259,7 @@ class Sms77Api_Plugin {
     function updateTables() {
         global $wpdb;
         global $sms77api_db_version;
-        $newVersion = '1.5.0';
+        $newVersion = '1.6.2';
 
         if (!(version_compare(get_option('sms77api_db_version', $sms77api_db_version), $newVersion) < 0)) {
             return;
@@ -284,6 +278,19 @@ class Sms77Api_Plugin {
                 `country_iso` VARCHAR(4) NOT NULL,
                 `carrier` VARCHAR(255) NOT NULL,
                 `network_type` VARCHAR(24) NOT NULL,
+                `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+                ) $this->_charset;");
+
+        dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_mnp_lookups` (
+                `id` TINYINT(9) AUTO_INCREMENT,
+                `number` VARCHAR(255) UNIQUE NOT NULL,
+                `country` VARCHAR(255) NOT NULL,
+                `international_formatted` VARCHAR(255) NOT NULL,
+                `national_format` VARCHAR(255) NOT NULL,
+                `network` VARCHAR(255) NOT NULL,
+                `mccmnc` VARCHAR(255) NOT NULL,
+                `isPorted` TINYINT(1) NOT NULL,
                 `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)
                 ) $this->_charset;");

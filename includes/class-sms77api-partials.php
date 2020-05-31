@@ -6,6 +6,9 @@
  * @subpackage sms77api/includes
  * @author     sms77 e.K. <support@sms77.io>
  */
+
+require_once 'class-sms77api-util.php';
+
 class sms77api_Partials {
     static function all($isGlobal) {
         self::debug($isGlobal);
@@ -105,6 +108,27 @@ class sms77api_Partials {
                    value='<?php echo get_option($option) ?>'/>
         </label>
         <?php
+    }
+
+    public static function lookupPage($table, $type) {
+        if (!get_option('sms77api_key')) {
+            return;
+        }
+        ?>
+        <h2><?php _e('Create a new Number Lookup', 'sms77api') ?></h2>
+
+        <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
+              style='display: flex; align-items: baseline'>
+            <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
+            <input type='hidden' name='type' value='<?php echo $type ?>'>
+
+            <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
+                   placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
+
+            <?php submit_button(__('Lookup', 'sms77api')) ?>
+        </form>
+        <?php
+        sms77api_Util::grid($table);
     }
 
     private static function label($isGlobal) {

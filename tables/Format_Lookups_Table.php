@@ -9,11 +9,11 @@
 
 require_once __DIR__ . '/Base_Table.php';
 
-class Number_Lookups_Table extends Base_Table {
+class Format_Lookups_Table extends Base_Table {
     public function __construct() {
         parent::__construct(
-            'number_lookups', 'Number Lookup',
-            'Number Lookups', 'updated');
+            'number_lookups', 'Format Lookup',
+            'Format Lookups', 'updated', 'international');
     }
 
     /** @return array */
@@ -58,48 +58,9 @@ class Number_Lookups_Table extends Base_Table {
     }
 
     function prepare_items() {
-        global $wpdb;
-
         $this->_initPrepareItems();
 
-        switch ($this->current_action()) {
-            case 'relookup':
-                if (isset($_POST['row_action'])) {
-                    $errors = [];
-                    $responses = [];
-
-                    foreach ($_POST['row_action'] as $nrLookupId) {
-                        try {
-                            $responses[] = sms77api_Util::formatLookup($wpdb->get_col(
-                                "SELECT international from {$wpdb->prefix}sms77api_number_lookups"
-                                . " WHERE id = $nrLookupId")[0]);
-                        } catch (\Exception $ex) {
-                            $errors[] = $ex->getMessage();
-                        }
-                    }
-
-                    wp_redirect(esc_url_raw(add_query_arg(['errors' => $errors, 'response' => $responses,])));
-                    die;
-                }
-
-                wp_redirect(esc_url(add_query_arg()));
-                die;
-
-                break;
-            case 'delete':
-                if (isset($_POST['row_action'])) {
-                    foreach (esc_sql($_POST['row_action']) as $id) {
-                        $wpdb->delete("{$wpdb->prefix}sms77api_number_lookups", ['id' => $id], ['%d']);
-                    }
-                }
-
-                wp_redirect(esc_url(add_query_arg()));
-                die;
-
-                break;
-            default:
-                break;
-        }
+        $this->_lookup('format');
 
         parent::prepare_items();
     }

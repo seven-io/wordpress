@@ -191,7 +191,7 @@ msgid "Created"
 msgstr ""
 
 #: tables/Messages_Table.php:60
-#: tables/Number_Lookups_Table.php:55
+#: tables/Format_Lookups_Table.php:55
 msgid "Delete"
 msgstr ""
 
@@ -199,46 +199,46 @@ msgstr ""
 msgid "Resend"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:23
+#: tables/Format_Lookups_Table.php:23
 msgid "Updated"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:24
+#: tables/Format_Lookups_Table.php:24
 msgid "Success"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:25
+#: tables/Format_Lookups_Table.php:25
 msgid "National"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:26
+#: tables/Format_Lookups_Table.php:26
 msgid "International"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:27
+#: tables/Format_Lookups_Table.php:27
 msgid "International Formatted"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:28
+#: tables/Format_Lookups_Table.php:28
 msgid "Country Name"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:29
+#: tables/Format_Lookups_Table.php:29
 msgid "Country Code"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:30
+#: tables/Format_Lookups_Table.php:30
 msgid "Country ISO"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:31
+#: tables/Format_Lookups_Table.php:31
 msgid "Carrier"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:32
+#: tables/Format_Lookups_Table.php:32
 msgid "Network Type"
 msgstr ""
 
-#: tables/Number_Lookups_Table.php:56
+#: tables/Format_Lookups_Table.php:56
 msgid "Lookup again"
 msgstr ""

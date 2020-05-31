@@ -41,34 +41,12 @@ class sms77api_Util {
         <?php
     }
 
-    static function formatLookup($number) {
-        global $wpdb;
-        $response = self::get(
-            'lookup', get_option('sms77api_key'), ['number' => $number, 'type' => 'format']);
-
-        if (true !== $response['success']) {
-            error_log(is_array($response) || is_object($response)
-                ? print_r($response, true) : $response);
-
-            return false;
-        }
-
-        if (empty($wpdb->get_col("SELECT international from {$wpdb->prefix}sms77api_number_lookups"
-            . " WHERE international = {$response['international']}"))) {
-            return 1 === $wpdb->insert($wpdb->prefix . "sms77api_number_lookups", $response)
-                ? $response : false;
-        }
-
-        return is_int($wpdb->update($wpdb->prefix . "sms77api_number_lookups",
-            $response, ['international' => $response['international']])) ? $response : false;
-    }
-
     static function sms($config) {
         global $wpdb;
 
         $response = self::get('sms', get_option('sms77api_key'), $config);
 
-        $wpdb->insert($wpdb->prefix . "sms77api_messages", [
+        $wpdb->insert("{$wpdb->prefix}sms77api_messages", [
             'response' => json_encode($response),
             'config' => json_encode($config),
         ]);
