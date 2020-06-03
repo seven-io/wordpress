@@ -11,19 +11,27 @@ require_once 'class-sms77api-util.php';
 class sms77api_Lookup {
     static function numbered($number, $type) {
         switch ($type) {
+            case 'cnam':
+                return self::cnam($number);
+                break;
             case 'format':
                 return self::format($number);
                 break;
-            case 'mnp':
-                return self::mnp($number);
-                break;
             case 'hlr':
                 return self::hlr($number);
+                break;
+            case 'mnp':
+                return self::mnp($number);
                 break;
             default:
                 return false;
                 break;
         }
+    }
+
+    static function cnam($number) {
+        return self::execute(
+            'cnam', $number, 'number', 'sms77api_cnam_lookups');
     }
 
     static function format($number) {
@@ -48,7 +56,7 @@ class sms77api_Lookup {
 
         $response = (array)$response;
 
-        if (true !== $response[$successKey]) {
+        if (true !== $response[$successKey] && 'true' !== $response[$successKey]) {
             error_log(is_array($response) || is_object($response)
                 ? print_r($response, true) : $response);
 
@@ -56,8 +64,8 @@ class sms77api_Lookup {
         }
 
         switch ($type) {
-            case 'mnp':
-                $response = (array)$response['mnp'];
+            case 'cnam':
+                unset($response['success'], $response['code']);
                 break;
             case 'hlr':
                 $response['current_carrier'] =
@@ -67,13 +75,14 @@ class sms77api_Lookup {
                 $response['status'] = true === $response['status'] ? 1 : 0;
                 $response['lookup_outcome'] = true === $response['lookup_outcome'] ? 1 : 0;
                 break;
+            case 'mnp':
+                $response = (array)$response['mnp'];
+                break;
             default:
                 break;
         }
 
-        //     die(var_dump($response));
-
-        if (empty($wpdb->get_col("SELECT $entityKey from {$wpdb->prefix}$entityName"
+        if (empty($wpdb->get_col("SELECT $entityKey FROM {$wpdb->prefix}$entityName"
             . " WHERE $entityKey = {$response[$entityKey]}"))) {
             return 1 === $wpdb->insert($wpdb->prefix . $entityName, $response)
                 ? $response : false;

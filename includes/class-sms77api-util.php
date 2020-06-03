@@ -11,7 +11,16 @@ require_once 'class-sms77api-options.php';
 class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
-    const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp'];
+    const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp',];
+    const TABLES = ['messages', 'number_lookups', 'mnp_lookups', 'hlr_lookups', 'cnam_lookups',];
+
+    static function getTableNames() {
+        return array_map(function ($name) {
+            global $wpdb;
+
+            return "{$wpdb->prefix}sms77api_$name";
+        }, self::TABLES);
+    }
 
     /**
      * @param Base_Table $table

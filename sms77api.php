@@ -30,6 +30,7 @@ require_once $rootPath . 'tables/' . 'Messages_Table.php';
 require_once $rootPath . 'tables/' . 'Format_Lookups_Table.php';
 require_once $rootPath . 'tables/' . 'MNP_Lookups_Table.php';
 require_once $rootPath . 'tables/' . 'HLR_Lookups_Table.php';
+require_once $rootPath . 'tables/' . 'CNAM_Lookups_Table.php';
 
 /**
  * @property Messages_Table messages_table
@@ -135,6 +136,10 @@ class Sms77Api_Plugin {
                 HLR_Lookups_Table::class, 'hlr_lookups_table',
                 __('HLR Lookups', 'sms77api'), 'sms77api_hlr_lookups',
                 'hlr_lookups_per_page', 'hlr');
+            $addSubMenuTable(
+                CNAM_Lookups_Table::class, 'cnam_lookups_table',
+                __('CNAM Lookups', 'sms77api'), 'sms77api_cnam_lookups',
+                'cnam_lookups_per_page', 'cnam');
 
             add_submenu_page('sms77api-menu', 'Write SMS', 'Write SMS',
                 'manage_options', 'sms77api-compose', function () {
@@ -305,6 +310,14 @@ register_activation_hook(__FILE__, function () {
                 `roaming` VARCHAR(255) NOT NULL,
                 `gsm_code` VARCHAR(255) NOT NULL,
                 `gsm_message` VARCHAR(255) NOT NULL,
+                `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+                ) $charset;");
+
+    dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_cnam_lookups` (
+                `id` TINYINT(9) AUTO_INCREMENT,
+                `number` VARCHAR(255) UNIQUE NOT NULL,
+                `name` VARCHAR(255) NOT NULL,
                 `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 PRIMARY KEY (`id`)
                 ) $charset;");
