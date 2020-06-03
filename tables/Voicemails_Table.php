@@ -9,10 +9,10 @@
 
 require_once __DIR__ . '/Base_Table.php';
 
-class Messages_Table extends Base_Table {
+class Voicemails_Table extends Base_Table {
     public function __construct() {
-        parent::__construct('messages', __('Message', 'sms77api'),
-            __('Messages', 'sms77api'), 'created');
+        parent::__construct('voicemails', __('Voice Mail', 'sms77api'),
+            __('Voice Mails', 'sms77api'), 'created');
     }
 
     /** @return array */
@@ -47,32 +47,34 @@ class Messages_Table extends Base_Table {
 
         switch ($this->current_action()) {
             case 'resend':
-                if (isset($_POST['row_action'])) {
-                    $errors = [];
-                    $responses = [];
-
-                    foreach ($_POST['row_action'] as $msgId) {
-                        try {
-                            $responses[] = sms77api_Util::sms((array)json_decode($wpdb->get_row(
-                                "SELECT config from {$wpdb->prefix}sms77api_messages WHERE id = $msgId")
-                                ->config));
-                        } catch (\Exception $ex) {
-                            $errors[] = $ex->getMessage();
-                        }
-                    }
-
-                    die($this->jsRedirect(esc_url_raw(add_query_arg([
-                        'errors' => $errors,
-                        'response' => $responses,
-                    ]))));
+                if (!isset($_POST['row_action'])) {
+                    wp_redirect(esc_url(add_query_arg()));
+                    die;
                 }
 
-                die($this->jsRedirect(esc_url(add_query_arg())));
+                $errors = [];
+                $responses = [];
+
+                foreach ($_POST['row_action'] as $msgId) {
+                    $sql = "SELECT config from {$wpdb->prefix}sms77api_voicemails WHERE id = $msgId";
+
+                    try {
+                        $responses[] = sms77api_Util::voice((array)json_decode($wpdb->get_row($sql)
+                            ->config));
+                    } catch (\Exception $ex) {
+                        $errors[] = $ex->getMessage();
+                    }
+                }
+
+                die($this->jsRedirect(esc_url_raw(add_query_arg([
+                    'errors' => $errors,
+                    'response' => $responses,
+                ]))));
                 break;
             case 'delete':
                 if (isset($_POST['row_action'])) {
                     foreach (esc_sql($_POST['row_action']) as $id) {
-                        $wpdb->delete("{$wpdb->prefix}sms77api_messages", ['id' => $id], ['%d']);
+                        $wpdb->delete("{$wpdb->prefix}sms77api_voicemails", ['id' => $id], ['%d']);
                     }
                 }
 

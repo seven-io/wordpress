@@ -22,18 +22,20 @@ if (!defined('WPINC')) {
 
 define('SMS77API_VERSION', '1.0.0');
 $rootPath = plugin_dir_path(__FILE__);
-require_once $rootPath . 'includes/' . 'class-sms77api-util.php';
-require_once $rootPath . 'includes/' . 'class-sms77api-options.php';
-require_once $rootPath . 'includes/' . 'class-sms77api-partials.php';
-require_once $rootPath . 'includes/' . 'class-sms77api-lookup.php';
-require_once $rootPath . 'tables/' . 'Messages_Table.php';
-require_once $rootPath . 'tables/' . 'Format_Lookups_Table.php';
-require_once $rootPath . 'tables/' . 'MNP_Lookups_Table.php';
-require_once $rootPath . 'tables/' . 'HLR_Lookups_Table.php';
-require_once $rootPath . 'tables/' . 'CNAM_Lookups_Table.php';
+require_once "{$rootPath}includes/" . 'class-sms77api-util.php';
+require_once "{$rootPath}includes/" . 'class-sms77api-options.php';
+require_once "{$rootPath}includes/" . 'class-sms77api-partials.php';
+require_once "{$rootPath}includes/" . 'class-sms77api-lookup.php';
+require_once "{$rootPath}tables/" . 'Messages_Table.php';
+require_once "{$rootPath}tables/" . 'Format_Lookups_Table.php';
+require_once "{$rootPath}tables/" . 'MNP_Lookups_Table.php';
+require_once "{$rootPath}tables/" . 'HLR_Lookups_Table.php';
+require_once "{$rootPath}tables/" . 'CNAM_Lookups_Table.php';
+require_once "{$rootPath}tables/" . 'Voicemails_Table.php';
 
 /**
  * @property Messages_Table messages_table
+ * @property Voicemails_Table voicemails_table
  */
 class Sms77Api_Plugin {
     static $instance;
@@ -84,24 +86,37 @@ class Sms77Api_Plugin {
                 'dashicons-email-alt2'
             );
 
-            add_action('load-' . add_submenu_page(
-                    'sms77api-menu',
-                    __('Messages', 'sms77api'),
-                    __('Messages', 'sms77api'),
-                    'manage_options',
-                    'sms77api-messages',
-                    function () {
-                        require_once __DIR__ . '/pages/messages.php';
-                    }
-                ), function () {
-                add_screen_option('per_page', [
-                    'label' => 'Messages',
-                    'default' => 5,
-                    'option' => 'messages_per_page',
-                ]);
+            $addSubMenuEntry = function ($title, $slug, $tpl, $screenOptionName, $prop, $obj) {
+                add_action('load-' . add_submenu_page(
+                        'sms77api-menu',
+                        $title,
+                        $title,
+                        'manage_options',
+                        $slug,
+                        function () use ($tpl) {
+                            require_once $tpl;
+                        }
+                    ), function () use ($screenOptionName, $title, $prop, $obj) {
+                    add_screen_option('per_page', [
+                        'label' => $title,
+                        'default' => 5,
+                        'option' => $screenOptionName,
+                    ]);
 
-                $this->messages_table = new Messages_Table();
-            });
+                    $this->$prop = $obj;
+                });
+            };
+            $addSubMenuEntry(
+                __('Messages', 'sms77api'), 'sms77api-messages',
+                __DIR__ . '/pages/messages.php', 'messages_per_page',
+                'messages_table', new Messages_Table()
+            );
+
+            $addSubMenuEntry(
+                __('Voice Mails', 'sms77api'), 'sms77api-voicemails',
+                __DIR__ . '/pages/voicemails.php', 'voicemails_per_page',
+                'voicemails_table', new Voicemails_Table()
+            );
 
             $addSubMenuTable = function ($Table, $tableProp, $title, $menuSlug, $perPageOption, $type) {
                 $hook = add_submenu_page(
@@ -150,13 +165,14 @@ class Sms77Api_Plugin {
         });
 
         add_action('admin_post_sms77api_compose_hook', function () {
-            $res = sms77api_Util::send(sms77api_Util::toString('receivers'));
+            $this->redirect('sms77api-messages',
+                sms77api_Util::send(sms77api_Util::toString('receivers')));
+        });
 
-            wp_redirect(admin_url('admin.php?' . http_build_query([
-                    'errors' => $res['errors'],
-                    'page' => 'sms77api-messages',
-                    'response' => $res['response'],
-                ])));
+        add_action('admin_post_sms77api_voice_hook', function () {
+
+            $this->redirect('sms77api-voicemails',
+                sms77api_Util::voice(sms77api_Util::toString('receivers')));
         });
 
         add_action('admin_enqueue_scripts', function () {
@@ -232,6 +248,14 @@ class Sms77Api_Plugin {
         });
     }
 
+    private function redirect($page, $res) {
+        wp_redirect(admin_url('admin.php?' . http_build_query([
+                'errors' => $res['errors'],
+                'page' => $page,
+                'response' => $res['response'],
+            ])));
+    }
+
     static function get_instance() {
         if (!isset(self::$instance)) {
             self::$instance = new self();
@@ -249,7 +273,7 @@ register_activation_hook(__FILE__, function () {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
     dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_messages` (
-                `id` MEDIUMINT(9) NOT NULL AUTO_INCREMENT,
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `response` TEXT NOT NULL,
                 `config` TEXT NOT NULL,
@@ -257,7 +281,7 @@ register_activation_hook(__FILE__, function () {
                 ) $charset;");
 
     dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_number_lookups` (
-                `id` TINYINT(9) AUTO_INCREMENT,
+                `id` INT(11) AUTO_INCREMENT,
                 `international` VARCHAR(255) UNIQUE NOT NULL,
                 `success` TINYINT(1) NOT NULL,
                 `national` VARCHAR(255) NOT NULL,
@@ -285,7 +309,7 @@ register_activation_hook(__FILE__, function () {
                 ) $charset;");
 
     dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_hlr_lookups` (
-                `id` TINYINT(9) AUTO_INCREMENT,
+                `id` INT(11) AUTO_INCREMENT,
                 `status` TINYINT(1) NOT NULL,
                 `status_message` VARCHAR(255) NOT NULL,
                 `lookup_outcome` TINYINT(1) NOT NULL,
@@ -310,10 +334,18 @@ register_activation_hook(__FILE__, function () {
                 ) $charset;");
 
     dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_cnam_lookups` (
-                `id` TINYINT(9) AUTO_INCREMENT,
+                `id` INT(11) AUTO_INCREMENT,
                 `number` VARCHAR(255) UNIQUE NOT NULL,
                 `name` VARCHAR(255) NOT NULL,
                 `updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                PRIMARY KEY (`id`)
+                ) $charset;");
+
+    dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sms77api_voicemails` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT,
+                `created` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `response` TEXT NOT NULL,
+                `config` TEXT NOT NULL,
                 PRIMARY KEY (`id`)
                 ) $charset;");
 

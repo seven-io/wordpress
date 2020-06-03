@@ -22,6 +22,10 @@ class Base_Table extends WP_List_Table {
         ], $extra));
     }
 
+    protected function jsRedirect($href) {
+        return '<script>location.href = "' . $href . '"</script>';
+    }
+
     /**
      * @param array $item
      * @param string $columnName

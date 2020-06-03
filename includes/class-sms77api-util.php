@@ -55,11 +55,11 @@ class sms77api_Util {
     }
 
     static function send($receivers) {
-        $msg = self::toString('msg');
-
         if (!isset($_POST['submit'])) {
             return;
         }
+
+        $msg = self::toString('msg');
 
         $errors = [];
 
@@ -92,6 +92,57 @@ class sms77api_Util {
                 'unicode' => self::toShortBool('unicode'),
                 'utf8' => self::toShortBool('utf8'),
             ]),
+        ];
+    }
+
+    static function voice($receiversOrConfig) {
+        global $wpdb;
+
+        $errors = [];
+
+        $isNew = is_string($receiversOrConfig);
+
+        if ($isNew && !isset($_POST['submit'])) {
+            $errors[] = 'Unexpected input! Please try again.';
+        }
+
+        $receivers = $isNew ? $receiversOrConfig : $receiversOrConfig['to'];
+        $msg = $isNew ? self::toString('msg') : $receiversOrConfig['text'];
+
+        if (!mb_strlen($receivers)) {
+            $errors[] = 'Receivers cannot be missing.';
+        }
+
+        if (!mb_strlen($msg)) {
+            $errors[] = 'Message cannot be empty.';
+        }
+
+        if (count($errors)) {
+            return [
+                'errors' => $errors,
+                'response' => null,
+            ];
+        }
+
+        $responses = [];
+        foreach (explode(',', $receivers) as $receiver) {
+            $config = [
+                'text' => $msg,
+                'to' => $receiver,
+            ];
+
+            $response = self::get('voice', get_option('sms77api_key'), $config);
+            $responses[] = $response;
+
+            $wpdb->insert("{$wpdb->prefix}sms77api_voicemails", [
+                'config' => json_encode($config),
+                'response' => json_encode($response),
+            ]);
+        }
+
+        return [
+            'errors' => $errors,
+            'response' => $responses,
         ];
     }
 

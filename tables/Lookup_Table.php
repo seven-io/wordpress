@@ -39,13 +39,11 @@ class Lookup_Table extends Base_Table {
                         }
                     }
 
-                    wp_redirect(esc_url_raw(add_query_arg(['errors' => $errors, 'response' => $responses,])));
-                    die;
+                    die(
+                    esc_url_raw(add_query_arg(['errors' => $errors, 'response' => $responses,])));
                 }
 
-                wp_redirect(esc_url(add_query_arg()));
-                die;
-
+                die($this->jsRedirect(esc_url(add_query_arg())));
                 break;
             case 'delete':
                 if (isset($_POST['row_action'])) {
@@ -55,9 +53,7 @@ class Lookup_Table extends Base_Table {
                     }
                 }
 
-                wp_redirect(esc_url(add_query_arg()));
-                die;
-
+                die($this->jsRedirect(esc_url(add_query_arg())));
                 break;
             default:
                 break;
