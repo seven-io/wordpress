@@ -141,11 +141,6 @@ class Sms77Api_Plugin {
                 __('CNAM Lookups', 'sms77api'), 'sms77api_cnam_lookups',
                 'cnam_lookups_per_page', 'cnam');
 
-            add_submenu_page('sms77api-menu', 'Write SMS', 'Write SMS',
-                'manage_options', 'sms77api-compose', function () {
-                    require_once __DIR__ . '/pages/compose.php';
-                });
-
             if (sms77api_Util::hasWooCommerce()) {
                 add_submenu_page('sms77api-menu', 'WooCommerce Bulk', 'WooCommerce Bulk',
                     'manage_options', 'sms77api-wooc', function () {
@@ -159,7 +154,7 @@ class Sms77Api_Plugin {
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
                     'errors' => $res['errors'],
-                    'page' => 'sms77api-compose',
+                    'page' => 'sms77api-messages',
                     'response' => $res['response'],
                 ])));
         });
@@ -211,7 +206,7 @@ class Sms77Api_Plugin {
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
                     'errors' => $apiRes['wooc'],
-                    'page' => 'sms77api-compose',
+                    'page' => 'sms77api-messages',
                     'response' => $apiRes['response'],
                 ])));
         });

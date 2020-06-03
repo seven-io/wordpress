@@ -7,9 +7,9 @@
  * @author     sms77 e.K. <support@sms77.io>
  */
 
-require_once __DIR__ . '/Base_Table.php';
+require_once __DIR__ . '/Lookup_Table.php';
 
-class HLR_Lookups_Table extends Base_Table {
+class HLR_Lookups_Table extends Lookup_Table {
     public function __construct() {
         parent::__construct(
             'hlr_lookups', 'HLR Lookup',

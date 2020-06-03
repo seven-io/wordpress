@@ -7,8 +7,6 @@
  * @author     sms77 e.K. <support@sms77.io>
  */
 
-require_once 'class-sms77api-util.php';
-
 class sms77api_Partials {
     static function all($isGlobal) {
         self::debug($isGlobal);
@@ -110,7 +108,64 @@ class sms77api_Partials {
         <?php
     }
 
-    public static function lookupPage($table, $type) {
+    static function defaultMessageElements() {
+        if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
+            $errors = implode(PHP_EOL, $_GET['errors']);
+            echo "<b>Errors:</b><pre>$errors</pre>";
+        }
+
+        if (isset($_GET['response'])) {
+            $response = json_encode($_GET['response'], JSON_PRETTY_PRINT);
+            echo "<b>Response:</b><pre>$response</pre>";
+        }
+
+        echo self::missingApiKeyLink();
+    }
+
+    static function missingApiKeyLink() {
+        if (get_option('sms77api_key')) {
+            return '';
+        }
+
+        $href = admin_url('options-general.php?page=sms77api');
+        $p = wp_kses(
+            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
+            ['a' => ['href' => []]]);
+        $p = sprintf($p, esc_url($href));
+
+        return "<p>$p</p>";
+    }
+
+    /**
+     * @param Base_Table $table
+     * @param bool $wrap
+     */
+    static function grid($table, $wrap = true) {
+        ?>
+        <?php
+        echo $wrap ? "<div class='wrap'><h1>sms77 - {$table->_args['_tpl']['title']}</h1>" : '';
+        self::defaultMessageElements();
+        ?>
+        <div id='poststuff'>
+            <div id='post-body' class='metabox-holder columns-2'>
+                <div id='post-body-content'>
+                    <div class='meta-box-sortables ui-sortable'>
+                        <form method='POST'>
+                            <?php
+                            $table->prepare_items();
+                            $table->display();
+                            ?>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <br class='clear'/>
+        </div>
+        <?php echo $wrap ? "</div>" : '';
+    }
+
+    static function lookupPage($table, $type) {
         ?>
         <?php if (get_option('sms77api_key')): ?>
             <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
@@ -127,7 +182,7 @@ class sms77api_Partials {
             </form>
         <?php endif;
 
-        sms77api_Util::grid($table);
+        self::grid($table);
     }
 
     private static function label($isGlobal) {

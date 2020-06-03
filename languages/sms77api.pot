@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-03T12:44:55+02:00\n"
+"POT-Creation-Date: 2020-06-03T15:25:09+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: sms77api\n"
@@ -34,113 +34,109 @@ msgstr ""
 msgid "http://sms77.io/"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:28
+#: includes/class-sms77api-partials.php:26
 msgid "Debug"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:54
+#: includes/class-sms77api-partials.php:52
 msgid "Delay"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:55
+#: includes/class-sms77api-partials.php:53
 msgid "sets a delay for sending"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:67
+#: includes/class-sms77api-partials.php:65
 msgid "Unicode"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:69
+#: includes/class-sms77api-partials.php:67
 msgid "forces unicode regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:75
+#: includes/class-sms77api-partials.php:73
 msgid "Flash"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:77
+#: includes/class-sms77api-partials.php:75
 msgid "makes the message appear directly in the display"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:83
+#: includes/class-sms77api-partials.php:81
 msgid "Performance Tracking"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:90
+#: includes/class-sms77api-partials.php:88
 msgid "UTF-8"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:92
+#: includes/class-sms77api-partials.php:90
 msgid "forces utf8 regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:101
+#: includes/class-sms77api-partials.php:99
 msgid "UDH"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:104
+#: includes/class-sms77api-partials.php:102
 msgid "User Data Header"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:116
-msgid "Create a new Lookup"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:123
-#: includes/class-sms77api-partials.php:124
-msgid "Number to look up"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:126
-msgid "Lookup"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:139
-msgid "Label"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:156
-msgid "TTL"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:157
-msgid "Time-To-Live (default: 86400000 ms - 24h)"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:172
-msgid "Default Message"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:173
-#: tables/Messages_Table.php:17
-msgid "Message"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:188
-msgid "Default Receiver(s)"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:189
-msgid "Receiver(s)"
-msgstr ""
-
-#: includes/class-sms77api-util.php:161
+#: includes/class-sms77api-partials.php:132
 msgid "An API Key is required for using this plugin. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
 msgstr ""
 
-#: pages/compose.php:17
-msgid "Compose SMS"
+#: includes/class-sms77api-partials.php:171
+msgid "Create a new Lookup"
 msgstr ""
 
-#: pages/compose.php:36
-msgid "Send SMS"
+#: includes/class-sms77api-partials.php:178
+#: includes/class-sms77api-partials.php:179
+msgid "Number to look up"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:181
+msgid "Lookup"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:194
+msgid "Label"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:211
+msgid "TTL"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:212
+msgid "Time-To-Live (default: 86400000 ms - 24h)"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:227
+msgid "Default Message"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:228
+#: tables/Messages_Table.php:14
+msgid "Message"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:243
+msgid "Default Receiver(s)"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:244
+msgid "Receiver(s)"
 msgstr ""
 
 #: pages/messages.php:15
-#: sms77api.php:88
 #: sms77api.php:89
-#: tables/Messages_Table.php:18
+#: sms77api.php:90
+#: tables/Messages_Table.php:15
 msgid "Messages"
+msgstr ""
+
+#: pages/messages.php:34
+msgid "Send SMS"
 msgstr ""
 
 #: pages/settings.php:15
@@ -192,10 +188,39 @@ msgstr ""
 msgid "HLR Lookups"
 msgstr ""
 
+#: sms77api.php:141
+msgid "CNAM Lookups"
+msgstr ""
+
+#: tables/CNAM_Lookups_Table.php:23
 #: tables/Format_Lookups_Table.php:23
 #: tables/HLR_Lookups_Table.php:23
 #: tables/MNP_Lookups_Table.php:23
 msgid "Updated"
+msgstr ""
+
+#: tables/CNAM_Lookups_Table.php:24
+#: tables/MNP_Lookups_Table.php:25
+msgid "Number"
+msgstr ""
+
+#: tables/CNAM_Lookups_Table.php:25
+msgid "Name"
+msgstr ""
+
+#: tables/CNAM_Lookups_Table.php:41
+#: tables/Format_Lookups_Table.php:55
+#: tables/HLR_Lookups_Table.php:67
+#: tables/Messages_Table.php:38
+#: tables/MNP_Lookups_Table.php:51
+msgid "Delete"
+msgstr ""
+
+#: tables/CNAM_Lookups_Table.php:42
+#: tables/Format_Lookups_Table.php:56
+#: tables/HLR_Lookups_Table.php:68
+#: tables/MNP_Lookups_Table.php:52
+msgid "Lookup again"
 msgstr ""
 
 #: tables/Format_Lookups_Table.php:24
@@ -235,19 +260,6 @@ msgstr ""
 
 #: tables/Format_Lookups_Table.php:32
 msgid "Network Type"
-msgstr ""
-
-#: tables/Format_Lookups_Table.php:55
-#: tables/HLR_Lookups_Table.php:67
-#: tables/Messages_Table.php:60
-#: tables/MNP_Lookups_Table.php:51
-msgid "Delete"
-msgstr ""
-
-#: tables/Format_Lookups_Table.php:56
-#: tables/HLR_Lookups_Table.php:68
-#: tables/MNP_Lookups_Table.php:52
-msgid "Lookup again"
 msgstr ""
 
 #: tables/HLR_Lookups_Table.php:24
@@ -302,28 +314,24 @@ msgstr ""
 msgid "Roaming"
 msgstr ""
 
-#: tables/Messages_Table.php:44
+#: tables/Messages_Table.php:22
 msgid "Response"
 msgstr ""
 
-#: tables/Messages_Table.php:45
+#: tables/Messages_Table.php:23
 msgid "Config"
 msgstr ""
 
-#: tables/Messages_Table.php:46
+#: tables/Messages_Table.php:24
 msgid "Created"
 msgstr ""
 
-#: tables/Messages_Table.php:61
+#: tables/Messages_Table.php:39
 msgid "Resend"
 msgstr ""
 
 #: tables/MNP_Lookups_Table.php:24
 msgid "Country"
-msgstr ""
-
-#: tables/MNP_Lookups_Table.php:25
-msgid "Number"
 msgstr ""
 
 #: tables/MNP_Lookups_Table.php:27

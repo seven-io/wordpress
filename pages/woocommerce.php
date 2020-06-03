@@ -15,7 +15,7 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
 ?>
     <h1>sms77 - WooCommerce</h1>
 
-<?php sms77api_Util::defaultMessageElements() ?>
+<?php sms77api_Partials::defaultMessageElements() ?>
 
 <?php if (get_option('sms77api_key') && sms77api_Util::hasWooCommerce()): ?>
     <h2>
