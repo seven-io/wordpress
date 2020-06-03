@@ -1,18 +1,18 @@
 <?php
 
 /**
- * @property array debug
- * @property null[] delay
- * @property array flash
- * @property null[] label
- * @property array key
- * @property null[] msg
- * @property array performance_tracking
- * @property null[] udh
- * @property array unicode
- * @property null[] receivers
- * @property array ttl
- * @property array utf8
+ * @property array sms77api_debug
+ * @property null[] sms77api_delay
+ * @property array sms77api_flash
+ * @property null[] sms77api_label
+ * @property array sms77api_key
+ * @property null[] sms77api_msg
+ * @property array sms77api_performance_tracking
+ * @property null[] sms77api_udh
+ * @property array sms77api_unicode
+ * @property null[] sms77api_receivers
+ * @property array sms77api_ttl
+ * @property array sms77api_utf8
  * @link       http://sms77.io
  * @package    sms77api
  * @subpackage sms77api/includes
@@ -28,67 +28,67 @@ class sms77api_Options {
     }
 
     private function debug() {
-        $this->debug = [0, [], 'boolean'];
+        $this->sms77api_debug = [0, [], 'boolean'];
     }
 
     private function delay() {
-        $this->delay = [null];
+        $this->sms77api_delay = [null];
     }
 
     private function flash() {
-        $this->flash = [0, [], 'boolean'];
+        $this->sms77api_flash = [0, [], 'boolean'];
     }
 
     private function label() {
-        $this->label = [null];
+        $this->sms77api_label = [null];
     }
 
     private function key() {
-        $this->key = [null, ['sanitize_callback' => function($key) {
-                $error = function($msg) {
-                    add_settings_error('sms77api_key',
-                        'sms77api_invalid_key', $msg);
-                };
+        $this->sms77api_key = [null, ['sanitize_callback' => function ($key) {
+            $error = function ($msg) {
+                add_settings_error('sms77api_key',
+                    'sms77api_invalid_key', $msg);
+            };
 
-                $response = sms77api_Util::get('balance', $key);
+            $response = sms77api_Util::get('balance', $key);
 
-                if (!$response) {
-                    return $error('Internal error. Please try again later.');
-                }
+            if (!$response) {
+                return $error('Internal error. Please try again later.');
+            }
 
-                if ('900' === $response) {
-                    return $error('Invalid API key or API down.');
-                }
+            if ('900' === $response) {
+                return $error('Invalid API key or API down.');
+            }
 
-                return $key;
-            },]];
+            return $key;
+        },]];
     }
 
     private function msg() {
-        $this->msg = [null];
+        $this->sms77api_msg = [null];
     }
 
     private function performance_tracking() {
-        $this->performance_tracking = [0, [], 'boolean'];
+        $this->sms77api_performance_tracking = [0, [], 'boolean'];
     }
 
     private function receivers() {
-        $this->receivers =  [null];
+        $this->sms77api_receivers = [null];
     }
 
     private function udh() {
-        $this->udh =  [null];
+        $this->sms77api_udh = [null];
     }
 
     private function unicode() {
-        $this->unicode =  [0, [], 'boolean'];
+        $this->sms77api_unicode = [0, [], 'boolean'];
     }
 
     private function utf8() {
-        $this->utf8 =  [0, [], 'boolean'];
+        $this->sms77api_utf8 = [0, [], 'boolean'];
     }
 
     private function ttl() {
-        $this->ttl = [null, [], 'integer'];
+        $this->sms77api_ttl = [null, [], 'integer'];
     }
 }

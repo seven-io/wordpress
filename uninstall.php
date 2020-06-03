@@ -13,6 +13,7 @@ require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 dbDelta("DROP TABLE IF EXISTS {$wpdb->prefix}sms77api_messages;");
 dbDelta("DROP TABLE IF EXISTS {$wpdb->prefix}sms77api_number_lookups;");
 dbDelta("DROP TABLE IF EXISTS {$wpdb->prefix}sms77api_mnp_lookups;");
+dbDelta("DROP TABLE IF EXISTS {$wpdb->prefix}sms77api_hlr_lookups;");
 
 delete_option('sms77api_db_version');
 require_once plugin_dir_path(__FILE__) . 'includes/class-sms77api-options.php';

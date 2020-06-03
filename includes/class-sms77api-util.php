@@ -11,6 +11,7 @@ require_once 'class-sms77api-options.php';
 class sms77api_Util {
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
+    const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp'];
 
     /**
      * @param Base_Table $table
@@ -147,13 +148,20 @@ class sms77api_Util {
             echo "<b>Response:</b><pre>$response</pre>";
         }
 
-        if (!get_option('sms77api_key')) {
-            $href = admin_url('options-general.php?page=sms77api');
-            $p = sprintf(wp_kses(
-                __('An API Key is required for sending SMS. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
-                ['a' => ['href' => []]]), esc_url($href));
+        echo self::missingApiKeyLink();
+    }
 
-            echo "<p>$p</p>";
+    static function missingApiKeyLink() {
+        if (get_option('sms77api_key')) {
+            return '';
         }
+
+        $href = admin_url('options-general.php?page=sms77api');
+        $p = wp_kses(
+            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
+            ['a' => ['href' => []]]);
+        $p = sprintf($p, esc_url($href));
+
+        return "<p>$p</p>";
     }
 }

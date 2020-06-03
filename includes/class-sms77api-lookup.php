@@ -17,6 +17,9 @@ class sms77api_Lookup {
             case 'mnp':
                 return self::mnp($number);
                 break;
+            case 'hlr':
+                return self::hlr($number);
+                break;
             default:
                 return false;
                 break;
@@ -24,37 +27,59 @@ class sms77api_Lookup {
     }
 
     static function format($number) {
-        return self::execute('format', $number, 'international', 'number_lookups');
+        return self::execute(
+            'format', $number, 'international', 'sms77api_number_lookups');
+    }
+
+    static function hlr($number) {
+        return self::execute(
+            'hlr', $number, 'international_format_number', 'sms77api_hlr_lookups', 'status');
     }
 
     static function mnp($number) {
-        return self::execute('mnp', $number, 'number', 'mnp_lookups');
+        return self::execute('mnp', $number, 'number', 'sms77api_mnp_lookups');
     }
 
-    private static function execute($type, $number, $entityKey, $entityName) {
+    private static function execute($type, $number, $entityKey, $entityName, $successKey = 'success') {
         global $wpdb;
 
         $response = sms77api_Util::get(
             'lookup', get_option('sms77api_key'), ['number' => $number, 'type' => $type]);
 
-        if (true !== $response['success']) {
+        $response = (array)$response;
+
+        if (true !== $response[$successKey]) {
             error_log(is_array($response) || is_object($response)
                 ? print_r($response, true) : $response);
 
             return false;
         }
 
-        if ('mnp' === $type) {
-            $response = (array)$response['mnp'];
+        switch ($type) {
+            case 'mnp':
+                $response = (array)$response['mnp'];
+                break;
+            case 'hlr':
+                $response['current_carrier'] =
+                    json_encode($response['current_carrier'], JSON_UNESCAPED_UNICODE);
+                $response['original_carrier'] =
+                    json_encode($response['original_carrier'], JSON_UNESCAPED_UNICODE);
+                $response['status'] = true === $response['status'] ? 1 : 0;
+                $response['lookup_outcome'] = true === $response['lookup_outcome'] ? 1 : 0;
+                break;
+            default:
+                break;
         }
 
-        if (empty($wpdb->get_col("SELECT $entityKey from {$wpdb->prefix}sms77api_$entityName"
+        //     die(var_dump($response));
+
+        if (empty($wpdb->get_col("SELECT $entityKey from {$wpdb->prefix}$entityName"
             . " WHERE $entityKey = {$response[$entityKey]}"))) {
-            return 1 === $wpdb->insert($wpdb->prefix . "sms77api_$entityName", $response)
+            return 1 === $wpdb->insert($wpdb->prefix . $entityName, $response)
                 ? $response : false;
         }
 
-        return is_int($wpdb->update($wpdb->prefix . "sms77api_$entityName",
+        return is_int($wpdb->update($wpdb->prefix . $entityName,
             $response, [$entityKey => $response[$entityKey]])) ? $response : false;
     }
 }

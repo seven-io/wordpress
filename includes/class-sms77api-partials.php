@@ -111,23 +111,22 @@ class sms77api_Partials {
     }
 
     public static function lookupPage($table, $type) {
-        if (!get_option('sms77api_key')) {
-            return;
-        }
         ?>
-        <h2><?php _e('Create a new Number Lookup', 'sms77api') ?></h2>
+        <?php if (get_option('sms77api_key')): ?>
+            <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
 
-        <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
-              style='display: flex; align-items: baseline'>
-            <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
-            <input type='hidden' name='type' value='<?php echo $type ?>'>
+            <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
+                  style='display: flex; align-items: baseline'>
+                <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
+                <input type='hidden' name='type' value='<?php echo $type ?>'>
 
-            <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
-                   placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
+                <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
+                       placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
 
-            <?php submit_button(__('Lookup', 'sms77api')) ?>
-        </form>
-        <?php
+                <?php submit_button(__('Lookup', 'sms77api')) ?>
+            </form>
+        <?php endif;
+
         sms77api_Util::grid($table);
     }
 
@@ -191,7 +190,8 @@ class sms77api_Partials {
                 <small>separated by comma eg: +4912345, +12345</small>
             </span>
 
-            <input name="<?php echo $isGlobal ? $option : $name ?>" value="<?php echo get_option($option); ?>"
+            <input name="<?php echo $isGlobal ? $option : $name ?>"
+                   value="<?php echo get_option($option); ?>"
                 <?php echo $isGlobal ? '' : 'required' ?>/>
         </label>
         <?php

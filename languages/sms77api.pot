@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-05-27T22:54:35+02:00\n"
+"POT-Creation-Date: 2020-06-03T12:44:55+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: sms77api\n"
@@ -34,85 +34,98 @@ msgstr ""
 msgid "http://sms77.io/"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:25
+#: includes/class-sms77api-partials.php:28
 msgid "Debug"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:51
+#: includes/class-sms77api-partials.php:54
 msgid "Delay"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:52
+#: includes/class-sms77api-partials.php:55
 msgid "sets a delay for sending"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:64
+#: includes/class-sms77api-partials.php:67
 msgid "Unicode"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:66
+#: includes/class-sms77api-partials.php:69
 msgid "forces unicode regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:72
+#: includes/class-sms77api-partials.php:75
 msgid "Flash"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:74
+#: includes/class-sms77api-partials.php:77
 msgid "makes the message appear directly in the display"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:80
+#: includes/class-sms77api-partials.php:83
 msgid "Performance Tracking"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:87
+#: includes/class-sms77api-partials.php:90
 msgid "UTF-8"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:89
+#: includes/class-sms77api-partials.php:92
 msgid "forces utf8 regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:98
+#: includes/class-sms77api-partials.php:101
 msgid "UDH"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:101
+#: includes/class-sms77api-partials.php:104
 msgid "User Data Header"
 msgstr ""
 
 #: includes/class-sms77api-partials.php:116
+msgid "Create a new Lookup"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:123
+#: includes/class-sms77api-partials.php:124
+msgid "Number to look up"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:126
+msgid "Lookup"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:139
 msgid "Label"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:133
+#: includes/class-sms77api-partials.php:156
 msgid "TTL"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:134
+#: includes/class-sms77api-partials.php:157
 msgid "Time-To-Live (default: 86400000 ms - 24h)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:149
+#: includes/class-sms77api-partials.php:172
 msgid "Default Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:150
+#: includes/class-sms77api-partials.php:173
 #: tables/Messages_Table.php:17
 msgid "Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:165
+#: includes/class-sms77api-partials.php:188
 msgid "Default Receiver(s)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:166
+#: includes/class-sms77api-partials.php:189
 msgid "Receiver(s)"
 msgstr ""
 
-#: includes/class-sms77api-util.php:175
-msgid "An API Key is required for sending SMS. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
+#: includes/class-sms77api-util.php:161
+msgid "An API Key is required for using this plugin. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
 msgstr ""
 
 #: pages/compose.php:17
@@ -124,6 +137,8 @@ msgid "Send SMS"
 msgstr ""
 
 #: pages/messages.php:15
+#: sms77api.php:88
+#: sms77api.php:89
 #: tables/Messages_Table.php:18
 msgid "Messages"
 msgstr ""
@@ -166,40 +181,20 @@ msgid "Date to"
 msgstr ""
 
 #: sms77api.php:129
-#: sms77api.php:130
-msgid "Number to look up"
+msgid "Format Lookups"
 msgstr ""
 
-#: sms77api.php:132
-msgid "Lookup"
+#: sms77api.php:133
+msgid "MNP Lookups"
 msgstr ""
 
-#: sms77api.php:232
-msgid "Failed to lookup number format."
-msgstr ""
-
-#: tables/Messages_Table.php:44
-msgid "Response"
-msgstr ""
-
-#: tables/Messages_Table.php:45
-msgid "Config"
-msgstr ""
-
-#: tables/Messages_Table.php:46
-msgid "Created"
-msgstr ""
-
-#: tables/Messages_Table.php:60
-#: tables/Format_Lookups_Table.php:55
-msgid "Delete"
-msgstr ""
-
-#: tables/Messages_Table.php:61
-msgid "Resend"
+#: sms77api.php:137
+msgid "HLR Lookups"
 msgstr ""
 
 #: tables/Format_Lookups_Table.php:23
+#: tables/HLR_Lookups_Table.php:23
+#: tables/MNP_Lookups_Table.php:23
 msgid "Updated"
 msgstr ""
 
@@ -216,6 +211,8 @@ msgid "International"
 msgstr ""
 
 #: tables/Format_Lookups_Table.php:27
+#: tables/HLR_Lookups_Table.php:28
+#: tables/MNP_Lookups_Table.php:26
 msgid "International Formatted"
 msgstr ""
 
@@ -224,6 +221,7 @@ msgid "Country Name"
 msgstr ""
 
 #: tables/Format_Lookups_Table.php:29
+#: tables/HLR_Lookups_Table.php:30
 msgid "Country Code"
 msgstr ""
 
@@ -239,6 +237,107 @@ msgstr ""
 msgid "Network Type"
 msgstr ""
 
+#: tables/Format_Lookups_Table.php:55
+#: tables/HLR_Lookups_Table.php:67
+#: tables/Messages_Table.php:60
+#: tables/MNP_Lookups_Table.php:51
+msgid "Delete"
+msgstr ""
+
 #: tables/Format_Lookups_Table.php:56
+#: tables/HLR_Lookups_Table.php:68
+#: tables/MNP_Lookups_Table.php:52
 msgid "Lookup again"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:24
+msgid "International Format Number"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:25
+msgid "Status Message"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:26
+msgid "Lookup Outcome"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:27
+msgid "Lookup Outcome Message"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:29
+msgid "National Format Number"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:31
+msgid "Country Code ISO3"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:32
+msgid "Country Prefix"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:33
+msgid "Current Carrier"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:34
+msgid "Original Carrier"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:35
+msgid "Valid Number"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:36
+msgid "Reachable"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:37
+msgid "Ported"
+msgstr ""
+
+#: tables/HLR_Lookups_Table.php:38
+msgid "Roaming"
+msgstr ""
+
+#: tables/Messages_Table.php:44
+msgid "Response"
+msgstr ""
+
+#: tables/Messages_Table.php:45
+msgid "Config"
+msgstr ""
+
+#: tables/Messages_Table.php:46
+msgid "Created"
+msgstr ""
+
+#: tables/Messages_Table.php:61
+msgid "Resend"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:24
+msgid "Country"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:25
+msgid "Number"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:27
+msgid "National Format"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:28
+msgid "Network"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:29
+msgid "MCCMNC"
+msgstr ""
+
+#: tables/MNP_Lookups_Table.php:30
+msgid "Is Ported"
 msgstr ""
