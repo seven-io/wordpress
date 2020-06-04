@@ -83,6 +83,7 @@ class sms77api_Util {
             'response' => self::sms([
                 'debug' => self::toShortBool('debug'),
                 'flash' => self::toShortBool('flash'),
+                'from' => array_key_exists('from', $_POST) ? $_POST['from'] : null,
                 'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
                 'performance_tracking' => self::toShortBool('performance_tracking'),
                 'text' => $msg,
@@ -99,7 +100,6 @@ class sms77api_Util {
         global $wpdb;
 
         $errors = [];
-
         $isNew = is_string($receiversOrConfig);
 
         if ($isNew && !isset($_POST['submit'])) {
@@ -124,12 +124,15 @@ class sms77api_Util {
             ];
         }
 
+        $config = [
+            'text' => $msg,
+            'xml' => $isNew
+                ? self::toShortBool('xml') : is_bool($receiversOrConfig['xml'])
+                    ? $receiversOrConfig['xml'] : 0,
+        ];
         $responses = [];
         foreach (explode(',', $receivers) as $receiver) {
-            $config = [
-                'text' => $msg,
-                'to' => $receiver,
-            ];
+            $config['to'] = $receiver;
 
             $response = self::get('voice', get_option('sms77api_key'), $config);
             $responses[] = $response;

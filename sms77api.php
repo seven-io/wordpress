@@ -157,8 +157,9 @@ class Sms77Api_Plugin {
                 'cnam_lookups_per_page', 'cnam');
 
             if (sms77api_Util::hasWooCommerce()) {
-                add_submenu_page('sms77api-menu', 'WooCommerce Bulk', 'WooCommerce Bulk',
-                    'manage_options', 'sms77api-wooc', function () {
+                add_submenu_page('sms77api-menu', 'WooCommerce Bulk',
+                    'WooCommerce', 'manage_options', 'sms77api-wooc',
+                    function () {
                         require_once __DIR__ . '/pages/woocommerce.php';
                     });
             }
@@ -170,7 +171,6 @@ class Sms77Api_Plugin {
         });
 
         add_action('admin_post_sms77api_voice_hook', function () {
-
             $this->redirect('sms77api-voicemails',
                 sms77api_Util::voice(sms77api_Util::toString('receivers')));
         });

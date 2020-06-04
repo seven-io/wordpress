@@ -28,7 +28,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
             </label>
 
             <label class='nostyle' style='display: flex; flex-direction: column;'>
-                <?php sms77api_Partials::msg(false) ?>
+                <?php sms77api_Partials::text(false) ?>
             </label>
 
             <?php submit_button(__('Send SMS', 'sms77api')) ?>

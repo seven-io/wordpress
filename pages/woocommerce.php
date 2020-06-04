@@ -19,7 +19,7 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
 
 <?php if (get_option('sms77api_key') && sms77api_Util::hasWooCommerce()): ?>
     <h2>
-        <?php _e('Send Bulk', 'sms77api') ?>
+        <?php _e('Send Bulk SMS', 'sms77api') ?>
     </h2>
     <form name='sms77api_wooc' method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='sms77api_wooc_bulk'>
@@ -64,10 +64,10 @@ require_once __DIR__ . '/../includes/class-sms77api-util.php';
         </div>
 
         <label style='flex-direction: column;'>
-            <?php sms77api_Partials::msg(false) ?>
+            <?php sms77api_Partials::text(false) ?>
         </label>
 
-        <?php submit_button(__('Send Bulk', 'sms77api')) ?>
+        <?php submit_button(__('Send Bulk SMS', 'sms77api')) ?>
     </form>
     <script>
         jQuery(function () {

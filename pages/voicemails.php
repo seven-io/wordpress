@@ -21,15 +21,25 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
               action='<?php echo admin_url('admin-post.php'); ?>'>
             <input type='hidden' name='action' value='sms77api_voice_hook'>
 
+            <label>
+                <?php
+                sms77api_Partials::checkboxSetting(
+                    'xml',
+                    __('XML', 'sms77api'),
+                    false,
+                    __('specifies whether given text is XML or not', 'sms77api'));
+                ?>
+            </label>
+
             <label class='nostyle' style='display: flex; flex-direction: column;'>
                 <?php sms77api_Partials::receivers(false) ?>
             </label>
 
             <label class='nostyle' style='display: flex; flex-direction: column;'>
-                <?php sms77api_Partials::msg(false) ?>
+                <?php sms77api_Partials::text(false) ?>
             </label>
 
-            <?php submit_button(__('Send SMS', 'sms77api')) ?>
+            <?php submit_button(__('Send Voice Mail', 'sms77api')) ?>
         </form>
 
         <style>

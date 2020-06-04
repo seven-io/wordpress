@@ -9,6 +9,7 @@
 
 class sms77api_Partials {
     static function all($isGlobal) {
+        self::from($isGlobal);
         self::debug($isGlobal);
         self::delay($isGlobal);
         self::unicode($isGlobal);
@@ -28,7 +29,7 @@ class sms77api_Partials {
             'validate parameters but do not send actual messages');
     }
 
-    private static function checkboxSetting($name, $label, $isGlobal, $helper = null) {
+    static function checkboxSetting($name, $label, $isGlobal, $helper = null) {
         $option = "sms77api_$name";
         ?>
         <label style='display: flex;'>
@@ -75,6 +76,22 @@ class sms77api_Partials {
             __('makes the message appear directly in the display', 'sms77api'));
     }
 
+    private static function from($isGlobal) {
+        $name = 'from';
+        $option = "sms77api_$name";
+        ?>
+        <label style='display: flex;'>
+        <span>
+            <strong><?php _e('From', 'sms77api') ?></strong>
+            <small>this gets displayed as the sender on the receiving end</small>
+        </span>
+
+            <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
+                   value='<?php echo get_option($option) ?>'/>
+        </label>
+        <?php
+    }
+
     private static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
@@ -99,7 +116,7 @@ class sms77api_Partials {
             <strong><?php _e('UDH', 'sms77api') ?></strong>
             <small>sets a custom <a
                         href='https://en.wikipedia.org/wiki/User_Data_Header'>
-                    <?php _e('User Data Header', 'sms77api') ?></a></a></small>
+                    <?php _e('User Data Header', 'sms77api') ?></a></small>
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
@@ -218,7 +235,7 @@ class sms77api_Partials {
         <?php
     }
 
-    static function msg($isGlobal) {
+    static function text($isGlobal) {
         $name = 'msg';
         $option = "sms77api_$name";
         ?>

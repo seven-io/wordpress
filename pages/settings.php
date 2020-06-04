@@ -34,7 +34,7 @@ require_once __DIR__ . '/../includes/class-sms77api-partials.php';
     <?php
     sms77api_Partials::all(true);
 
-    sms77api_Partials::msg(true);
+    sms77api_Partials::text(true);
     sms77api_Partials::receivers(true);
 
     submit_button();
