@@ -21,6 +21,22 @@ class sms77api_Partials {
         self::ttl($isGlobal);
     }
 
+    private static function from($isGlobal) {
+        $name = 'from';
+        $option = "sms77api_$name";
+        ?>
+        <label style='display: flex;'>
+        <span>
+            <strong><?php _e('From', 'sms77api') ?></strong>
+            <small>this gets displayed as the sender on the receiving end</small>
+        </span>
+
+            <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
+                   value='<?php echo get_option($option) ?>'/>
+        </label>
+        <?php
+    }
+
     private static function debug($isGlobal) {
         self::checkboxSetting(
             'debug',
@@ -76,22 +92,6 @@ class sms77api_Partials {
             __('makes the message appear directly in the display', 'sms77api'));
     }
 
-    private static function from($isGlobal) {
-        $name = 'from';
-        $option = "sms77api_$name";
-        ?>
-        <label style='display: flex;'>
-        <span>
-            <strong><?php _e('From', 'sms77api') ?></strong>
-            <small>this gets displayed as the sender on the receiving end</small>
-        </span>
-
-            <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
-                   value='<?php echo get_option($option) ?>'/>
-        </label>
-        <?php
-    }
-
     private static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
@@ -123,83 +123,6 @@ class sms77api_Partials {
                    value='<?php echo get_option($option) ?>'/>
         </label>
         <?php
-    }
-
-    static function defaultMessageElements() {
-        if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
-            $errors = implode(PHP_EOL, $_GET['errors']);
-            echo "<b>Errors:</b><pre>$errors</pre>";
-        }
-
-        if (isset($_GET['response'])) {
-            $response = json_encode($_GET['response'], JSON_PRETTY_PRINT);
-            echo "<b>Response:</b><pre>$response</pre>";
-        }
-
-        echo self::missingApiKeyLink();
-    }
-
-    static function missingApiKeyLink() {
-        if (get_option('sms77api_key')) {
-            return '';
-        }
-
-        $href = admin_url('options-general.php?page=sms77api');
-        $p = wp_kses(
-            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
-            ['a' => ['href' => []]]);
-        $p = sprintf($p, esc_url($href));
-
-        return "<p>$p</p>";
-    }
-
-    /**
-     * @param Base_Table $table
-     * @param bool $wrap
-     */
-    static function grid($table, $wrap = true) {
-        ?>
-        <?php
-        echo $wrap ? "<div class='wrap'><h1>sms77 - {$table->_args['_tpl']['title']}</h1>" : '';
-        self::defaultMessageElements();
-        ?>
-        <div id='poststuff'>
-            <div id='post-body' class='metabox-holder columns-2'>
-                <div id='post-body-content'>
-                    <div class='meta-box-sortables ui-sortable'>
-                        <form method='POST'>
-                            <?php
-                            $table->prepare_items();
-                            $table->display();
-                            ?>
-                        </form>
-                    </div>
-                </div>
-            </div>
-
-            <br class='clear'/>
-        </div>
-        <?php echo $wrap ? "</div>" : '';
-    }
-
-    static function lookupPage($table, $type) {
-        ?>
-        <?php if (get_option('sms77api_key')): ?>
-            <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
-
-            <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
-                  style='display: flex; align-items: baseline'>
-                <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
-                <input type='hidden' name='type' value='<?php echo $type ?>'>
-
-                <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
-                       placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
-
-                <?php submit_button(__('Lookup', 'sms77api')) ?>
-            </form>
-        <?php endif;
-
-        self::grid($table);
     }
 
     private static function label($isGlobal) {
@@ -235,7 +158,84 @@ class sms77api_Partials {
         <?php
     }
 
-    static function text($isGlobal) {
+    static function lookupPage($table, $type) {
+        ?>
+        <?php if (get_option('sms77api_key')): ?>
+            <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
+
+            <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
+                  style='display: flex; align-items: baseline'>
+                <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
+                <input type='hidden' name='type' value='<?php echo $type ?>'>
+
+                <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
+                       placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
+
+                <?php submit_button(__('Lookup', 'sms77api')) ?>
+            </form>
+        <?php endif;
+
+        self::grid($table);
+    }
+
+    /**
+     * @param Base_Table $table
+     * @param bool $wrap
+     */
+    static function grid($table, $wrap = true) {
+        ?>
+        <?php
+        echo $wrap ? "<div class='wrap'><h1>sms77 - {$table->_args['_tpl']['title']}</h1>" : '';
+        self::defaultMessageElements();
+        ?>
+        <div id='poststuff'>
+            <div id='post-body' class='metabox-holder columns-2'>
+                <div id='post-body-content'>
+                    <div class='meta-box-sortables ui-sortable'>
+                        <form method='POST'>
+                            <?php
+                            $table->prepare_items();
+                            $table->display();
+                            ?>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <br class='clear'/>
+        </div>
+        <?php echo $wrap ? "</div>" : '';
+    }
+
+    static function defaultMessageElements() {
+        if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
+            $errors = implode(PHP_EOL, $_GET['errors']);
+            echo "<b>Errors:</b><pre>$errors</pre>";
+        }
+
+        if (isset($_GET['response'])) {
+            $response = json_encode($_GET['response'], JSON_PRETTY_PRINT);
+            echo "<b>Response:</b><pre>$response</pre>";
+        }
+
+        echo self::missingApiKeyLink();
+    }
+
+    static function missingApiKeyLink() {
+        if (get_option('sms77api_key')) {
+            return '';
+        }
+
+        $href = admin_url('options-general.php?page=sms77api');
+        $p = wp_kses(
+            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
+            ['a' => ['href' => []]]);
+        $p = sprintf($p, esc_url($href));
+
+        return "<p>$p</p>";
+    }
+
+    static function text($isGlobal, $counter = true) {
         $name = 'msg';
         $option = "sms77api_$name";
         ?>
@@ -244,10 +244,41 @@ class sms77api_Partials {
                     ? _e('Default Message', 'sms77api')
                     : _e('Message', 'sms77api') ?></strong>
 
-            <textarea name='<?php echo $isGlobal ? $option : $name ?>'
+            <textarea data-sms77-sms name='<?php echo $isGlobal ? $option : $name ?>'
             <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
         </label>
-        <?php
+
+        <?php if ($counter): ?>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const CHAR_LIMITS = {GSM7: 160, UCS2: 67};
+                    const isUnicode = str => /[^\u0000-\u00ff]/.test(str);
+
+                    for (const textarea of document.querySelectorAll('textarea[data-sms77-sms]')) {
+                        textarea.insertAdjacentHTML('afterend',
+                            `<span style='position: absolute; right: 22px;'></span>`);
+
+                        textarea.addEventListener('input', () => {
+                            const encoding = isUnicode(textarea.value) ? 'UCS2' : 'GSM7';
+
+                            const charCount = textarea.value.length;
+
+                            let msgCount = charCount / CHAR_LIMITS[encoding];
+                            if (1 >= msgCount) {
+                                msgCount = 1;
+                            } else {
+                                msgCount = Number.parseFloat(String(msgCount));
+                                msgCount = Math.floor(msgCount);
+                                msgCount++;
+                            }
+
+                            textarea.nextElementSibling.textContent
+                                = `${charCount} (${msgCount}) [${encoding}]`;
+                        });
+                    }
+                });
+            </script>
+        <?php endif;
     }
 
     static function receivers($isGlobal) {

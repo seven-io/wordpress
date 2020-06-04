@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-06-03T15:25:09+02:00\n"
+"POT-Creation-Date: 2020-06-04T11:06:54+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: sms77api\n"
@@ -34,103 +34,106 @@ msgstr ""
 msgid "http://sms77.io/"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:26
+#: includes/class-sms77api-partials.php:30
+msgid "From"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:43
 msgid "Debug"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:52
+#: includes/class-sms77api-partials.php:69
 msgid "Delay"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:53
+#: includes/class-sms77api-partials.php:70
 msgid "sets a delay for sending"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:65
+#: includes/class-sms77api-partials.php:82
 msgid "Unicode"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:67
+#: includes/class-sms77api-partials.php:84
 msgid "forces unicode regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:73
+#: includes/class-sms77api-partials.php:90
 msgid "Flash"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:75
+#: includes/class-sms77api-partials.php:92
 msgid "makes the message appear directly in the display"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:81
+#: includes/class-sms77api-partials.php:98
 msgid "Performance Tracking"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:88
+#: includes/class-sms77api-partials.php:105
 msgid "UTF-8"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:90
+#: includes/class-sms77api-partials.php:107
 msgid "forces utf8 regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:99
+#: includes/class-sms77api-partials.php:116
 msgid "UDH"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:102
+#: includes/class-sms77api-partials.php:119
 msgid "User Data Header"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:132
-msgid "An API Key is required for using this plugin. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
-msgstr ""
-
-#: includes/class-sms77api-partials.php:171
-msgid "Create a new Lookup"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:178
-#: includes/class-sms77api-partials.php:179
-msgid "Number to look up"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:181
-msgid "Lookup"
-msgstr ""
-
-#: includes/class-sms77api-partials.php:194
+#: includes/class-sms77api-partials.php:134
 msgid "Label"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:211
+#: includes/class-sms77api-partials.php:151
 msgid "TTL"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:212
+#: includes/class-sms77api-partials.php:152
 msgid "Time-To-Live (default: 86400000 ms - 24h)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:227
+#: includes/class-sms77api-partials.php:164
+msgid "Create a new Lookup"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:171
+#: includes/class-sms77api-partials.php:172
+msgid "Number to look up"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:174
+msgid "Lookup"
+msgstr ""
+
+#: includes/class-sms77api-partials.php:231
+msgid "An API Key is required for using this plugin. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
+msgstr ""
+
+#: includes/class-sms77api-partials.php:244
 msgid "Default Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:228
+#: includes/class-sms77api-partials.php:245
 #: tables/Messages_Table.php:14
 msgid "Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:243
+#: includes/class-sms77api-partials.php:291
 msgid "Default Receiver(s)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:244
+#: includes/class-sms77api-partials.php:292
 msgid "Receiver(s)"
 msgstr ""
 
 #: pages/messages.php:15
-#: sms77api.php:89
-#: sms77api.php:90
+#: sms77api.php:110
 #: tables/Messages_Table.php:15
 msgid "Messages"
 msgstr ""
@@ -155,9 +158,27 @@ msgstr ""
 msgid "required for sending SMS - get yours @ "
 msgstr ""
 
+#: pages/voicemails.php:15
+#: sms77api.php:116
+#: tables/Voicemails_Table.php:15
+msgid "Voice Mails"
+msgstr ""
+
+#: pages/voicemails.php:28
+msgid "XML"
+msgstr ""
+
+#: pages/voicemails.php:30
+msgid "specifies whether given text is XML or not"
+msgstr ""
+
+#: pages/voicemails.php:42
+msgid "Send Voice Mail"
+msgstr ""
+
 #: pages/woocommerce.php:22
 #: pages/woocommerce.php:70
-msgid "Send Bulk"
+msgid "Send Bulk SMS"
 msgstr ""
 
 #: pages/woocommerce.php:32
@@ -176,19 +197,19 @@ msgstr ""
 msgid "Date to"
 msgstr ""
 
-#: sms77api.php:129
+#: sms77api.php:144
 msgid "Format Lookups"
 msgstr ""
 
-#: sms77api.php:133
+#: sms77api.php:148
 msgid "MNP Lookups"
 msgstr ""
 
-#: sms77api.php:137
+#: sms77api.php:152
 msgid "HLR Lookups"
 msgstr ""
 
-#: sms77api.php:141
+#: sms77api.php:156
 msgid "CNAM Lookups"
 msgstr ""
 
@@ -213,6 +234,7 @@ msgstr ""
 #: tables/HLR_Lookups_Table.php:67
 #: tables/Messages_Table.php:38
 #: tables/MNP_Lookups_Table.php:51
+#: tables/Voicemails_Table.php:38
 msgid "Delete"
 msgstr ""
 
@@ -315,18 +337,22 @@ msgid "Roaming"
 msgstr ""
 
 #: tables/Messages_Table.php:22
+#: tables/Voicemails_Table.php:22
 msgid "Response"
 msgstr ""
 
 #: tables/Messages_Table.php:23
+#: tables/Voicemails_Table.php:23
 msgid "Config"
 msgstr ""
 
 #: tables/Messages_Table.php:24
+#: tables/Voicemails_Table.php:24
 msgid "Created"
 msgstr ""
 
 #: tables/Messages_Table.php:39
+#: tables/Voicemails_Table.php:39
 msgid "Resend"
 msgstr ""
 
@@ -348,4 +374,8 @@ msgstr ""
 
 #: tables/MNP_Lookups_Table.php:30
 msgid "Is Ported"
+msgstr ""
+
+#: tables/Voicemails_Table.php:14
+msgid "Voice Mail"
 msgstr ""
