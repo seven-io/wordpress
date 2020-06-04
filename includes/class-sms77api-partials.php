@@ -283,39 +283,74 @@ class sms77api_Partials {
                     ? _e('Default Message', 'sms77api')
                     : _e('Message', 'sms77api') ?></strong>
 
-            <textarea data-sms77-sms name='<?php echo $isGlobal ? $option : $name ?>'
+            <textarea style='padding-top: 10px;' data-sms77-sms
+                      name='<?php echo $isGlobal ? $option : $name ?>'
             <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
         </label>
 
         <?php if ($counter): ?>
             <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                    const CHAR_LIMITS = {GSM7: 160, UCS2: 67};
-                    const isUnicode = str => /[^\u0000-\u00ff]/.test(str);
+                const ONE_BYTE_CHARS = ['@', 'Δ', '0', '¡', 'P', '¿', 'p', '£', '_', '!', '1', 'A', 'Q', 'a', 'q', '$', 'Φ', '"', '2', 'B', 'R', 'b', 'r', '¥', 'Γ', '#', '3', 'C', 'S', 'c', 's', 'è', 'Λ', '¤', '4', 'D', 'T', 'd', 't', 'é', 'Ω', '%', '5', 'E', 'U', 'e', 'u', 'ù', 'Π', '&', '6', 'F', 'V', 'f', 'v', 'ì', 'Ψ', '\'', '7', 'G', 'W', 'g', 'w', 'ò', 'Σ', '(', '8', 'H', 'X', 'h', 'x', 'Ç', 'Θ', ')', '9', 'I', 'Y', 'i', 'y', 'Ξ', '*', ':', 'J', 'Z', 'j', 'z', 'Ø', '+', ';', 'K', 'Ä', 'k', 'ä', 'ø', 'Æ', ',', '<', 'L', 'Ö', 'l', 'ö', 'æ', '-', '=', 'M', 'Ñ', 'm', 'ñ', 'Å', 'ß', '.', '>', 'N', 'Ü', 'n', 'ü', 'å', 'É', '/', '?', 'O', '§', 'o', 'à'];
+                const TWO_BYTE_CHARS = ['^', '|', '€', '{', '}', '[', ']', '~', '\\'];
+
+                const handleSmsText = () => {
+                    const handleInput = ({target: textarea}) => {
+                        const encoding = (() => {
+                            let encoding = 'GSM7';
+
+                            for (const char of textarea.value.split('')) {
+                                if (![...ONE_BYTE_CHARS, ...TWO_BYTE_CHARS].includes(char)) {
+                                    encoding = 'UCS2';
+                                    break;
+                                }
+                            }
+
+                            return encoding;
+                        })();
+
+                        let charCount = textarea.value.length;
+
+                        if ('UCS2' === encoding) {
+                            for (const twoByteChar of TWO_BYTE_CHARS) {
+                                for (const char of textarea.value.split('')) {
+                                    if (char === twoByteChar) {
+                                        charCount++;
+                                    }
+                                }
+                            }
+                        }
+
+                        const CHAR_LIMITS = {
+                            GSM7: 160,
+                            UCS2: 70,
+                        };
+
+                        if (CHAR_LIMITS[encoding] < charCount) {
+                            CHAR_LIMITS.GSM7 = 153;
+                            CHAR_LIMITS.UCS2 = 67;
+                        }
+
+                        let msgCount = charCount / CHAR_LIMITS[encoding];
+                        if (1 >= msgCount) {
+                            msgCount = 1;
+                        } else {
+                            msgCount = Math.floor(Number.parseFloat(String(msgCount)));
+                            msgCount++;
+                        }
+
+                        textarea.nextElementSibling.textContent
+                            = `${charCount}/${msgCount} [${encoding}]`;
+                    };
 
                     for (const textarea of document.querySelectorAll('textarea[data-sms77-sms]')) {
                         textarea.insertAdjacentHTML('afterend',
                             `<span style='position: absolute; right: 22px;'></span>`);
 
-                        textarea.addEventListener('input', () => {
-                            const encoding = isUnicode(textarea.value) ? 'UCS2' : 'GSM7';
-
-                            const charCount = textarea.value.length;
-
-                            let msgCount = charCount / CHAR_LIMITS[encoding];
-                            if (1 >= msgCount) {
-                                msgCount = 1;
-                            } else {
-                                msgCount = Number.parseFloat(String(msgCount));
-                                msgCount = Math.floor(msgCount);
-                                msgCount++;
-                            }
-
-                            textarea.nextElementSibling.textContent
-                                = `${charCount} (${msgCount}) [${encoding}]`;
-                        });
+                        textarea.addEventListener('input', handleInput);
                     }
-                });
+                };
+
+                document.addEventListener('DOMContentLoaded', handleSmsText);
             </script>
         <?php endif;
     }
