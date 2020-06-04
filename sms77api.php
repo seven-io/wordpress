@@ -47,14 +47,6 @@ class Sms77Api_Plugin {
             dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
         );
 
-        $this->addActions();
-
-        add_filter('set-screen-option', function ($status, $option, $value) {
-            return $value;
-        }, 10, 3);
-    }
-
-    private function addActions() {
         add_action('admin_init', function () {
             foreach ((array)new sms77api_Options as $name => $values) {
                 add_option($name, $values[0]);
@@ -126,7 +118,25 @@ class Sms77Api_Plugin {
                     'manage_options',
                     $menuSlug,
                     function () use ($tableProp, $type) {
-                        sms77api_Partials::lookupPage($this->$tableProp, $type);
+                        ?>
+                        <?php if (get_option('sms77api_key')): ?>
+                            <?php $label = __('Number to look up', 'sms77api'); ?>
+                            <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
+
+                            <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
+                                  style='display: flex; align-items: baseline'>
+                                <input type='hidden' name='action'
+                                       value='sms77api_number_lookup_hook'>
+                                <input type='hidden' name='type' value='<?php echo $type ?>'>
+
+                                <input aria-label='<?php echo $label ?>'
+                                       placeholder='<?php echo $label ?>' name='number'/>
+
+                                <?php submit_button(__('Perform Lookup', 'sms77api')) ?>
+                            </form>
+                        <?php endif;
+
+                        sms77api_Partials::grid($this->$tableProp);
                     }
                 );
                 add_action("load-$hook", function () use ($title, $tableProp, $Table, $perPageOption) {
@@ -231,7 +241,7 @@ class Sms77Api_Plugin {
             $errors = [];
 
             if (!isset($_POST['submit'])
-                || !in_array($_POST['type'], sms77api_Util::LOOKUP_TYPES)) {
+                || !in_array($_POST['type'], sms77api_Util::LOOKUP_TYPES, false)) {
                 return;
             }
 
@@ -246,8 +256,16 @@ class Sms77Api_Plugin {
                     'response' => $response,
                 ])));
         });
+
+        add_filter('set-screen-option', function ($status, $option, $value) {
+            return $value;
+        }, 10, 3);
     }
 
+    /**
+     * @param string $page
+     * @param array $res
+     */
     private function redirect($page, $res) {
         wp_redirect(admin_url('admin.php?' . http_build_query([
                 'errors' => $res['errors'],
@@ -256,6 +274,7 @@ class Sms77Api_Plugin {
             ])));
     }
 
+    /** @return Sms77Api_Plugin */
     static function get_instance() {
         if (!isset(self::$instance)) {
             self::$instance = new self();

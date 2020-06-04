@@ -12,6 +12,14 @@ if (!class_exists('WP_List_Table')) {
 }
 
 class Base_Table extends WP_List_Table {
+    /**
+     * Base_Table constructor.
+     * @param string $entityName
+     * @param string $singular
+     * @param string $plural
+     * @param string $orderColumn
+     * @param array $extra
+     */
     public function __construct($entityName, $singular, $plural, $orderColumn, $extra = []) {
         parent::__construct(array_merge([
             'singular' => $singular,
@@ -22,6 +30,10 @@ class Base_Table extends WP_List_Table {
         ], $extra));
     }
 
+    /**
+     * @param string $href
+     * @return string
+     */
     protected function jsRedirect($href) {
         return '<script>location.href = "' . $href . '"</script>';
     }
@@ -36,7 +48,6 @@ class Base_Table extends WP_List_Table {
     }
 
     /**
-     * Render the bulk edit checkbox
      * @param array $item
      * @return string
      */
@@ -44,18 +55,18 @@ class Base_Table extends WP_List_Table {
         return "<input type='checkbox' name='row_action[]' value='{$item['id']}' />";
     }
 
+    /** @return void */
     protected function _initPrepareItems() {
         $this->_column_headers = $this->get_column_info();
 
-        if (isset($_POST['_wpnonce']) && !empty($_POST['_wpnonce'])) {
-            if (!wp_verify_nonce(
+        if (isset($_POST['_wpnonce']) && !empty($_POST['_wpnonce']) && !wp_verify_nonce(
                 filter_input(INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING),
                 'bulk-' . $this->_args['plural'])) {
-                wp_die('SECURITY_CHECK_FAILED');
-            }
+            wp_die('SECURITY_CHECK_FAILED');
         }
     }
 
+    /** @return void */
     public function prepare_items() {
         global $wpdb;
 
@@ -71,9 +82,7 @@ class Base_Table extends WP_List_Table {
         $this->items = $this->getRows();
     }
 
-    /**
-     * @return mixed
-     */
+    /** @return mixed */
     public function getRows() {
         $perPage = $this->get_pagination_arg('per_page');
 

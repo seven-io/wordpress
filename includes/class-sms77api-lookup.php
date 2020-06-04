@@ -9,6 +9,11 @@
 require_once 'class-sms77api-util.php';
 
 class sms77api_Lookup {
+    /**
+     * @param string $number
+     * @param string $type
+     * @return array|bool|mixed|null
+     */
     static function numbered($number, $type) {
         switch ($type) {
             case 'cnam':
@@ -29,25 +34,49 @@ class sms77api_Lookup {
         }
     }
 
+    /**
+     * @param string $number
+     * @return array|bool|mixed|null
+     */
     static function cnam($number) {
         return self::execute(
             'cnam', $number, 'number', 'sms77api_cnam_lookups');
     }
 
+    /**
+     * @param string $number
+     * @return array|bool|mixed|null
+     */
     static function format($number) {
         return self::execute(
             'format', $number, 'international', 'sms77api_number_lookups');
     }
 
+    /**
+     * @param string $number
+     * @return array|bool|mixed|null
+     */
     static function hlr($number) {
         return self::execute(
             'hlr', $number, 'international_format_number', 'sms77api_hlr_lookups', 'status');
     }
 
+    /**
+     * @param string $number
+     * @return array|bool|mixed|null
+     */
     static function mnp($number) {
         return self::execute('mnp', $number, 'number', 'sms77api_mnp_lookups');
     }
 
+    /**
+     * @param string $type
+     * @param string $number
+     * @param string $entityKey
+     * @param string $entityName
+     * @param string $successKey
+     * @return array|bool|mixed|null
+     */
     private static function execute($type, $number, $entityKey, $entityName, $successKey = 'success') {
         global $wpdb;
 

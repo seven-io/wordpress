@@ -27,22 +27,27 @@ class sms77api_Options {
         }
     }
 
+    /** @return void */
     private function debug() {
         $this->sms77api_debug = [0, [], 'boolean'];
     }
 
+    /** @return void */
     private function delay() {
         $this->sms77api_delay = [null];
     }
 
+    /** @return void */
     private function flash() {
         $this->sms77api_flash = [0, [], 'boolean'];
     }
 
+    /** @return void */
     private function label() {
         $this->sms77api_label = [null];
     }
 
+    /** @return void */
     private function key() {
         $this->sms77api_key = [null, ['sanitize_callback' => function ($key) {
             $error = function ($msg) {
@@ -64,30 +69,37 @@ class sms77api_Options {
         },]];
     }
 
+    /** @return void */
     private function msg() {
         $this->sms77api_msg = [null];
     }
 
+    /** @return void */
     private function performance_tracking() {
         $this->sms77api_performance_tracking = [0, [], 'boolean'];
     }
 
+    /** @return void */
     private function receivers() {
         $this->sms77api_receivers = [null];
     }
 
+    /** @return void */
     private function udh() {
         $this->sms77api_udh = [null];
     }
 
+    /** @return void */
     private function unicode() {
         $this->sms77api_unicode = [0, [], 'boolean'];
     }
 
+    /** @return void */
     private function utf8() {
         $this->sms77api_utf8 = [0, [], 'boolean'];
     }
 
+    /** @return void */
     private function ttl() {
         $this->sms77api_ttl = [null, [], 'integer'];
     }

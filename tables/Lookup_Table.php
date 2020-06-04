@@ -14,12 +14,24 @@ if (!class_exists('sms77api_Lookup')) {
 require_once __DIR__ . '/Base_Table.php';
 
 class Lookup_Table extends Base_Table {
+    /**
+     * Lookup_Table constructor.
+     * @param string $entityName
+     * @param string $singular
+     * @param string $plural
+     * @param string $orderColumn
+     * @param string $entityUnique
+     */
     public function __construct($entityName, $singular, $plural, $orderColumn, $entityUnique) {
         parent::__construct($entityName, $singular, $plural, $orderColumn, [
             '_entityUnique' => $entityUnique,
         ]);
     }
 
+    /**
+     * @param string $type
+     * @return void
+     */
     protected function _lookup($type) {
         global $wpdb;
 
@@ -34,7 +46,7 @@ class Lookup_Table extends Base_Table {
                             $responses[] = sms77api_Lookup::numbered($wpdb->get_col(
                                 "SELECT {$this->_args['_entityUnique']} from {$wpdb->prefix}sms77api_{$this->_args['_entityName']}"
                                 . " WHERE id = $lookupId")[0], $type);
-                        } catch (\Exception $ex) {
+                        } catch (Exception $ex) {
                             $errors[] = $ex->getMessage();
                         }
                     }

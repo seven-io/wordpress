@@ -40,6 +40,7 @@ class Voicemails_Table extends Base_Table {
         ];
     }
 
+    /** @return void */
     public function prepare_items() {
         global $wpdb;
 
@@ -60,8 +61,8 @@ class Voicemails_Table extends Base_Table {
 
                     try {
                         $responses[] = sms77api_Util::voice((array)json_decode($wpdb->get_row($sql)
-                            ->config));
-                    } catch (\Exception $ex) {
+                            ->config, true));
+                    } catch (Exception $ex) {
                         $errors[] = $ex->getMessage();
                     }
                 }

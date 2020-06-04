@@ -8,11 +8,17 @@
  */
 
 class sms77api_Util {
-    const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
-    const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
     const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp',];
     const TABLES = ['messages', 'number_lookups', 'mnp_lookups', 'hlr_lookups', 'cnam_lookups',];
+    const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
+    const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
+    /**
+     * @param string $endpoint
+     * @param string $apiKey
+     * @param array $data
+     * @return array|mixed|null
+     */
     static function get($endpoint, $apiKey, $data = []) {
         $isJsonEndpoint = 'balance' !== $endpoint;
 
@@ -24,23 +30,24 @@ class sms77api_Util {
         if (is_wp_error($response)) {
             error_log($response->get_error_message());
             return null;
-        } else {
-            $body = $response['body'];
+        }
 
-            if ($isJsonEndpoint) {
-                $body = (array)json_decode($body);
+        $body = $response['body'];
 
-                if ('sms' === $endpoint) {
-                    foreach ($body['messages'] as $k => $msg) {
-                        $body['messages'][$k] = (array)$msg;
-                    }
+        if ($isJsonEndpoint) {
+            $body = (array)json_decode($body, true);
+
+            if ('sms' === $endpoint) {
+                foreach ($body['messages'] as $k => $msg) {
+                    $body['messages'][$k] = (array)$msg;
                 }
             }
-
-            return stripslashes_deep($body);
         }
+
+        return stripslashes_deep($body);
     }
 
+    /** @return string[] */
     static function getTableNames() {
         return array_map(function ($name) {
             global $wpdb;
@@ -49,11 +56,16 @@ class sms77api_Util {
         }, self::TABLES);
     }
 
+    /** @return bool */
     static function hasWooCommerce() {
         return in_array('woocommerce/woocommerce.php',
-            apply_filters('active_plugins', get_option('active_plugins')));
+            apply_filters('active_plugins', get_option('active_plugins')), false);
     }
 
+    /**
+     * @param string $receivers
+     * @return array|void
+     */
     static function send($receivers) {
         if (!isset($_POST['submit'])) {
             return;
@@ -63,11 +75,11 @@ class sms77api_Util {
 
         $errors = [];
 
-        if (!mb_strlen($receivers)) {
+        if ('' === $receivers) {
             $errors[] = 'Receivers cannot be missing.';
         }
 
-        if (!mb_strlen($msg)) {
+        if ('' === $msg) {
             $errors[] = 'Message cannot be empty.';
         }
 
@@ -96,6 +108,10 @@ class sms77api_Util {
         ];
     }
 
+    /**
+     * @param array|string $receiversOrConfig
+     * @return array|array[]
+     */
     static function voice($receiversOrConfig) {
         global $wpdb;
 
@@ -109,11 +125,11 @@ class sms77api_Util {
         $receivers = $isNew ? $receiversOrConfig : $receiversOrConfig['to'];
         $msg = $isNew ? self::toString('msg') : $receiversOrConfig['text'];
 
-        if (!mb_strlen($receivers)) {
+        if ('' === $receivers) {
             $errors[] = 'Receivers cannot be missing.';
         }
 
-        if (!mb_strlen($msg)) {
+        if ('' === $msg) {
             $errors[] = 'Message cannot be empty.';
         }
 
@@ -149,6 +165,10 @@ class sms77api_Util {
         ];
     }
 
+    /**
+     * @param array $config
+     * @return array|mixed|null
+     */
     static function sms($config) {
         global $wpdb;
 
@@ -162,10 +182,18 @@ class sms77api_Util {
         return $response;
     }
 
+    /**
+     * @param string $key
+     * @return int
+     */
     static function toShortBool($key) {
         return array_key_exists($key, $_POST) ? (int)((bool)$_POST[$key]) : 0;
     }
 
+    /**
+     * @param string $key
+     * @return mixed|string
+     */
     static function toString($key) {
         return array_key_exists($key, $_POST) ? $_POST[$key] : '';
     }

@@ -69,6 +69,7 @@ class HLR_Lookups_Table extends Lookup_Table {
         ];
     }
 
+    /** @return void */
     function prepare_items() {
         $this->_initPrepareItems();
 

@@ -8,6 +8,10 @@
  */
 
 class sms77api_Partials {
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     static function all($isGlobal) {
         self::from($isGlobal);
         self::debug($isGlobal);
@@ -21,6 +25,10 @@ class sms77api_Partials {
         self::ttl($isGlobal);
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function from($isGlobal) {
         $name = 'from';
         $option = "sms77api_$name";
@@ -37,6 +45,10 @@ class sms77api_Partials {
         <?php
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function debug($isGlobal) {
         self::checkboxSetting(
             'debug',
@@ -45,6 +57,13 @@ class sms77api_Partials {
             'validate parameters but do not send actual messages');
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param bool $isGlobal
+     * @param string|null $helper
+     * @return void
+     */
     static function checkboxSetting($name, $label, $isGlobal, $helper = null) {
         $option = "sms77api_$name";
         ?>
@@ -60,6 +79,10 @@ class sms77api_Partials {
         <?php
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function delay($isGlobal) {
         $name = 'delay';
         $option = "sms77api_$name";
@@ -76,6 +99,10 @@ class sms77api_Partials {
         <?php
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function unicode($isGlobal) {
         self::checkboxSetting(
             'unicode',
@@ -84,6 +111,10 @@ class sms77api_Partials {
             __('forces unicode regardless of server determination', 'sms77api'));
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function flash($isGlobal) {
         self::checkboxSetting(
             'flash',
@@ -92,6 +123,10 @@ class sms77api_Partials {
             __('makes the message appear directly in the display', 'sms77api'));
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
@@ -99,6 +134,10 @@ class sms77api_Partials {
             $isGlobal);
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function utf8($isGlobal) {
         self::checkboxSetting(
             'utf8',
@@ -107,6 +146,10 @@ class sms77api_Partials {
             __('forces utf8 regardless of server determination', 'sms77api'));
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function udh($isGlobal) {
         $name = 'udh';
         $option = "sms77api_$name";
@@ -125,6 +168,10 @@ class sms77api_Partials {
         <?php
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function label($isGlobal) {
         $name = 'label';
         $option = "sms77api_$name";
@@ -141,6 +188,10 @@ class sms77api_Partials {
         <?php
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     private static function ttl($isGlobal) {
         $name = 'ttl';
         $option = "sms77api_$name";
@@ -158,29 +209,10 @@ class sms77api_Partials {
         <?php
     }
 
-    static function lookupPage($table, $type) {
-        ?>
-        <?php if (get_option('sms77api_key')): ?>
-            <h2><?php _e('Create a new Lookup', 'sms77api') ?></h2>
-
-            <form method='POST' action='<?php echo admin_url('admin-post.php') ?>'
-                  style='display: flex; align-items: baseline'>
-                <input type='hidden' name='action' value='sms77api_number_lookup_hook'>
-                <input type='hidden' name='type' value='<?php echo $type ?>'>
-
-                <input aria-label='<?php _e('Number to look up', 'sms77api') ?>'
-                       placeholder='<?php _e('Number to look up', 'sms77api') ?>' name='number'/>
-
-                <?php submit_button(__('Lookup', 'sms77api')) ?>
-            </form>
-        <?php endif;
-
-        self::grid($table);
-    }
-
     /**
      * @param Base_Table $table
      * @param bool $wrap
+     * @return void
      */
     static function grid($table, $wrap = true) {
         ?>
@@ -207,6 +239,7 @@ class sms77api_Partials {
         <?php echo $wrap ? "</div>" : '';
     }
 
+    /** @return void */
     static function defaultMessageElements() {
         if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
             $errors = implode(PHP_EOL, $_GET['errors']);
@@ -221,6 +254,7 @@ class sms77api_Partials {
         echo self::missingApiKeyLink();
     }
 
+    /** @return string */
     static function missingApiKeyLink() {
         if (get_option('sms77api_key')) {
             return '';
@@ -235,6 +269,11 @@ class sms77api_Partials {
         return "<p>$p</p>";
     }
 
+    /**
+     * @param bool $isGlobal
+     * @param bool $counter
+     * @return void
+     */
     static function text($isGlobal, $counter = true) {
         $name = 'msg';
         $option = "sms77api_$name";
@@ -281,6 +320,10 @@ class sms77api_Partials {
         <?php endif;
     }
 
+    /**
+     * @param bool $isGlobal
+     * @return void
+     */
     static function receivers($isGlobal) {
         $name = 'receivers';
         $option = "sms77api_$name";
