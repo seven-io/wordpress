@@ -19,12 +19,15 @@ class sms77api_Util {
      * @param array $data
      * @return array|mixed|null
      */
-    static function get($endpoint, $apiKey, $data = []) {
+    static function get($endpoint, $apiKey, array $data = []) {
         $isJsonEndpoint = 'balance' !== $endpoint;
 
         $response = wp_remote_get(
             "https://gateway.sms77.io/api/$endpoint?"
-            . http_build_query(array_merge($data, ['json' => $isJsonEndpoint ? 1 : 0, 'p' => $apiKey])),
+            . http_build_query(array_merge($data, [
+                'json' => $isJsonEndpoint ? 1 : 0,
+                'p' => $apiKey,
+                'sendWith' => 'WordPress'])),
             ['blocking' => true,]);
 
         if (is_wp_error($response)) {
