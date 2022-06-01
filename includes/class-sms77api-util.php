@@ -146,8 +146,8 @@ class sms77api_Util {
         $config = [
             'text' => $msg,
             'xml' => $isNew
-                ? self::toShortBool('xml') : is_bool($receiversOrConfig['xml'])
-                    ? $receiversOrConfig['xml'] : 0,
+                ? self::toShortBool('xml')
+                : (is_bool($receiversOrConfig['xml']) ? $receiversOrConfig['xml'] : 0),
         ];
         $responses = [];
         foreach (explode(',', $receivers) as $receiver) {
