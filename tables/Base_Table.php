@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/tables
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/tables
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
 if (!class_exists('WP_List_Table')) {
@@ -75,7 +75,7 @@ class Base_Table extends WP_List_Table {
         $this->set_pagination_args([
             'total_items' =>
                 $wpdb->get_var(
-                    "SELECT COUNT(*) FROM {$wpdb->prefix}sms77api_{$this->_args['_entityName']}"),
+                    "SELECT COUNT(*) FROM {$wpdb->prefix}sevenapi_{$this->_args['_entityName']}"),
             'per_page' => $perPage,
         ]);
 
@@ -88,7 +88,7 @@ class Base_Table extends WP_List_Table {
 
         global $wpdb;
 
-        $sql = "SELECT * FROM {$wpdb->prefix}sms77api_{$this->_args['_entityName']}";
+        $sql = "SELECT * FROM {$wpdb->prefix}sevenapi_{$this->_args['_entityName']}";
 
         if (empty($_REQUEST['orderby'])) {
             $sql .= " ORDER BY {$this->_args['_orderColumn']} DESC";

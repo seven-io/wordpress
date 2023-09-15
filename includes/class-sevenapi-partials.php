@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/includes
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/includes
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
-class sms77api_Partials {
+class sevenapi_Partials {
     /**
      * @param bool $isGlobal
      * @return void
@@ -31,11 +31,11 @@ class sms77api_Partials {
      */
     private static function from($isGlobal) {
         $name = 'from';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
         <span>
-            <strong><?php _e('From', 'sms77api') ?></strong>
+            <strong><?php _e('From', 'sevenapi') ?></strong>
             <small>this gets displayed as the sender on the receiving end</small>
         </span>
 
@@ -52,7 +52,7 @@ class sms77api_Partials {
     private static function debug($isGlobal) {
         self::checkboxSetting(
             'debug',
-            __('Debug', 'sms77api'),
+            __('Debug', 'sevenapi'),
             $isGlobal,
             'validate parameters but do not send actual messages');
     }
@@ -65,7 +65,7 @@ class sms77api_Partials {
      * @return void
      */
     static function checkboxSetting($name, $label, $isGlobal, $helper = null) {
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <span>
@@ -85,12 +85,12 @@ class sms77api_Partials {
      */
     private static function delay($isGlobal) {
         $name = 'delay';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <span>
-            <strong><?php _e('Delay', 'sms77api') ?></strong>
-            <small><?php _e('sets a delay for sending', 'sms77api') ?></small>
+            <strong><?php _e('Delay', 'sevenapi') ?></strong>
+            <small><?php _e('sets a delay for sending', 'sevenapi') ?></small>
         </span>
 
             <input name='<?php echo $isGlobal ? $option : $name ?>'
@@ -106,9 +106,9 @@ class sms77api_Partials {
     private static function unicode($isGlobal) {
         self::checkboxSetting(
             'unicode',
-            __('Unicode', 'sms77api'),
+            __('Unicode', 'sevenapi'),
             $isGlobal,
-            __('forces unicode regardless of server determination', 'sms77api'));
+            __('forces unicode regardless of server determination', 'sevenapi'));
     }
 
     /**
@@ -118,9 +118,9 @@ class sms77api_Partials {
     private static function flash($isGlobal) {
         self::checkboxSetting(
             'flash',
-            __('Flash', 'sms77api'),
+            __('Flash', 'sevenapi'),
             $isGlobal,
-            __('makes the message appear directly in the display', 'sms77api'));
+            __('makes the message appear directly in the display', 'sevenapi'));
     }
 
     /**
@@ -130,7 +130,7 @@ class sms77api_Partials {
     private static function performanceTracking($isGlobal) {
         self::checkboxSetting(
             'performance_tracking',
-            __('Performance Tracking', 'sms77api'),
+            __('Performance Tracking', 'sevenapi'),
             $isGlobal);
     }
 
@@ -141,9 +141,9 @@ class sms77api_Partials {
     private static function utf8($isGlobal) {
         self::checkboxSetting(
             'utf8',
-            __('UTF-8', 'sms77api'),
+            __('UTF-8', 'sevenapi'),
             $isGlobal,
-            __('forces utf8 regardless of server determination', 'sms77api'));
+            __('forces utf8 regardless of server determination', 'sevenapi'));
     }
 
     /**
@@ -152,14 +152,14 @@ class sms77api_Partials {
      */
     private static function udh($isGlobal) {
         $name = 'udh';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <span>
-            <strong><?php _e('UDH', 'sms77api') ?></strong>
+            <strong><?php _e('UDH', 'sevenapi') ?></strong>
             <small>sets a custom <a
                         href='https://en.wikipedia.org/wiki/User_Data_Header'>
-                    <?php _e('User Data Header', 'sms77api') ?></a></small>
+                    <?php _e('User Data Header', 'sevenapi') ?></a></small>
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
@@ -174,11 +174,11 @@ class sms77api_Partials {
      */
     private static function label($isGlobal) {
         $name = 'label';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <span>
-            <strong><?php _e('Label', 'sms77api') ?></strong>
+            <strong><?php _e('Label', 'sevenapi') ?></strong>
             <small>allowed characters: a-z, A-Z, 0-9, .-_@</small>
         </span>
 
@@ -194,13 +194,13 @@ class sms77api_Partials {
      */
     private static function ttl($isGlobal) {
         $name = 'ttl';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         $value = get_option($option);
         ?>
         <label style='display: flex;'>
             <span>
-                <strong><?php _e('TTL', 'sms77api') ?></strong>
-                <small><?php _e('Time-To-Live (default: 86400000 ms - 24h)', 'sms77api') ?></small>
+                <strong><?php _e('TTL', 'sevenapi') ?></strong>
+                <small><?php _e('Time-To-Live (default: 86400000 ms - 24h)', 'sevenapi') ?></small>
             </span>
 
             <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
@@ -217,7 +217,7 @@ class sms77api_Partials {
     static function grid($table, $wrap = true) {
         ?>
         <?php
-        echo $wrap ? "<div class='wrap'><h1>sms77 - {$table->_args['_tpl']['title']}</h1>" : '';
+        echo $wrap ? "<div class='wrap'><h1>seven - {$table->_args['_tpl']['title']}</h1>" : '';
         self::defaultMessageElements();
         ?>
         <div id='poststuff'>
@@ -256,13 +256,13 @@ class sms77api_Partials {
 
     /** @return string */
     static function missingApiKeyLink() {
-        if (get_option('sms77api_key')) {
+        if (get_option('sevenapi_key')) {
             return '';
         }
 
-        $href = admin_url('options-general.php?page=sms77api');
+        $href = admin_url('options-general.php?page=sevenapi');
         $p = wp_kses(
-            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sms77api'),
+            __('An API Key is required for using this plugin. Please head to the <a href="%s">Plugin Settings</a> to set it.', 'sevenapi'),
             ['a' => ['href' => []]]);
         $p = sprintf($p, esc_url($href));
 
@@ -276,20 +276,20 @@ class sms77api_Partials {
      */
     static function text($isGlobal, $counter = true) {
         $name = 'msg';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <strong><?php $isGlobal
-                    ? _e('Default Message', 'sms77api')
-                    : _e('Message', 'sms77api') ?></strong>
+                    ? _e('Default Message', 'sevenapi')
+                    : _e('Message', 'sevenapi') ?></strong>
 
-            <textarea style='padding-top: 10px;' data-sms77-sms
+            <textarea style='padding-top: 10px;' data-seven-sms
                       name='<?php echo $isGlobal ? $option : $name ?>'
             <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
         </label>
 
         <?php if ($counter): ?>
-            <script src='https://unpkg.com/@sms77.io/counter@1.2.0/dist/index.js'></script>
+            <script src='https://unpkg.com/@seven.io/counter/dist/index.js'></script>
         <?php endif;
     }
 
@@ -299,13 +299,13 @@ class sms77api_Partials {
      */
     static function receivers($isGlobal) {
         $name = 'receivers';
-        $option = "sms77api_$name";
+        $option = "sevenapi_$name";
         ?>
         <label style='display: flex;'>
             <span>
                  <strong><?php $isGlobal
-                         ? _e('Default Receiver(s)', 'sms77api')
-                         : _e('Receiver(s)', 'sms77api') ?></strong>
+                         ? _e('Default Receiver(s)', 'sevenapi')
+                         : _e('Receiver(s)', 'sevenapi') ?></strong>
                 <small>separated by comma eg: +4912345, +12345</small>
             </span>
 

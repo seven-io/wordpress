@@ -1,52 +1,52 @@
 <?php
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/pages
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/pages
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
 if (!defined('WPINC')) {
     die;
 }
 
-require_once __DIR__ . '/../includes/class-sms77api-partials.php';
+require_once __DIR__ . '/../includes/class-sevenapi-partials.php';
 ?>
-<h1>sms77 - <?php _e('Settings', 'sms77api') ?></h1>
+<h1>seven - <?php _e('Settings', 'sevenapi') ?></h1>
 
-<h2><?php _e('General', 'sms77api') ?></h2>
+<h2><?php _e('General', 'sevenapi') ?></h2>
 
-<form name='sms77api_settings' method="POST" action="options.php"
+<form name='sevenapi_settings' method="POST" action="options.php"
       style='display: flex; flex-direction: column;'>
-    <?php settings_fields('sms77api_general_settings'); ?>
+    <?php settings_fields('sevenapi_general_settings'); ?>
 
     <label style='display: flex'>
         <span>
-            <strong><?php _e('API Key', 'sms77api') ?></strong>
+            <strong><?php _e('API Key', 'sevenapi') ?></strong>
             <small>
-                <?php _e('required for sending SMS - get yours @ ', 'sms77api') ?>
-                <a href='http://sms77.io'>sms77.io</a></small>
+                <?php _e('required for sending SMS - get yours @ ', 'sevenapi') ?>
+                <a href='https://www.seven.io'>seven.io</a></small>
         </span>
 
-        <input required name="sms77api_key" value="<?php echo get_option('sms77api_key'); ?>"/>
+        <input required name="sevenapi_key" value="<?php echo get_option('sevenapi_key'); ?>"/>
     </label>
 
     <?php
-    sms77api_Partials::all(true);
+    sevenapi_Partials::all(true);
 
-    sms77api_Partials::text(true);
-    sms77api_Partials::receivers(true);
+    sevenapi_Partials::text(true);
+    sevenapi_Partials::receivers(true);
 
     submit_button();
     ?>
 </form>
 
 <style>
-    form[name='sms77api_settings'] label {
+    form[name='sevenapi_settings'] label {
         justify-content: space-between;
     }
 
-    form[name='sms77api_settings'] label:not(:last-of-type) {
+    form[name='sevenapi_settings'] label:not(:last-of-type) {
         margin-bottom: 10px;
     }
 </style>

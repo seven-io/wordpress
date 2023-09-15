@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/includes
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/includes
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
-class sms77api_Util {
+class sevenapi_Util {
     const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp',];
     const TABLES = ['messages', 'number_lookups', 'mnp_lookups', 'hlr_lookups', 'cnam_lookups',];
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
@@ -23,7 +23,7 @@ class sms77api_Util {
         $isJsonEndpoint = 'balance' !== $endpoint;
 
         $response = wp_remote_get(
-            "https://gateway.sms77.io/api/$endpoint?"
+            "https://gateway.seven.io/api/$endpoint?"
             . http_build_query(array_merge($data, [
                 'json' => $isJsonEndpoint ? 1 : 0,
                 'p' => $apiKey,
@@ -55,7 +55,7 @@ class sms77api_Util {
         return array_map(function ($name) {
             global $wpdb;
 
-            return "{$wpdb->prefix}sms77api_$name";
+            return "{$wpdb->prefix}sevenapi_$name";
         }, self::TABLES);
     }
 
@@ -153,10 +153,10 @@ class sms77api_Util {
         foreach (explode(',', $receivers) as $receiver) {
             $config['to'] = $receiver;
 
-            $response = self::get('voice', get_option('sms77api_key'), $config);
+            $response = self::get('voice', get_option('sevenapi_key'), $config);
             $responses[] = $response;
 
-            $wpdb->insert("{$wpdb->prefix}sms77api_voicemails", [
+            $wpdb->insert("{$wpdb->prefix}sevenapi_voicemails", [
                 'config' => json_encode($config),
                 'response' => json_encode($response),
             ]);
@@ -175,9 +175,9 @@ class sms77api_Util {
     static function sms($config) {
         global $wpdb;
 
-        $response = self::get('sms', get_option('sms77api_key'), $config);
+        $response = self::get('sms', get_option('sevenapi_key'), $config);
 
-        $wpdb->insert("{$wpdb->prefix}sms77api_messages", [
+        $wpdb->insert("{$wpdb->prefix}sevenapi_messages", [
             'config' => json_encode($config),
             'response' => json_encode($response),
         ]);

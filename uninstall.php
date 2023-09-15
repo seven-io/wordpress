@@ -1,7 +1,7 @@
 <?php
 /**
- * @link       http://sms77.io
- * @package    sms77api
+ * @link       http://www.seven.io
+ * @package    sevenapi
  */
 
 if (!defined('WP_UNINSTALL_PLUGIN')) {
@@ -9,13 +9,13 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 }
 
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-require_once plugin_dir_path(__FILE__) . 'includes/class-sms77api-util.php';
-foreach (sms77api_Util::getTableNames() as $tableName) {
+require_once plugin_dir_path(__FILE__) . 'includes/class-sevenapi-util.php';
+foreach (sevenapi_Util::getTableNames() as $tableName) {
     dbDelta("DROP TABLE IF EXISTS $tableName;");
 }
 
-delete_option('sms77api_db_version');
-require_once plugin_dir_path(__FILE__) . 'includes/class-sms77api-options.php';
-foreach ((array)new sms77api_Options as $name => $v) {
+delete_option('sevenapi_db_version');
+require_once plugin_dir_path(__FILE__) . 'includes/class-sevenapi-options.php';
+foreach ((array)new sevenapi_Options as $name => $v) {
     delete_option($name);
 }

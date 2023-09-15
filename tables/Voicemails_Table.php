@@ -1,27 +1,27 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/tables
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/tables
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
 require_once __DIR__ . '/Base_Table.php';
 
 class Voicemails_Table extends Base_Table {
     public function __construct() {
-        parent::__construct('voicemails', __('Voice Mail', 'sms77api'),
-            __('Voice Mails', 'sms77api'), 'created');
+        parent::__construct('voicemails', __('Voice Mail', 'sevenapi'),
+            __('Voice Mails', 'sevenapi'), 'created');
     }
 
     /** @return array */
     function get_columns() {
         return [
             'cb' => '<input type="checkbox" />',
-            'response' => __('Response', 'sms77api'),
-            'config' => __('Config', 'sms77api'),
-            'created' => __('Created', 'sms77api'),
+            'response' => __('Response', 'sevenapi'),
+            'config' => __('Config', 'sevenapi'),
+            'created' => __('Created', 'sevenapi'),
         ];
     }
 
@@ -35,8 +35,8 @@ class Voicemails_Table extends Base_Table {
     /** @return array */
     public function get_bulk_actions() {
         return [
-            'delete' => __('Delete', 'sms77api'),
-            'resend' => __('Resend', 'sms77api'),
+            'delete' => __('Delete', 'sevenapi'),
+            'resend' => __('Resend', 'sevenapi'),
         ];
     }
 
@@ -57,10 +57,10 @@ class Voicemails_Table extends Base_Table {
                 $responses = [];
 
                 foreach ($_POST['row_action'] as $msgId) {
-                    $sql = "SELECT config from {$wpdb->prefix}sms77api_voicemails WHERE id = $msgId";
+                    $sql = "SELECT config from {$wpdb->prefix}sevenapi_voicemails WHERE id = $msgId";
 
                     try {
-                        $responses[] = sms77api_Util::voice((array)json_decode($wpdb->get_row($sql)
+                        $responses[] = sevenapi_Util::voice((array)json_decode($wpdb->get_row($sql)
                             ->config, true));
                     } catch (Exception $ex) {
                         $errors[] = $ex->getMessage();
@@ -75,7 +75,7 @@ class Voicemails_Table extends Base_Table {
             case 'delete':
                 if (isset($_POST['row_action'])) {
                     foreach (esc_sql($_POST['row_action']) as $id) {
-                        $wpdb->delete("{$wpdb->prefix}sms77api_voicemails", ['id' => $id], ['%d']);
+                        $wpdb->delete("{$wpdb->prefix}sevenapi_voicemails", ['id' => $id], ['%d']);
                     }
                 }
 

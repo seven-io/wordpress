@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/includes
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/includes
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
-require_once 'class-sms77api-util.php';
+require_once 'class-sevenapi-util.php';
 
-class sms77api_Lookup {
+class sevenapi_Lookup {
     /**
      * @param string $number
      * @param string $type
@@ -40,7 +40,7 @@ class sms77api_Lookup {
      */
     static function cnam($number) {
         return self::execute(
-            'cnam', $number, 'number', 'sms77api_cnam_lookups');
+            'cnam', $number, 'number', 'sevenapi_cnam_lookups');
     }
 
     /**
@@ -49,7 +49,7 @@ class sms77api_Lookup {
      */
     static function format($number) {
         return self::execute(
-            'format', $number, 'international', 'sms77api_number_lookups');
+            'format', $number, 'international', 'sevenapi_number_lookups');
     }
 
     /**
@@ -58,7 +58,7 @@ class sms77api_Lookup {
      */
     static function hlr($number) {
         return self::execute(
-            'hlr', $number, 'international_format_number', 'sms77api_hlr_lookups', 'status');
+            'hlr', $number, 'international_format_number', 'sevenapi_hlr_lookups', 'status');
     }
 
     /**
@@ -66,7 +66,7 @@ class sms77api_Lookup {
      * @return array|bool|mixed|null
      */
     static function mnp($number) {
-        return self::execute('mnp', $number, 'number', 'sms77api_mnp_lookups');
+        return self::execute('mnp', $number, 'number', 'sevenapi_mnp_lookups');
     }
 
     /**
@@ -80,8 +80,8 @@ class sms77api_Lookup {
     private static function execute($type, $number, $entityKey, $entityName, $successKey = 'success') {
         global $wpdb;
 
-        $response = sms77api_Util::get(
-            'lookup', get_option('sms77api_key'), ['number' => $number, 'type' => $type]);
+        $response = sevenapi_Util::get(
+            'lookup', get_option('sevenapi_key'), ['number' => $number, 'type' => $type]);
 
         $response = (array)$response;
 

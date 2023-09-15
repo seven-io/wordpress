@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/tables
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/tables
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
-if (!class_exists('sms77api_Lookup')) {
-    require_once __DIR__ . '/../includes/class-sms77api-lookup.php';
+if (!class_exists('sevenapi_Lookup')) {
+    require_once __DIR__ . '/../includes/class-sevenapi-lookup.php';
 }
 
 require_once __DIR__ . '/Base_Table.php';
@@ -43,8 +43,8 @@ class Lookup_Table extends Base_Table {
 
                     foreach ($_POST['row_action'] as $lookupId) {
                         try {
-                            $responses[] = sms77api_Lookup::numbered($wpdb->get_col(
-                                "SELECT {$this->_args['_entityUnique']} from {$wpdb->prefix}sms77api_{$this->_args['_entityName']}"
+                            $responses[] = sevenapi_Lookup::numbered($wpdb->get_col(
+                                "SELECT {$this->_args['_entityUnique']} from {$wpdb->prefix}sevenapi_{$this->_args['_entityName']}"
                                 . " WHERE id = $lookupId")[0], $type);
                         } catch (Exception $ex) {
                             $errors[] = $ex->getMessage();
@@ -60,7 +60,7 @@ class Lookup_Table extends Base_Table {
             case 'delete':
                 if (isset($_POST['row_action'])) {
                     foreach (esc_sql($_POST['row_action']) as $id) {
-                        $wpdb->delete("{$wpdb->prefix}sms77api_{$this->_args['_entityName']}",
+                        $wpdb->delete("{$wpdb->prefix}sevenapi_{$this->_args['_entityName']}",
                             ['id' => $id], ['%d']);
                     }
                 }

@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @link       http://sms77.io
- * @package    sms77api
- * @subpackage sms77api/tables
- * @author     sms77 e.K. <support@sms77.io>
+ * @link       http://www.seven.io
+ * @package    sevenapi
+ * @subpackage sevenapi/tables
+ * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
 
 require_once __DIR__ . '/Lookup_Table.php';
@@ -20,9 +20,9 @@ class CNAM_Lookups_Table extends Lookup_Table {
     function get_columns() {
         return [
             'cb' => '<input type="checkbox" />',
-            'updated' => __('Updated', 'sms77api'),
-            'number' => __('Number', 'sms77api'),
-            'name' => __('Name', 'sms77api'),
+            'updated' => __('Updated', 'sevenapi'),
+            'number' => __('Number', 'sevenapi'),
+            'name' => __('Name', 'sevenapi'),
         ];
     }
 
@@ -38,8 +38,8 @@ class CNAM_Lookups_Table extends Lookup_Table {
     /** @return array */
     function get_bulk_actions() {
         return [
-            'delete' => __('Delete', 'sms77api'),
-            'relookup' => __('Lookup again', 'sms77api'),
+            'delete' => __('Delete', 'sevenapi'),
+            'relookup' => __('Lookup again', 'sevenapi'),
         ];
     }
 

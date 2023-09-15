@@ -1,8 +1,8 @@
-# Copyright (C) 2020 sms77 e.K.
-# This file is distributed under the same license as the sms77 API plugin.
+# Copyright (C) 2023 seven communications GmbH & Co. KG
+# This file is distributed under the same license as the seven API plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: sms77 API 1.0.0\n"
+"Project-Id-Version: seven API 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-api\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -12,128 +12,128 @@ msgstr ""
 "POT-Creation-Date: 2020-06-04T11:06:54+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
-"X-Domain: sms77api\n"
+"X-Domain: sevenapi\n"
 
 #. Plugin Name of the plugin
-msgid "sms77 API"
+msgid "seven API"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "http://github.com/sms77io/wp-api"
+msgid "http://github.com/seven-io/wordpress"
 msgstr ""
 
 #. Description of the plugin
-msgid "Send SMS through the sms77.io gateway."
+msgid "Send SMS through the seven.io gateway."
 msgstr ""
 
 #. Author of the plugin
-msgid "sms77 e.K."
+msgid "seven communications GmbH & Co. KG"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "http://sms77.io/"
+msgid "https://www.seven.io/"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:30
+#: includes/class-sevenapi-partials.php:30
 msgid "From"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:43
+#: includes/class-sevenapi-partials.php:43
 msgid "Debug"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:69
+#: includes/class-sevenapi-partials.php:69
 msgid "Delay"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:70
+#: includes/class-sevenapi-partials.php:70
 msgid "sets a delay for sending"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:82
+#: includes/class-sevenapi-partials.php:82
 msgid "Unicode"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:84
+#: includes/class-sevenapi-partials.php:84
 msgid "forces unicode regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:90
+#: includes/class-sevenapi-partials.php:90
 msgid "Flash"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:92
+#: includes/class-sevenapi-partials.php:92
 msgid "makes the message appear directly in the display"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:98
+#: includes/class-sevenapi-partials.php:98
 msgid "Performance Tracking"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:105
+#: includes/class-sevenapi-partials.php:105
 msgid "UTF-8"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:107
+#: includes/class-sevenapi-partials.php:107
 msgid "forces utf8 regardless of server determination"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:116
+#: includes/class-sevenapi-partials.php:116
 msgid "UDH"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:119
+#: includes/class-sevenapi-partials.php:119
 msgid "User Data Header"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:134
+#: includes/class-sevenapi-partials.php:134
 msgid "Label"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:151
+#: includes/class-sevenapi-partials.php:151
 msgid "TTL"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:152
+#: includes/class-sevenapi-partials.php:152
 msgid "Time-To-Live (default: 86400000 ms - 24h)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:164
+#: includes/class-sevenapi-partials.php:164
 msgid "Create a new Lookup"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:171
-#: includes/class-sms77api-partials.php:172
+#: includes/class-sevenapi-partials.php:171
+#: includes/class-sevenapi-partials.php:172
 msgid "Number to look up"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:174
+#: includes/class-sevenapi-partials.php:174
 msgid "Lookup"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:231
+#: includes/class-sevenapi-partials.php:231
 msgid "An API Key is required for using this plugin. Please head to the <a href=\"%s\">Plugin Settings</a> to set it."
 msgstr ""
 
-#: includes/class-sms77api-partials.php:244
+#: includes/class-sevenapi-partials.php:244
 msgid "Default Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:245
+#: includes/class-sevenapi-partials.php:245
 #: tables/Messages_Table.php:14
 msgid "Message"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:291
+#: includes/class-sevenapi-partials.php:291
 msgid "Default Receiver(s)"
 msgstr ""
 
-#: includes/class-sms77api-partials.php:292
+#: includes/class-sevenapi-partials.php:292
 msgid "Receiver(s)"
 msgstr ""
 
 #: pages/messages.php:15
-#: sms77api.php:110
+#: sevenapi.php:110
 #: tables/Messages_Table.php:15
 msgid "Messages"
 msgstr ""
@@ -159,7 +159,7 @@ msgid "required for sending SMS - get yours @ "
 msgstr ""
 
 #: pages/voicemails.php:15
-#: sms77api.php:116
+#: sevenapi.php:116
 #: tables/Voicemails_Table.php:15
 msgid "Voice Mails"
 msgstr ""
@@ -197,19 +197,19 @@ msgstr ""
 msgid "Date to"
 msgstr ""
 
-#: sms77api.php:144
+#: sevenapi.php:144
 msgid "Format Lookups"
 msgstr ""
 
-#: sms77api.php:148
+#: sevenapi.php:148
 msgid "MNP Lookups"
 msgstr ""
 
-#: sms77api.php:152
+#: sevenapi.php:152
 msgid "HLR Lookups"
 msgstr ""
 
-#: sms77api.php:156
+#: sevenapi.php:156
 msgid "CNAM Lookups"
 msgstr ""
 
