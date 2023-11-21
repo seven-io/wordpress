@@ -14,7 +14,6 @@ class sevenapi_Partials {
      */
     static function all($isGlobal) {
         self::from($isGlobal);
-        self::debug($isGlobal);
         self::delay($isGlobal);
         self::unicode($isGlobal);
         self::flash($isGlobal);
@@ -43,18 +42,6 @@ class sevenapi_Partials {
                    value='<?php echo get_option($option) ?>'/>
         </label>
         <?php
-    }
-
-    /**
-     * @param bool $isGlobal
-     * @return void
-     */
-    private static function debug($isGlobal) {
-        self::checkboxSetting(
-            'debug',
-            __('Debug', 'sevenapi'),
-            $isGlobal,
-            'validate parameters but do not send actual messages');
     }
 
     /**

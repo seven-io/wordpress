@@ -96,7 +96,6 @@ class sevenapi_Util {
         return [
             'errors' => $errors,
             'response' => self::sms([
-                'debug' => self::toShortBool('debug'),
                 'flash' => self::toShortBool('flash'),
                 'from' => array_key_exists('from', $_POST) ? $_POST['from'] : null,
                 'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,

@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @property array sevenapi_debug
  * @property null[] sevenapi_delay
  * @property array sevenapi_flash
  * @property null[] sevenapi_label
@@ -25,11 +24,6 @@ class sevenapi_Options {
                 $this->{$name}();
             }
         }
-    }
-
-    /** @return void */
-    private function debug() {
-        $this->sevenapi_debug = [0, [], 'boolean'];
     }
 
     /** @return void */

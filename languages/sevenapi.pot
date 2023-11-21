@@ -38,10 +38,6 @@ msgstr ""
 msgid "From"
 msgstr ""
 
-#: includes/class-sevenapi-partials.php:43
-msgid "Debug"
-msgstr ""
-
 #: includes/class-sevenapi-partials.php:69
 msgid "Delay"
 msgstr ""
