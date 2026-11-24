@@ -54,13 +54,13 @@ require_once __DIR__ . '/../includes/class-sevenapi-util.php';
             <label style='display: flex; flex-direction: column;'>
                 <strong><?php _e('Date', 'sevenapi') ?></strong>
 
-                <input class='datepicker' name='date'/>
+                <input type='date' name='date'/>
             </label>
 
             <label style='flex-direction: column; display: none;'>
                 <strong><?php _e('Date to', 'sevenapi') ?></strong>
 
-                <input class='datepicker' name='date_to'/>
+                <input type='date' name='date_to'/>
             </label>
         </div>
 
@@ -72,8 +72,6 @@ require_once __DIR__ . '/../includes/class-sevenapi-util.php';
     </form>
     <script>
         jQuery(function () {
-            jQuery('.datepicker').datepicker({dateFormat: 'yy-dd-mm'});
-
             const $form = document.querySelector('form[name="sevenapi_wooc"]');
             const $dateLabel = $form.querySelector('input[name="date"]').previousElementSibling;
             const dateText = $dateLabel.innerText.trim();
@@ -87,7 +85,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-util.php';
         });
     </script>
     <style>
-        form[name='sevenapi_wooc'] .datepicker {
+        form[name='sevenapi_wooc'] input[type='date'] {
             min-height: 30px;
         }
 

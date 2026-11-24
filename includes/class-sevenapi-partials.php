@@ -39,7 +39,7 @@ class sevenapi_Partials {
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
-                   value='<?php echo get_option($option) ?>'/>
+                   value='<?php echo esc_attr(get_option($option)) ?>'/>
         </label>
         <?php
     }
@@ -81,7 +81,7 @@ class sevenapi_Partials {
         </span>
 
             <input name='<?php echo $isGlobal ? $option : $name ?>'
-                   value='<?php echo get_option($option) ?>'/>
+                   value='<?php echo esc_attr(get_option($option)) ?>'/>
         </label>
         <?php
     }
@@ -150,7 +150,7 @@ class sevenapi_Partials {
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
-                   value='<?php echo get_option($option) ?>'/>
+                   value='<?php echo esc_attr(get_option($option)) ?>'/>
         </label>
         <?php
     }
@@ -170,7 +170,7 @@ class sevenapi_Partials {
         </span>
 
             <input style='min-height: 30px' name='<?php echo $isGlobal ? $option : $name ?>'
-                   value='<?php echo get_option($option) ?>'/>
+                   value='<?php echo esc_attr(get_option($option)) ?>'/>
         </label>
         <?php
     }
@@ -191,7 +191,7 @@ class sevenapi_Partials {
             </span>
 
             <input type='number' name='<?php echo $isGlobal ? $option : $name ?>'
-                <?php echo $value ? "value='$value'" : '' ?>/>
+                <?php echo $value ? "value='" . esc_attr($value) . "'" : '' ?>/>
         </label>
         <?php
     }
@@ -228,14 +228,17 @@ class sevenapi_Partials {
 
     /** @return void */
     static function defaultMessageElements() {
-        if (count(isset($_GET['errors']) ? $_GET['errors'] : [])) {
-            $errors = implode(PHP_EOL, $_GET['errors']);
-            echo "<b>Errors:</b><pre>$errors</pre>";
+        $errors = isset($_GET['errors']) ? (array)wp_unslash($_GET['errors']) : [];
+        if (count($errors)) {
+            $errors = array_map(function ($error) {
+                return is_scalar($error) ? (string)$error : wp_json_encode($error);
+            }, $errors);
+            echo '<b>Errors:</b><pre>' . esc_html(implode(PHP_EOL, $errors)) . '</pre>';
         }
 
         if (isset($_GET['response'])) {
-            $response = json_encode($_GET['response'], JSON_PRETTY_PRINT);
-            echo "<b>Response:</b><pre>$response</pre>";
+            $response = wp_json_encode(wp_unslash($_GET['response']), JSON_PRETTY_PRINT);
+            echo '<b>Response:</b><pre>' . esc_html($response) . '</pre>';
         }
 
         echo self::missingApiKeyLink();
@@ -272,12 +275,14 @@ class sevenapi_Partials {
 
             <textarea style='padding-top: 10px;' data-seven-sms
                       name='<?php echo $isGlobal ? $option : $name ?>'
-            <?php echo $isGlobal ? '' : 'required' ?>><?php echo trim(get_option($option)) ?></textarea>
+            <?php echo $isGlobal ? '' : 'required' ?>><?php echo esc_textarea(trim(get_option($option))) ?></textarea>
         </label>
 
-        <?php if ($counter): ?>
-            <script src='https://unpkg.com/@seven.io/counter/dist/index.js'></script>
-        <?php endif;
+        <?php if ($counter) {
+            wp_enqueue_script('sevenapi-counter',
+                plugins_url('assets/js/seven-counter.min.js', dirname(__DIR__) . '/sevenapi.php'),
+                [], '1.11.1', true);
+        }
     }
 
     /**
@@ -297,7 +302,7 @@ class sevenapi_Partials {
             </span>
 
             <input name="<?php echo $isGlobal ? $option : $name ?>"
-                   value="<?php echo get_option($option); ?>"
+                   value="<?php echo esc_attr(get_option($option)); ?>"
                 <?php echo $isGlobal ? '' : 'required' ?>/>
         </label>
         <?php

@@ -80,7 +80,7 @@ class sevenapi_Lookup {
     private static function execute($type, $number, $entityKey, $entityName, $successKey = 'success') {
         global $wpdb;
 
-        $response = sevenapi_Util::get(
+        $response = sevenapi_Util::request(
             'lookup', get_option('sevenapi_key'), ['number' => $number, 'type' => $type]);
 
         $response = (array)$response;
@@ -111,8 +111,9 @@ class sevenapi_Lookup {
                 break;
         }
 
-        if (empty($wpdb->get_col("SELECT $entityKey FROM {$wpdb->prefix}$entityName"
-            . " WHERE $entityKey = {$response[$entityKey]}"))) {
+        if (!$wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$wpdb->prefix}$entityName WHERE $entityKey = %s",
+            $response[$entityKey]))) {
             return 1 === $wpdb->insert($wpdb->prefix . $entityName, $response)
                 ? $response : false;
         }

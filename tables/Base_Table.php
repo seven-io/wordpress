@@ -44,7 +44,7 @@ class Base_Table extends WP_List_Table {
      * @return mixed
      */
     public function column_default($item, $columnName) {
-        return $item[$columnName];
+        return esc_html((string)$item[$columnName]);
     }
 
     /**
@@ -52,18 +52,21 @@ class Base_Table extends WP_List_Table {
      * @return string
      */
     function column_cb($item) {
-        return "<input type='checkbox' name='row_action[]' value='{$item['id']}' />";
+        return "<input type='checkbox' name='row_action[]' value='" . absint($item['id']) . "' />";
     }
 
     /** @return void */
     protected function _initPrepareItems() {
         $this->_column_headers = $this->get_column_info();
 
-        if (isset($_POST['_wpnonce']) && !empty($_POST['_wpnonce']) && !wp_verify_nonce(
-                filter_input(INPUT_POST, '_wpnonce', FILTER_SANITIZE_STRING),
-                'bulk-' . $this->_args['plural'])) {
-            wp_die('SECURITY_CHECK_FAILED');
+        if ($this->current_action()) {
+            check_admin_referer('bulk-' . $this->_args['plural']);
         }
+    }
+
+    /** @return int[] */
+    protected function _selectedIds() {
+        return isset($_POST['row_action']) ? array_map('absint', (array)$_POST['row_action']) : [];
     }
 
     /** @return void */
@@ -90,11 +93,15 @@ class Base_Table extends WP_List_Table {
 
         $sql = "SELECT * FROM {$wpdb->prefix}sevenapi_{$this->_args['_entityName']}";
 
-        if (empty($_REQUEST['orderby'])) {
-            $sql .= " ORDER BY {$this->_args['_orderColumn']} DESC";
+        $sortable = array_map(function ($column) {
+            return is_array($column) ? $column[0] : $column;
+        }, $this->get_sortable_columns());
+
+        if (isset($_REQUEST['orderby']) && in_array($_REQUEST['orderby'], $sortable, true)) {
+            $order = isset($_REQUEST['order']) && 'desc' === strtolower($_REQUEST['order']) ? 'DESC' : 'ASC';
+            $sql .= " ORDER BY {$_REQUEST['orderby']} $order";
         } else {
-            $sql .= ' ORDER BY ' . esc_sql($_REQUEST['orderby']);
-            $sql .= empty($_REQUEST['order']) ? ' ASC' : ' ' . esc_sql($_REQUEST['order']);
+            $sql .= " ORDER BY {$this->_args['_orderColumn']} DESC";
         }
 
         $sql .= " LIMIT $perPage";

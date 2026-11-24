@@ -28,7 +28,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-partials.php';
                 <a href='https://www.seven.io'>seven.io</a></small>
         </span>
 
-        <input required name="sevenapi_key" value="<?php echo get_option('sevenapi_key'); ?>"/>
+        <input required name="sevenapi_key" value="<?php echo esc_attr(get_option('sevenapi_key')); ?>"/>
     </label>
 
     <?php

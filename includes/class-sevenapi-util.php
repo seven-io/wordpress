@@ -19,28 +19,34 @@ class sevenapi_Util {
      * @param array $data
      * @return array|mixed|null
      */
-    static function get($endpoint, $apiKey, array $data = []) {
+    static function request($endpoint, $apiKey, array $data = [], $method = 'GET') {
         $isJsonEndpoint = 'balance' !== $endpoint;
+        $url = "https://gateway.seven.io/api/$endpoint";
+        $params = array_merge($data, [
+            'json' => $isJsonEndpoint ? 1 : 0,
+            'sendWith' => 'WordPress',
+        ]);
+        // Key goes in a header so it never ends up in URLs or access logs.
+        $args = ['headers' => ['X-Api-Key' => $apiKey], 'timeout' => 30];
 
-        $response = wp_remote_get(
-            "https://gateway.seven.io/api/$endpoint?"
-            . http_build_query(array_merge($data, [
-                'json' => $isJsonEndpoint ? 1 : 0,
-                'p' => $apiKey,
-                'sendWith' => 'WordPress'])),
-            ['blocking' => true,]);
+        if ('POST' === $method) {
+            $args['body'] = $params;
+            $response = wp_remote_post($url, $args);
+        } else {
+            $response = wp_remote_get($url . '?' . http_build_query($params), $args);
+        }
 
         if (is_wp_error($response)) {
             error_log($response->get_error_message());
             return null;
         }
 
-        $body = $response['body'];
+        $body = wp_remote_retrieve_body($response);
 
         if ($isJsonEndpoint) {
             $body = (array)json_decode($body, true);
 
-            if ('sms' === $endpoint) {
+            if ('sms' === $endpoint && isset($body['messages'])) {
                 foreach ($body['messages'] as $k => $msg) {
                     $body['messages'][$k] = (array)$msg;
                 }
@@ -97,13 +103,13 @@ class sevenapi_Util {
             'errors' => $errors,
             'response' => self::sms([
                 'flash' => self::toShortBool('flash'),
-                'from' => array_key_exists('from', $_POST) ? $_POST['from'] : null,
-                'label' => array_key_exists('label', $_POST) ? $_POST['label'] : null,
+                'from' => array_key_exists('from', $_POST) ? self::toString('from') : null,
+                'label' => array_key_exists('label', $_POST) ? self::toString('label') : null,
                 'performance_tracking' => self::toShortBool('performance_tracking'),
                 'text' => $msg,
                 'to' => $receivers,
                 'ttl' => array_key_exists('ttl', $_POST) ? (int)$_POST['ttl'] : null,
-                'udh' => array_key_exists('udh', $_POST) ? $_POST['udh'] : null,
+                'udh' => array_key_exists('udh', $_POST) ? self::toString('udh') : null,
                 'unicode' => self::toShortBool('unicode'),
                 'utf8' => self::toShortBool('utf8'),
             ]),
@@ -152,7 +158,7 @@ class sevenapi_Util {
         foreach (explode(',', $receivers) as $receiver) {
             $config['to'] = $receiver;
 
-            $response = self::get('voice', get_option('sevenapi_key'), $config);
+            $response = self::request('voice', get_option('sevenapi_key'), $config, 'POST');
             $responses[] = $response;
 
             $wpdb->insert("{$wpdb->prefix}sevenapi_voicemails", [
@@ -174,7 +180,7 @@ class sevenapi_Util {
     static function sms($config) {
         global $wpdb;
 
-        $response = self::get('sms', get_option('sevenapi_key'), $config);
+        $response = self::request('sms', get_option('sevenapi_key'), $config, 'POST');
 
         $wpdb->insert("{$wpdb->prefix}sevenapi_messages", [
             'config' => json_encode($config),
@@ -197,6 +203,6 @@ class sevenapi_Util {
      * @return mixed|string
      */
     static function toString($key) {
-        return array_key_exists($key, $_POST) ? $_POST[$key] : '';
+        return array_key_exists($key, $_POST) ? wp_unslash($_POST[$key]) : '';
     }
 }

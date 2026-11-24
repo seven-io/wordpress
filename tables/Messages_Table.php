@@ -52,11 +52,15 @@ class Messages_Table extends Base_Table {
                     $errors = [];
                     $responses = [];
 
-                    foreach ($_POST['row_action'] as $msgId) {
+                    foreach ($this->_selectedIds() as $msgId) {
+                        $config = $wpdb->get_var($wpdb->prepare(
+                            "SELECT config FROM {$wpdb->prefix}sevenapi_messages WHERE id = %d", $msgId));
+                        if (null === $config) {
+                            continue;
+                        }
+
                         try {
-                            $responses[] = sevenapi_Util::sms((array)json_decode($wpdb->get_row(
-                                "SELECT config from {$wpdb->prefix}sevenapi_messages WHERE id = $msgId")
-                                ->config, true));
+                            $responses[] = sevenapi_Util::sms((array)json_decode($config, true));
                         } catch (Exception $ex) {
                             $errors[] = $ex->getMessage();
                         }

@@ -5,11 +5,11 @@
  * @package           sevenapi
  * @wordpress-plugin
  * Plugin Name:       seven API
- * Plugin URI:        http://github.com/seven-io/wp-api
+ * Plugin URI:        https://github.com/seven-io/wordpress
  * Description:       Send SMS through the seven.io gateway.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Author:            seven communications GmbH & Co. KG
- * Author URI:        http://wwww.seven.io/
+ * Author URI:        https://www.seven.io/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       sevenapi
@@ -20,7 +20,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define('SEVENAPI_VERSION', '1.0.1');
+define('SEVENAPI_VERSION', '1.0.2');
 $rootPath = plugin_dir_path(__FILE__);
 require_once "{$rootPath}includes/" . 'class-sevenapi-util.php';
 require_once "{$rootPath}includes/" . 'class-sevenapi-options.php';
@@ -73,7 +73,7 @@ class SevenApi_Plugin {
                 'manage_options',
                 'sevenapi-menu',
                 function () {
-                    die("<script>window.location.assign('https://wwww.seven.io')</script>");
+                    die("<script>window.location.assign('https://www.seven.io')</script>");
                 },
                 'dashicons-email-alt2'
             );
@@ -188,13 +188,6 @@ class SevenApi_Plugin {
                 sevenapi_Util::voice(sevenapi_Util::toString('receivers')));
         });
 
-        add_action('admin_enqueue_scripts', function () {
-            wp_enqueue_script('jquery-ui-datepicker');
-            wp_enqueue_style('sevenapi-admin-ui-css',
-                'http://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css',
-                false, '1.12.1', false);
-        });
-
         add_action('admin_post_sevenapi_wooc_bulk', function () {
             $this->authorize('sevenapi_wooc_bulk');
 
@@ -202,13 +195,17 @@ class SevenApi_Plugin {
                 return;
             }
 
-            $date = isset($_POST['date']) ? $_POST['date'] : null;
-            $dateModificator = isset($_POST['date_modificator']) ? $_POST['date_modificator'] : null;
-            $dateAction = isset($_POST['date_action']) ? $_POST['date_action'] : null;
+            $date = isset($_POST['date']) ? sanitize_text_field(wp_unslash($_POST['date'])) : null;
+            $dateModificator = isset($_POST['date_modificator'])
+            && in_array($_POST['date_modificator'], sevenapi_Util::WOOC_BULK_FILTER_DATE_MODIFICATORS, true)
+                ? $_POST['date_modificator'] : null;
+            $dateAction = isset($_POST['date_action'])
+            && in_array($_POST['date_action'], sevenapi_Util::WOOC_BULK_FILTER_DATE_ACTIONS, true)
+                ? $_POST['date_action'] : null;
             $args = [];
             if ($date && $dateAction && $dateModificator) {
                 if ('...' === $dateModificator) {
-                    $dateTo = isset($_POST['date_to']) ? $_POST['date_to'] : null;
+                    $dateTo = isset($_POST['date_to']) ? sanitize_text_field(wp_unslash($_POST['date_to'])) : null;
                     if (!$dateTo) {
                         return wp_redirect(admin_url('admin.php?' . http_build_query([
                                 'errors' => ['To-Date must be set if using the "..." modificator.'],
@@ -236,7 +233,7 @@ class SevenApi_Plugin {
             $apiRes = sevenapi_Util::send(implode(',', array_unique($phones)));
 
             wp_redirect(admin_url('admin.php?' . http_build_query([
-                    'errors' => $apiRes['wooc'],
+                    'errors' => $apiRes['errors'],
                     'page' => 'sevenapi-messages',
                     'response' => $apiRes['response'],
                 ])));
@@ -247,12 +244,12 @@ class SevenApi_Plugin {
 
             $errors = [];
 
-            if (!isset($_POST['submit'])
-                || !in_array($_POST['type'], sevenapi_Util::LOOKUP_TYPES, false)) {
+            if (!isset($_POST['submit'], $_POST['type'], $_POST['number'])
+                || !in_array($_POST['type'], sevenapi_Util::LOOKUP_TYPES, true)) {
                 return;
             }
 
-            $response = sevenapi_Lookup::numbered($_POST['number'], $_POST['type']);
+            $response = sevenapi_Lookup::numbered(sanitize_text_field(wp_unslash($_POST['number'])), $_POST['type']);
             if (!$response) {
                 $errors[] = __("Failed to lookup '{$_POST['type']}'.", 'sevenapi');
             }

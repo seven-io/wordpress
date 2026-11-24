@@ -49,7 +49,7 @@ class sevenapi_Options {
                     'sevenapi_invalid_key', $msg);
             };
 
-            $response = sevenapi_Util::get('balance', $key);
+            $response = sevenapi_Util::request('balance', $key);
 
             if (!$response) {
                 return $error('Internal error. Please try again later.');
