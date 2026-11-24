@@ -7,11 +7,11 @@
  * Plugin Name:       seven API
  * Plugin URI:        https://github.com/seven-io/wordpress
  * Description:       Send SMS through the seven.io gateway.
- * Version:           1.0.2
+ * Version:           1.1.0
  * Author:            seven communications GmbH & Co. KG
  * Author URI:        https://www.seven.io/
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
+ * License:           MIT
+ * License URI:       https://opensource.org/licenses/MIT
  * Text Domain:       sevenapi
  * Domain Path:       /languages
  */
@@ -20,7 +20,8 @@ if (!defined('WPINC')) {
     die;
 }
 
-define('SEVENAPI_VERSION', '1.0.2');
+define('SEVENAPI_VERSION', '1.1.0');
+define('SEVENAPI_DB_VERSION', '1.1.0');
 $rootPath = plugin_dir_path(__FILE__);
 require_once "{$rootPath}includes/" . 'class-sevenapi-util.php';
 require_once "{$rootPath}includes/" . 'class-sevenapi-options.php';
@@ -37,6 +38,7 @@ require_once "{$rootPath}tables/" . 'Voicemails_Table.php';
  * @property Messages_Table messages_table
  * @property Voicemails_Table voicemails_table
  */
+#[AllowDynamicProperties]
 class SevenApi_Plugin {
     static $instance;
 
@@ -44,7 +46,7 @@ class SevenApi_Plugin {
         load_plugin_textdomain(
             'sevenapi',
             false,
-            dirname(dirname(plugin_basename(__FILE__))) . '/languages/'
+            dirname(plugin_basename(__FILE__)) . '/languages/'
         );
 
         add_action('admin_init', function () {
@@ -327,7 +329,7 @@ register_activation_hook(__FILE__, function () {
                 ) $charset;");
 
     dbDelta("CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}sevenapi_mnp_lookups` (
-                `id` TINYINT(9) AUTO_INCREMENT,
+                `id` INT(11) AUTO_INCREMENT,
                 `number` VARCHAR(255) UNIQUE NOT NULL,
                 `country` VARCHAR(255) NOT NULL,
                 `international_formatted` VARCHAR(255) NOT NULL,
@@ -380,9 +382,18 @@ register_activation_hook(__FILE__, function () {
                 PRIMARY KEY (`id`)
                 ) $charset;");
 
-    add_option('sevenapi_db_version', '1.0.0');
+    add_option('sevenapi_db_version', SEVENAPI_DB_VERSION);
 });
 
 add_action('plugins_loaded', function () {
+    global $wpdb;
+
+    // Activation hooks don't run on updates, so migrate existing installs here.
+    $dbVersion = get_option('sevenapi_db_version');
+    if ($dbVersion && version_compare($dbVersion, SEVENAPI_DB_VERSION, '<')) {
+        $wpdb->query("ALTER TABLE `{$wpdb->prefix}sevenapi_mnp_lookups` MODIFY `id` INT(11) NOT NULL AUTO_INCREMENT");
+        update_option('sevenapi_db_version', SEVENAPI_DB_VERSION);
+    }
+
     SevenApi_Plugin::get_instance();
 });

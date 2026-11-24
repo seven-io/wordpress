@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: sevenio
 Tags: sms, text2speech
-Requires at least: 3.1.0
+Requires at least: 4.7
 Requires PHP: 7.2
 Tested up to: 5.4.3
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: MIT
 License URI: LICENSE.txt
 
@@ -26,6 +26,18 @@ Send SMS and text-to-speech messages through WordPress via the seven.io gateway.
 2. Plugin Settings
 
 == Changelog ==
+
+= 1.1.0 =
+* Fix: MNP lookups failed to save (unknown network_type column) and stopped working after 127 entries; existing installs are migrated automatically.
+* Fix: the Delay option is now actually sent to the API.
+* Fix: uninstalling actually removes the plugin's database tables (dbDelta silently ignored the DROP statements).
+* Fix: translations are loaded from the correct path.
+* Fix: saving an invalid API key no longer wipes the stored one.
+* Fix: PHP 8.2+ deprecation notices for dynamic properties.
+* Fix: the API response was shown twice on the Messages and Voice Mails pages; umlauts are shown readable.
+* Lookups use the current /api/lookup/{type} endpoints.
+* The settings page links to dashboard.seven.io for the API key.
+* License header aligned with LICENSE.txt (MIT); requires WordPress 4.7+.
 
 = 1.0.2 =
 * Security: escape all output on the plugin pages (fixes reflected and stored XSS).

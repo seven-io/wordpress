@@ -9,7 +9,7 @@
 
 class sevenapi_Util {
     const LOOKUP_TYPES = ['format', 'cnam', 'hlr', 'mnp',];
-    const TABLES = ['messages', 'number_lookups', 'mnp_lookups', 'hlr_lookups', 'cnam_lookups',];
+    const TABLES = ['messages', 'voicemails', 'number_lookups', 'mnp_lookups', 'hlr_lookups', 'cnam_lookups',];
     const WOOC_BULK_FILTER_DATE_ACTIONS = ['created', 'paid', 'completed',];
     const WOOC_BULK_FILTER_DATE_MODIFICATORS = ['>=', '<=', '>', '<', '...',];
 
@@ -102,6 +102,7 @@ class sevenapi_Util {
         return [
             'errors' => $errors,
             'response' => self::sms([
+                'delay' => '' !== self::toString('delay') ? self::toString('delay') : null,
                 'flash' => self::toShortBool('flash'),
                 'from' => array_key_exists('from', $_POST) ? self::toString('from') : null,
                 'label' => array_key_exists('label', $_POST) ? self::toString('label') : null,

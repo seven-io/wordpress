@@ -204,8 +204,10 @@ class sevenapi_Partials {
     static function grid($table, $wrap = true) {
         ?>
         <?php
-        echo $wrap ? "<div class='wrap'><h1>seven - {$table->_args['_tpl']['title']}</h1>" : '';
-        self::defaultMessageElements();
+        if ($wrap) {
+            echo "<div class='wrap'><h1>seven - " . esc_html($table->_args['_tpl']['title']) . '</h1>';
+            self::defaultMessageElements();
+        }
         ?>
         <div id='poststuff'>
             <div id='post-body' class='metabox-holder columns-2'>
@@ -231,13 +233,14 @@ class sevenapi_Partials {
         $errors = isset($_GET['errors']) ? (array)wp_unslash($_GET['errors']) : [];
         if (count($errors)) {
             $errors = array_map(function ($error) {
-                return is_scalar($error) ? (string)$error : wp_json_encode($error);
+                return is_scalar($error) ? (string)$error : wp_json_encode($error, JSON_UNESCAPED_UNICODE);
             }, $errors);
             echo '<b>Errors:</b><pre>' . esc_html(implode(PHP_EOL, $errors)) . '</pre>';
         }
 
         if (isset($_GET['response'])) {
-            $response = wp_json_encode(wp_unslash($_GET['response']), JSON_PRETTY_PRINT);
+            $response = wp_json_encode(wp_unslash($_GET['response']),
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             echo '<b>Response:</b><pre>' . esc_html($response) . '</pre>';
         }
 

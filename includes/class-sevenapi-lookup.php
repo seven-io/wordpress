@@ -80,12 +80,11 @@ class sevenapi_Lookup {
     private static function execute($type, $number, $entityKey, $entityName, $successKey = 'success') {
         global $wpdb;
 
-        $response = sevenapi_Util::request(
-            'lookup', get_option('sevenapi_key'), ['number' => $number, 'type' => $type]);
+        $response = (array)sevenapi_Util::request(
+            "lookup/$type", get_option('sevenapi_key'), ['number' => $number]);
 
-        $response = (array)$response;
-
-        if (true !== $response[$successKey] && 'true' !== $response[$successKey]) {
+        $success = isset($response[$successKey]) ? $response[$successKey] : null;
+        if (true !== $success && 'true' !== $success) {
             error_log(is_array($response) || is_object($response)
                 ? print_r($response, true) : $response);
 
@@ -109,6 +108,14 @@ class sevenapi_Lookup {
                 break;
             default:
                 break;
+        }
+
+        // The API returns fields the tables don't have (e.g. mnp.network_type), which would fail the insert.
+        $columns = $wpdb->get_col("SHOW COLUMNS FROM {$wpdb->prefix}$entityName");
+        $response = array_intersect_key($response, array_flip($columns));
+
+        if (!isset($response[$entityKey])) {
+            return false;
         }
 
         if (!$wpdb->get_var($wpdb->prepare(

@@ -17,6 +17,7 @@
  * @subpackage sevenapi/includes
  * @author     seven communications GmbH & Co. KG <support@seven.io>
  */
+#[AllowDynamicProperties]
 class sevenapi_Options {
     public function __construct() {
         foreach (get_class_methods($this) as $name) {
@@ -44,9 +45,12 @@ class sevenapi_Options {
     /** @return void */
     private function key() {
         $this->sevenapi_key = [null, ['sanitize_callback' => function ($key) {
+            // Keep the previously stored key so a typo doesn't wipe a working one.
             $error = function ($msg) {
                 add_settings_error('sevenapi_key',
                     'sevenapi_invalid_key', $msg);
+
+                return get_option('sevenapi_key');
             };
 
             $response = sevenapi_Util::request('balance', $key);

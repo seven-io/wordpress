@@ -25,7 +25,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-partials.php';
             <strong><?php _e('API Key', 'sevenapi') ?></strong>
             <small>
                 <?php _e('required for sending SMS - get yours @ ', 'sevenapi') ?>
-                <a href='https://www.seven.io'>seven.io</a></small>
+                <a href='https://dashboard.seven.io/developer' target='_blank' rel='noopener'>dashboard.seven.io</a></small>
         </span>
 
         <input required name="sevenapi_key" value="<?php echo esc_attr(get_option('sevenapi_key')); ?>"/>
