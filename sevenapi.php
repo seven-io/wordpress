@@ -7,7 +7,7 @@
  * Plugin Name:       seven API
  * Plugin URI:        http://github.com/seven-io/wp-api
  * Description:       Send SMS through the seven.io gateway.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            seven communications GmbH & Co. KG
  * Author URI:        http://wwww.seven.io/
  * License:           GPL-2.0+
@@ -20,7 +20,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-define('SEVENAPI_VERSION', '1.0.0');
+define('SEVENAPI_VERSION', '1.0.1');
 $rootPath = plugin_dir_path(__FILE__);
 require_once "{$rootPath}includes/" . 'class-sevenapi-util.php';
 require_once "{$rootPath}includes/" . 'class-sevenapi-options.php';
@@ -127,6 +127,7 @@ class SevenApi_Plugin {
                                   style='display: flex; align-items: baseline'>
                                 <input type='hidden' name='action'
                                        value='sevenapi_number_lookup_hook'>
+                                <?php wp_nonce_field('sevenapi_number_lookup_hook') ?>
                                 <input type='hidden' name='type' value='<?php echo $type ?>'>
 
                                 <input aria-label='<?php echo $label ?>'
@@ -176,11 +177,13 @@ class SevenApi_Plugin {
         });
 
         add_action('admin_post_sevenapi_compose_hook', function () {
+            $this->authorize('sevenapi_compose_hook');
             $this->redirect('sevenapi-messages',
                 sevenapi_Util::send(sevenapi_Util::toString('receivers')));
         });
 
         add_action('admin_post_sevenapi_voice_hook', function () {
+            $this->authorize('sevenapi_voice_hook');
             $this->redirect('sevenapi-voicemails',
                 sevenapi_Util::voice(sevenapi_Util::toString('receivers')));
         });
@@ -193,6 +196,8 @@ class SevenApi_Plugin {
         });
 
         add_action('admin_post_sevenapi_wooc_bulk', function () {
+            $this->authorize('sevenapi_wooc_bulk');
+
             if (!isset($_POST['submit'])) {
                 return;
             }
@@ -238,6 +243,8 @@ class SevenApi_Plugin {
         });
 
         add_action('admin_post_sevenapi_number_lookup_hook', function () {
+            $this->authorize('sevenapi_number_lookup_hook');
+
             $errors = [];
 
             if (!isset($_POST['submit'])
@@ -260,6 +267,14 @@ class SevenApi_Plugin {
         add_filter('set-screen-option', function ($status, $option, $value) {
             return $value;
         }, 10, 3);
+    }
+
+    private function authorize($action) {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You are not allowed to do this.', 'sevenapi'), '', ['response' => 403]);
+        }
+
+        check_admin_referer($action);
     }
 
     /**

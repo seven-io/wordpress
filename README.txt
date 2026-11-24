@@ -4,7 +4,7 @@ Tags: sms, text2speech
 Requires at least: 3.1.0
 Requires PHP: 7.2
 Tested up to: 5.4.3
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: MIT
 License URI: LICENSE.txt
 
@@ -26,6 +26,9 @@ Send SMS and text-to-speech messages through WordPress via the seven.io gateway.
 2. Plugin Settings
 
 == Changelog ==
+
+= 1.0.1 =
+* Security: require the manage_options capability and a valid nonce for sending SMS, voice calls, WooCommerce bulk SMS and number lookups.
 
 = 1.0 =
 * Initial release.

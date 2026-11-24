@@ -23,6 +23,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-util.php';
     </h2>
     <form name='sevenapi_wooc' method='POST' action='<?php echo admin_url('admin-post.php'); ?>'>
         <input type='hidden' name='action' value='sevenapi_wooc_bulk'>
+        <?php wp_nonce_field('sevenapi_wooc_bulk') ?>
 
         <?php sevenapi_Partials::all(false) ?>
 

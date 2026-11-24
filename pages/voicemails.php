@@ -20,6 +20,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-partials.php';
         <form name='sevenapi_voicemails' method='POST'
               action='<?php echo admin_url('admin-post.php'); ?>'>
             <input type='hidden' name='action' value='sevenapi_voice_hook'>
+            <?php wp_nonce_field('sevenapi_voice_hook') ?>
 
             <label>
                 <?php

@@ -20,6 +20,7 @@ require_once __DIR__ . '/../includes/class-sevenapi-partials.php';
         <form name='sevenapi_compose' method='POST'
               action='<?php echo admin_url('admin-post.php'); ?>'>
             <input type='hidden' name='action' value='sevenapi_compose_hook'>
+            <?php wp_nonce_field('sevenapi_compose_hook') ?>
 
             <?php sevenapi_Partials::all(false) ?>
 
